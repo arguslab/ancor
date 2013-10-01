@@ -8,24 +8,20 @@ class Instance
     :undeploy
   ]
 
-  field :role_id
-  field :scenario_id
-
   field :name, type: String
-  field :status, type: Symbol, default: :absent
+  field :status, type: Symbol
 
   field :lifecycle_stage, type: Symbol, default: :deploy
 
-  def interfaces
-    InstanceInterface.where(instance_id: id).all
-  end
+  belongs_to :role
+  belongs_to :scenario
 
-  def role
-    Role.find role_id
-  end
+  has_many :interfaces, class_name: "InstanceInterface"
 
-  def scenario
-    Scenario.find scenario_id
+  def networks
+    interfaces.map do |interface|
+      interface.network
+    end
   end
 
   def usable?

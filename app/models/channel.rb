@@ -5,6 +5,5 @@ class Channel
   field :description, type: String
   field :slug, type: Symbol
 
-  field :exporter_id, type: String
-  field :importer_ids, type: Array
+  belongs_to :role
 end

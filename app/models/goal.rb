@@ -5,5 +5,5 @@ class Goal
   field :description, type: String
   field :slug, type: Symbol
 
-  field :role_ids, type: Array
+  has_and_belongs_to_many :roles
 end

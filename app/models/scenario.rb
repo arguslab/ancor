@@ -5,9 +5,5 @@ class Scenario
   field :description, type: String
   field :slug, type: Symbol
 
-  field :role_id, type: String
-
-  def role
-    Role.find role_id
-  end
+  belongs_to :role
 end

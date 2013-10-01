@@ -7,7 +7,5 @@ class Network
   field :cidr, type: String
   field :ip_version, type: Integer, default: 4
 
-  field :status, type: Symbol, default: :absent
-
-  validates :cidr, uniqueness: true
+  field :status, type: Symbol
 end
