@@ -1,5 +1,4 @@
-
-### What is ANCOR?
+## What is ANCOR?
 
 ANCOR is a cloud automation framework that models dependencies between different layers in an
 application stack. When instances in one layer changes, the instances in a dependent layer
@@ -7,7 +6,7 @@ are notified and reconfigured.
 
 Think of it like OpsWorks with dependency management.
 
-### What is ancor-puppet?
+## What is ancor-puppet?
 
 To demonstrate zero-downtime changes in clusters, I put together a stack that you'll typically
 see in modern web application deployments:
