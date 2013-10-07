@@ -71,6 +71,11 @@ Install MongoDB Server
 sudo apt-get install mongodb-server
 ```
 
+Install Redis
+```
+sudo apt-get install redis-server
+```
+
 Install bundler
 ```
 gem install bundler
