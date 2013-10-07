@@ -2,12 +2,10 @@ source 'https://rubygems.org'
 
 gem 'rails', '3.2.14'
 
-gem 'mongoid'
-
-gem 'fog'
-gem 'sidekiq'
-
 gem 'abstract_type'
+gem 'fog'
+gem 'mongoid'
+gem 'sidekiq'
 
 group :development, :testing do
   # Development dependencies

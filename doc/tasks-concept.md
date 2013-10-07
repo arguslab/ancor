@@ -40,3 +40,9 @@ There are two general points of waiting:
 
 - Before the task is considered finished, it has to wait for something
 - Before the task can start, it has to wait for something
+
+## Wait handles
+
+- Puppet run complete (instance name)
+- Instance initialization complete (instance name)
+- Task complete (task id)
