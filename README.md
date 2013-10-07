@@ -22,3 +22,46 @@ not been tuned, but they do work, if deployed correctly.
 
 Because ANCOR does random port and IP selection, every single service that will be exposed to
 other instances will not make assumptions about which port/IP to use.
+
+## Setting Up the Development Environment
+
+### Ubuntu (>= 12.04 LTS)
+
+sudo apt-get update
+sudo apt-get dist-upgrade
+sudo reboot
+
+sudo apt-get install curl git htop
+
+curl -L https://get.rvm.io | bash -s stable
+source ~/.profile 
+rvm
+rvm get stable
+
+rvm install ruby-1.9.3
+Teriminal Preferences - Select "Run Command as Login Shell" option
+Exit and reopen terminal
+
+ruby -v
+rvm use --default ruby-1.9.3
+
+Install Sublime 3
+download sublime form http://www.sublimetext.com/3
+sudo dpkg -i /home/andu/Desktop/sublime-text_build-xxxx_amd64.deb
+subl
+
+Install MongoDB Server
+sudo apt-get install mongodb-server
+
+gem install bundler
+
+mkdir workspace
+cd workspace/
+git clone git@github.com:ianunruh/ancor.git
+cd ancor/
+bundle install
+
+git config --global user.name "Alex Bardas"
+git config --global user.email "senatorandu@yahoo.com"
+git config --global core.editor "vim"
+
