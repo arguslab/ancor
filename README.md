@@ -27,41 +27,67 @@ other instances will not make assumptions about which port/IP to use.
 
 ### Ubuntu (>= 12.04 LTS)
 
+Update the OS (if needed)
+```
 sudo apt-get update
 sudo apt-get dist-upgrade
 sudo reboot
+```
 
-sudo apt-get install curl git htop
+Make sure the following packages are installed
+```
+sudo apt-get install vim curl git htop
+```
 
+Download and run RVM
+```
 curl -L https://get.rvm.io | bash -s stable
 source ~/.profile 
 rvm
 rvm get stable
+```
 
+Install Ruby 1.9.3
+```
 rvm install ruby-1.9.3
+```
 Teriminal Preferences - Select "Run Command as Login Shell" option
 Exit and reopen terminal
 
+```
 ruby -v
 rvm use --default ruby-1.9.3
+```
 
 Install Sublime 3
-download sublime form http://www.sublimetext.com/3
+Download sublime form http://www.sublimetext.com/3
+```
 sudo dpkg -i /home/andu/Desktop/sublime-text_build-xxxx_amd64.deb
 subl
+```
 
 Install MongoDB Server
+```
 sudo apt-get install mongodb-server
+```
 
+Install bundler
+```
 gem install bundler
+```
 
+Pull repository from GitHub (make sure you have defined a Github public/private keypair)
+```
 mkdir workspace
 cd workspace/
 git clone git@github.com:ianunruh/ancor.git
 cd ancor/
 bundle install
+```
 
-git config --global user.name "Alex Bardas"
-git config --global user.email "senatorandu@yahoo.com"
+Configure Git
+```
+git config --global user.name "John Doe"
+git config --global user.email "eid@ksu.edu"
 git config --global core.editor "vim"
-
+```
