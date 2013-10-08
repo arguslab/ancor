@@ -5,7 +5,7 @@ class Task
   include Stateful
 
   field :type, type: String
-  field :parameters, type: Hash
+  field :arguments, type: Array
   field :state, type: Symbol, default: :pending
 
   field :store, type: Hashie::Mash, default: -> { Hashie::Mash.new }
