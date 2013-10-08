@@ -96,3 +96,8 @@ git config --global user.name "John Doe"
 git config --global user.email "eid@ksu.edu"
 git config --global core.editor "vim"
 ```
+
+(Optional) In case terminal colors were disabled after installing RVM, edit ~/.bash_profile:
+```
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" && source "$HOME/.bashrc" # Load RVM into a shell session *as a function*
+```
