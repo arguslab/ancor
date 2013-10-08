@@ -4,6 +4,7 @@ gem 'rails', '3.2.14'
 
 gem 'abstract_type'
 gem 'fog'
+gem 'hashie'
 gem 'mongoid'
 gem 'sidekiq'
 
