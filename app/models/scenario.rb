@@ -6,4 +6,6 @@ class Scenario
   field :slug, type: Symbol
 
   belongs_to :role
+
+  embeds_many :stages, class_name: "ScenarioStage"
 end
