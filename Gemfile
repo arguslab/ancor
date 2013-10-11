@@ -7,6 +7,7 @@ gem 'fog'
 gem 'hashie'
 gem 'mongoid'
 gem 'sidekiq'
+gem 'sinatra'
 
 group :development, :testing do
   # Development dependencies

@@ -11,16 +11,16 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
 RSpec.configure do |config|
   config.before(:suite) do
-    DatabaseCleaner.strategy = :truncation
-    DatabaseCleaner.clean_with :truncation
+    # DatabaseCleaner.strategy = :truncation
+    # DatabaseCleaner.clean_with :truncation
   end
 
   config.before(:each) do
-    DatabaseCleaner.start
+    # DatabaseCleaner.start
   end
 
   config.after(:each) do
-    DatabaseCleaner.clean
+    # DatabaseCleaner.clean
   end
 
   # If true, the base class of anonymous controllers will be inferred

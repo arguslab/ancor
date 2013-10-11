@@ -9,6 +9,7 @@ module Ancor
       begin
         klass = task.type.constantize
         instance = klass.new
+        instance.state = task.state
 
         unless instance.perform(*task.arguments)
           # The task exited, but was not finished
@@ -17,6 +18,7 @@ module Ancor
         end
       rescue
         # TODO Log the error
+        raise
 
         task.update_state :error
         process_wait_handles :task_failed, task_id
