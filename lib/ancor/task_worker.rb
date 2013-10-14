@@ -1,5 +1,3 @@
-require 'pp'
-
 module Ancor
   class TaskWorker
     include Sidekiq::Worker
@@ -8,18 +6,15 @@ module Ancor
       task = find_and_lock task_id
       return unless task
 
-      puts "#{task.type}: Got lock on task"
-
       # Get the most recent state
       task.reload
 
       begin
         klass = task.type.constantize
         executor = klass.new
-        executor.context = task
+        executor.task = task
 
         unless execute_task task, executor
-          puts "#{task.type}: Suspended task"
           # The task exited, but was not finished
           task.update_state :suspended
           return
@@ -28,8 +23,6 @@ module Ancor
         task.update_state :error
         raise
       end
-
-      puts "#{task.type}: Task completed"
 
       task.update_state :completed
       process_wait_handles :task_completed, task.id
@@ -72,12 +65,9 @@ module Ancor
         "parameters.task_id" => task_id
       }
 
-      puts "Finding wait handles for #{task_id}"
-
-      tasks = WaitHandle.where(criteria).pluck(:task_ids).flatten.uniq
-      tasks.each do |task|
-        puts "Calling wait handle #{task}"
-        TaskWorker.perform_async task.to_s
+      wait_tasks = WaitHandle.where(criteria).pluck(:task_ids).flatten.uniq
+      wait_tasks.each do |wait_task_id|
+        TaskWorker.perform_async wait_task_id.to_s
       end
     end
   end # Task Worker

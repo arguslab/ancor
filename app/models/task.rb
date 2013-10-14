@@ -8,5 +8,5 @@ class Task
   field :arguments, type: Array
   field :state, type: Symbol, default: :pending
 
-  field :store, type: Hash, default: -> { {} }
+  field :context, type: Hash, default: -> { {} }
 end
