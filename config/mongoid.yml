@@ -69,7 +69,7 @@ development:
 test:
   sessions:
     default:
-      database: ancor_test
+      database: ancor_development
       hosts:
         - localhost:27017
       options:

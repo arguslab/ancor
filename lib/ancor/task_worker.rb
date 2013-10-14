@@ -6,37 +6,47 @@ module Ancor
       task = find_and_lock task_id
       return unless task
 
+      logger.debug "Got lock on task #{task_id}"
+
+      # Get the most recent state
+      task.reload
+
       begin
         klass = task.type.constantize
         instance = klass.new
-        instance.state = task.state
+        instance.context = task
 
-        unless instance.perform(*task.arguments)
+        unless execute_task task, instance
+          logger.debug "Task #{task_id} suspended"
           # The task exited, but was not finished
           task.update_state :suspended
           return
         end
       rescue
-        # TODO Log the error
-        raise
-
+        logger.debug "Task #{task_id} failed"
         task.update_state :error
-        process_wait_handles :task_failed, task_id
-
-        return
+        raise
       end
 
+      logger.debug "Task #{task_id} completed"
+
       task.update_state :completed
-      process_wait_handles :task_completed, task_id
+      process_wait_handles :task_completed, task.id
     end
 
     private
+
+    def execute_task(task, instance)
+      instance.perform(*task.arguments)
+    ensure
+      task.save
+    end
 
     def find_and_lock(task_id)
       loop do
         task = Task.find task_id
 
-        if [:error, :completed].include? task.state
+        if task.state == :completed
           # Task is already finished
           return false
         end
@@ -46,7 +56,7 @@ module Ancor
           raise InvalidStateError
         end
 
-        # changing from (pending|suspended) to in_progress
+        # changing from (pending|suspended|error) to in_progress
         if task.update_state :in_progress
           return task
         end
@@ -58,12 +68,13 @@ module Ancor
     def process_wait_handles(type, task_id)
       criteria = {
         "type" => type,
-        "parameters.task_id" => Moped::BSON::ObjectId.from_string(task_id)
+        "parameters.task_id" => task_id
       }
 
       tasks = WaitHandle.where(criteria).pluck(:task_ids).flatten.uniq
-      tasks.each do |task|
-        TaskWorker.perform_async task.id
+      tasks.each do |tid|
+        logger.debug "Notifying task #{tid} that task #{task_id} finished"
+        TaskWorker.perform_async tid.to_s
       end
     end
   end # Task Worker

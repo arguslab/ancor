@@ -1,10 +1,10 @@
 module Ancor
   class BaseTask
-    # @return [Hashie::Mash]
-    attr_accessor :state
+    # @return [Task]
+    attr_accessor :context
 
-    def initialize
-      @state = Hashie::Mash.new
+    def store
+      @context.store
     end
 
     # @param [Object...] arguments
