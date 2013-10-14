@@ -3,9 +3,7 @@ require 'hashie'
 module Ancor
   module Extensions
     module Mash
-      def self.include(receiver)
-        receiver.extend ClassMethods
-      end
+      extend ActiveSupport::Concern
 
       def mongoize
         to_hash

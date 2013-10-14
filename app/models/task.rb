@@ -8,5 +8,5 @@ class Task
   field :arguments, type: Array
   field :state, type: Symbol, default: :pending
 
-  field :store, type: Hashie::Mash, default: -> { Hashie::Mash.new }
+  field :store, type: Hash, default: -> { {} }
 end

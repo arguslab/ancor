@@ -5,6 +5,6 @@ module Providable
   include Mongoid::Document
 
   included do
-    field :provider, type: Hashie::Mash, default: -> { Hashie::Mash.new }
+    field :provider, type: Hash, default: -> { {} }
   end
 end

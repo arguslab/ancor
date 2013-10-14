@@ -1,3 +1,5 @@
+require 'pp'
+
 module Ancor
   class TaskWorker
     include Sidekiq::Worker
@@ -6,29 +8,28 @@ module Ancor
       task = find_and_lock task_id
       return unless task
 
-      logger.debug "Got lock on task #{task_id}"
+      puts "#{task.type}: Got lock on task"
 
       # Get the most recent state
       task.reload
 
       begin
         klass = task.type.constantize
-        instance = klass.new
-        instance.context = task
+        executor = klass.new
+        executor.context = task
 
-        unless execute_task task, instance
-          logger.debug "Task #{task_id} suspended"
+        unless execute_task task, executor
+          puts "#{task.type}: Suspended task"
           # The task exited, but was not finished
           task.update_state :suspended
           return
         end
       rescue
-        logger.debug "Task #{task_id} failed"
         task.update_state :error
         raise
       end
 
-      logger.debug "Task #{task_id} completed"
+      puts "#{task.type}: Task completed"
 
       task.update_state :completed
       process_wait_handles :task_completed, task.id
@@ -36,8 +37,8 @@ module Ancor
 
     private
 
-    def execute_task(task, instance)
-      instance.perform(*task.arguments)
+    def execute_task(task, executor)
+      executor.perform(*task.arguments)
     ensure
       task.save
     end
@@ -71,10 +72,12 @@ module Ancor
         "parameters.task_id" => task_id
       }
 
+      puts "Finding wait handles for #{task_id}"
+
       tasks = WaitHandle.where(criteria).pluck(:task_ids).flatten.uniq
-      tasks.each do |tid|
-        logger.debug "Notifying task #{tid} that task #{task_id} finished"
-        TaskWorker.perform_async tid.to_s
+      tasks.each do |task|
+        puts "Calling wait handle #{task}"
+        TaskWorker.perform_async task.to_s
       end
     end
   end # Task Worker
