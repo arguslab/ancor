@@ -4,6 +4,8 @@ module Ancor
       # @return [Task]
       attr_accessor :task
 
+      # State of the task that is persisted between task executions
+      # in the database
       # @return [Hash]
       def context
         @task.context
@@ -20,18 +22,25 @@ module Ancor
 
       private
 
+      # Returns true if the the given key is set in the context of the task
+      #
       # @param [Symbol] key
       # @return [Boolean]
       def task_started?(key)
         context.key?(key.to_s)
       end
 
+      # Returns true if the dependent task stored in the context was completed 
+      #
       # @param [Symbol] key
       # @return [Boolean]
       def task_completed?(key)
         Task.find(context[key.to_s]).state == :completed
       end
 
+      # Store dependent task in the context of the main task and pass the dependent
+      # task to be executed
+      #
       # @param [Symbol] key
       # @param [Class] klass
       # @param [Object...] args
@@ -43,18 +52,20 @@ module Ancor
         execute_task task_id
       end
 
+      # Creating a new dependent task and an associated wait hanlde 
+      #
       # @param [Class] klass
       # @param [Object...] args
       # @return [String] The identifier of the created task
       def create_task(klass, *args)
-        task = Task.create(type: klass.name, arguments: args)
+        dependent = Task.create(type: klass.name, arguments: args)
 
         wh = WaitHandle.new(type: :task_completed)
-        wh.parameters["task_id"] = task.id
-        wh.tasks << context
+        wh.parameters["task_id"] = dependent.id
+        wh.tasks << task
         wh.save
 
-        task.id.to_s
+        dependent.id.to_s
       end
 
       # Enqueues the task with the given identifier into the Sidekiq queue
