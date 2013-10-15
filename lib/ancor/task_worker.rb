@@ -46,8 +46,11 @@ module Ancor
         end
 
         if task.state == :in_progress
-          # Sidekiq should requeue this task in ~15 seconds
-          raise InvalidStateError
+          interval = rand 1..15
+
+          # Requeue this task for processing in 1-10 seconds
+          TaskWorker.perform_in(interval, task_id)
+          return false
         end
 
         # changing from (pending|suspended|error) to in_progress

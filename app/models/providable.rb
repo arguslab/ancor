@@ -5,6 +5,7 @@ module Providable
   include Mongoid::Document
 
   included do
-    field :provider, type: Hash, default: -> { {} }
+    field :provider_details, type: Hash, default: -> { {} }
+    belongs_to :provider
   end
 end
