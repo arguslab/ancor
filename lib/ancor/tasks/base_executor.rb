@@ -57,7 +57,7 @@ module Ancor
         task.id.to_s
       end
 
-      # Puts the given task in the Sidekiq queue
+      # Enqueues the task with the given identifier into the Sidekiq queue
       #
       # @param [String] task_id
       # @return [undefined]
