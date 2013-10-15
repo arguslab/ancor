@@ -4,10 +4,12 @@ module Ancor
       # @return [Task]
       attr_accessor :task
 
+      # @return [Hash]
       def context
         @task.context
       end
 
+      # @abstract
       # @param [Object...] arguments
       # @return [Boolean]
       #   Returns true if the executor finished
@@ -18,16 +20,22 @@ module Ancor
 
       private
 
-      def task_completed?(key)
-        k = key.to_s
-
-        if context[k]
-          Task.find(context[k]).state == :completed
-        else
-          false
-        end
+      # @param [Symbol] key
+      # @return [Boolean]
+      def task_started?(key)
+        context.key?(key.to_s)
       end
 
+      # @param [Symbol] key
+      # @return [Boolean]
+      def task_completed?(key)
+        Task.find(context[key.to_s]).state == :completed
+      end
+
+      # @param [Symbol] key
+      # @param [Class] klass
+      # @param [Object...] args
+      # @return [undefined]
       def perform_task(key, klass, *args)
         k = key.to_s
         task_id = create_task klass, *args
@@ -35,6 +43,9 @@ module Ancor
         execute_task task_id
       end
 
+      # @param [Class] klass
+      # @param [Object...] args
+      # @return [String] The identifier of the created task
       def create_task(klass, *args)
         task = Task.create(type: klass.name, arguments: args)
 
@@ -46,6 +57,10 @@ module Ancor
         task.id.to_s
       end
 
+      # Puts the given task in the Sidekiq queue
+      #
+      # @param [String] task_id
+      # @return [undefined]
       def execute_task(task_id)
         TaskWorker.perform_async(task_id)
       end
