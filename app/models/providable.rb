@@ -6,6 +6,6 @@ module Providable
 
   included do
     field :provider_details, type: Hash, default: -> { {} }
-    belongs_to :provider
+    belongs_to :provider_endpoint
   end
 end
