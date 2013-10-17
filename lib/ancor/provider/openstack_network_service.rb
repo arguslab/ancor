@@ -11,6 +11,7 @@ module Ancor
       end
 
       def terminate_network(connection,network)
+        puts "TO DO - terminate network and related subnets"
         raise NotImplementedError
       end 
 

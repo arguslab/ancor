@@ -1,6 +1,6 @@
 module Ancor
   module Provider
-    class InstanceService
+    class InstanceService < BaseService
 
       def create_instance(connection,instance)
         raise NotImplementedError

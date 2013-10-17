@@ -1,6 +1,6 @@
 module Ancor
   module Provider
-    class SecurityGroupService
+    class SecurityGroupService < BaseService
 
       def create_security_group(connection,instance)
         raise NotImplementedError

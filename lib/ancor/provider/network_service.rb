@@ -1,6 +1,6 @@
 module Ancor
   module Provider
-    class NetworkService
+    class NetworkService < BaseService
       
       def create_network(connection,instance)
         raise NotImplementedError

@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe Ancor::BaseTask do
+describe Ancor::BaseExecutor do
   it 'should raise an exception when calling perform' do
-    task = Ancor::BaseTask.new
+    task = Ancor::BaseExecutor.new
     expect {
       task.perform
     }.to raise_error NotImplementedError
