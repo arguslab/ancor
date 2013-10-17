@@ -9,9 +9,9 @@ module Ancor
           name: instance.name,
           flavor_ref: instance.provider_details["flavor_id"],
           image_ref: instance.provider_details["image_id"],
-          nics: nics,
+          nics: instance.networks,
           # security_groups: [security_group],
-          user_data: user_data
+          user_data: instance.provider_details["user_data"] #@obj_store
         }
         os_instance = connection.servers.create options
       end
