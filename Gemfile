@@ -8,6 +8,7 @@ gem 'hashie'
 gem 'mongoid'
 gem 'sidekiq'
 gem 'sinatra'
+gem 'thread_safe'
 
 group :development, :testing do
   # Development dependencies
