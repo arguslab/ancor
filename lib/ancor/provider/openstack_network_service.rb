@@ -11,8 +11,23 @@ module Ancor
       end
 
       def terminate_network(connection,network)
-        puts "TO DO - terminate network and related subnets"
-        raise NotImplementedError
+        # Identify network
+        network_id = network.provider_details["network_id"]
+        
+        os_network = quantum.networks.find do |p|
+          p.network_id == network_id
+        end
+        
+        # Delete interface(s) from router
+        router_id = network.provider_details["router_id"]
+        subnet_id = network.provider_details["subnet_id"]
+
+        attempt do
+          connection.remove_router_interface router_id, subnet_id
+        end
+        
+        os_network.destroy
+        
       end 
 
 
