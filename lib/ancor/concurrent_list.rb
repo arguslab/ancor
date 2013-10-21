@@ -42,7 +42,7 @@ module Ancor
     end
 
     def to_a
-      @elements
+      @elements.dup
     end
 
     private
