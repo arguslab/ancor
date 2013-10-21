@@ -12,6 +12,10 @@ module Ancor
         @mutex = Mutex.new
       end
 
+      def register_connection_factory(provider_type, factory_class)
+        @connection_factories.put provider_type, factory_class
+      end
+
       def register_service(provider_type, service_class)
         @services.push(ServiceRegistration.new(provider_type, service_class))
       end

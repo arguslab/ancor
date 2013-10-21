@@ -1,6 +1,8 @@
 module Ancor
   module Provider
     class OpenStackSecurityGroupService < SecurityGroupService
+      interacts_with :os_nova
+
       # @param [Fog::Compute::OpenStack] connection
       # @param [Instance] instance
       # @return [undefined]

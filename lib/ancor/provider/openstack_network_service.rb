@@ -1,6 +1,8 @@
 module Ancor
   module Provider
     class OpenStackNetworkService < NetworkService
+      interacts_with :os_neutron
+
       # @param [Fog::Network::OpenStack] connection
       # @param [Network] network
       # @return [undefined]
@@ -21,6 +23,9 @@ module Ancor
         # Identify network
         network_id = network.provider_details["network_id"]
 
+        # TODO You can look up network by ID directly. However, find can be used
+        # in the case where network ID was not persisted to model and you need to find
+        # the network by name
         os_network = conection.networks.find do |p|
           p.network_id == network_id
         end
