@@ -1,15 +1,19 @@
 module Ancor
   module Provider
     class InstanceService < BaseService
-
-      def create_instance(connection,instance)
+      # @param [Object] connection
+      # @param [Instance] instance
+      # @return [undefined]
+      def create(connection, instance)
         raise NotImplementedError
       end
 
-      def terminate_instance(connection,instance)
+      # @param [Object] connection
+      # @param [Instance] instance
+      # @return [undefined]
+      def delete(connection, instance)
         raise NotImplementedError
-      end	
-
+      end
     end # InstanceService
-  end 
+  end # Provider
 end

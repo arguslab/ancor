@@ -1,14 +1,19 @@
 module Ancor
   module Provider
     class NetworkService < BaseService
-      
-      def create_network(connection,instance)
+      # @param [Object] connection
+      # @param [Network] network
+      # @return [undefined]
+      def create(connection, network)
         raise NotImplementedError
       end
 
-      def terminate_network(connection,instance)
+      # @param [Object] connection
+      # @param [Network] network
+      # @return [undefined]
+      def delete(connection, network)
         raise NotImplementedError
-      end 
+      end
     end # NetworkService
-  end 
+  end # Provider
 end

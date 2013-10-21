@@ -1,18 +1,26 @@
 module Ancor
   module Provider
     class SecurityGroupService < BaseService
-
-      def create_security_group(connection,instance)
+      # @param [Object] connection
+      # @param [Instance] instance
+      # @return [undefined]
+      def create(connection, instance)
         raise NotImplementedError
       end
 
-      def delete_security_group(connection,instance)
+      # @param [Object] connection
+      # @param [Instance] instance
+      # @return [undefined]
+      def delete(connection, instance)
         raise NotImplementedError
       end
 
-      def update_security_group(connection,instance)
+      # @param [Object] connection
+      # @param [Instance] instance
+      # @return [undefined]
+      def update(connection, instance)
         raise NotImplementedError
       end
     end # SecurityGroupService
-  end 
+  end # Provider
 end

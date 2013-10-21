@@ -1,10 +1,12 @@
-require 'fog'
-
 module Ancor
   module Provider
-    class OpenStackInstanceService < InstanceService 
+    class OpenStackInstanceService < InstanceService
+      # @param [Fog::Compute::OpenStack] connection
+      # @param [Instance] instance
+      # @return [undefined]
+      def create(connection, instance)
+        # TODO Lock the instance for this operation
 
-      def create_instance(connection,instance)
         options = {
           name: instance.name,
           flavor_ref: instance.provider_details["flavor_id"],
@@ -16,13 +18,18 @@ module Ancor
         os_instance = connection.servers.create options
       end
 
-      def terminate_instance(connection,instance)
+      # @param [Fog::Compute::OpenStack] connection
+      # @param [Instance] instance
+      # @return [undefined]
+      def delete(connection, instance)
+        # TODO Lock the instance for this operation
+
         os_instance = connection.servers.find do |i|
           i.name == instance.name
         end
+
         os_instance.destroy
       end
-
     end # OpenStackInstanceService
-  end 
+  end # Provider
 end
