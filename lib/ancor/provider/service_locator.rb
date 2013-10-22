@@ -8,12 +8,14 @@ module Ancor
         @services = ConcurrentList.new
         @connections = ThreadSafe::Cache.new
         @connection_factories = ThreadSafe::Cache.new
-
-        @mutex = Mutex.new
       end
 
-      def register_connection_factory(provider_type, factory_class)
-        @connection_factories.put provider_type, factory_class
+      def register_connection(endpoint_id, connection)
+        @connections.put(endpoint_id, connection)
+      end
+
+      def register_connection_factory(provider_type, &factory)
+        @connection_factories.put(provider_type, factory)
       end
 
       def register_service(provider_type, service_class)
@@ -44,7 +46,11 @@ module Ancor
       # @param [ProviderEndpoint] endpoint
       # @return [Object]
       def connection(endpoint)
+        endpoint_id = endpoint.id.to_s
 
+        @connections.compute_if_absent(endpoint_id) do
+          @connection_factories.get(endpoint.type).call(endpoint.options)
+        end
       end
     end # ServiceLocator
 
@@ -56,7 +62,7 @@ module Ancor
         @mutex = Mutex.new
       end
 
-      def matches(provider_type, service_class)
+      def matches?(provider_type, service_class)
         @provider_type == provider_type && @service_class <= service_class
       end
 

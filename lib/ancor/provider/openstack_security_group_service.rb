@@ -14,7 +14,7 @@ module Ancor
 
         secgroup = connection.security_groups.create options
 
-        instance.provider_details["secgroup_id"] = secgroup.id
+        instance.provider_details['secgroup_id'] = secgroup.id
         instance.save
       end
 
@@ -29,7 +29,7 @@ module Ancor
       # @param [Instance] instance
       # @return [undefined]
       def update(connection, instance)
-        secgroup_id = instance.provider_details["secgroup_id"]
+        secgroup_id = instance.provider_details['secgroup_id']
 
         connection.create_security_group_rule id, 1, 65535, 'tcp'
         connection.create_security_group_rule id, 1, 65535, 'udp'

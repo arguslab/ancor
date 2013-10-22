@@ -1,6 +1,8 @@
 module Ancor
   module Tasks
     class BaseExecutor
+      include Operational
+
       # @return [Task]
       attr_accessor :task
 
@@ -30,7 +32,7 @@ module Ancor
         context.key?(key.to_s)
       end
 
-      # Returns true if the dependent task stored in the context was completed 
+      # Returns true if the dependent task stored in the context was completed
       #
       # @param [Symbol] key
       # @return [Boolean]
@@ -52,7 +54,7 @@ module Ancor
         execute_task task_id
       end
 
-      # Creating a new dependent task and an associated wait hanlde 
+      # Creating a new dependent task and an associated wait hanlde
       #
       # @param [Class] klass
       # @param [Object...] args

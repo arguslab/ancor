@@ -1,5 +1,7 @@
 module Ancor
   module Provider
+    # TODO Can descriptions or notes be added to networks/subnets? If so, set them
+    # to "Maintained by ANCOR"
     class OpenStackNetworkService < NetworkService
       interacts_with :os_neutron
 

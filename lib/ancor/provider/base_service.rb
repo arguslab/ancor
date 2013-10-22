@@ -8,11 +8,11 @@ module Ancor
         # provider type
         #
         # @example
-        #   class AmazonInstanceService
+        #   class AmazonInstanceService < InstanceService
         #     interacts_with :aws
         #   end
         #
-        #   class OsNeutronNetworkService
+        #   class OsNeutronNetworkService < NetworkService
         #     interacts_with :os_neutron
         #   end
         #
@@ -28,13 +28,6 @@ module Ancor
         def locator
           ServiceLocator.instance
         end
-      end
-
-      private
-
-      # @return [ServiceLocator]
-      def locator
-        ServiceLocator.instance
       end
     end # BaseService
   end # Provider

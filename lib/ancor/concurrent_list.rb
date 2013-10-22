@@ -29,6 +29,10 @@ module Ancor
       @elements.empty?
     end
 
+    def include?(element)
+      @elements.include?(element)
+    end
+
     def push(element)
       update do |elements|
         elements.push element
