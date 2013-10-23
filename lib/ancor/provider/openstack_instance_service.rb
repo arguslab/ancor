@@ -32,6 +32,16 @@ module Ancor
           user_data: instance.provider_details['user_data']
         }
         os_instance = connection.servers.create options
+
+        wait_until do
+          os_instance.reload
+
+          if os_instance.state == STATE_ERROR
+            raise 'Error creating instance'
+          end
+
+          os_instance.state == STATE_ACTIVE
+        end
       end
 
       # @param [Fog::Compute::OpenStack] connection
@@ -43,32 +53,6 @@ module Ancor
         if os_instance
           os_instance.destroy
         end
-      end
-
-      def error?(connection, instance)
-        os_instance = find_instance connection, instance
-
-        unless os_instance
-          raise 'Instance not found'
-        end
-
-        os_instance.state == STATE_ERROR
-      end
-
-      def exists?(connection, instance)
-        !!find_instance(connection, instance)
-      end
-
-      def active?(connection, instance)
-        os_instance = find_instance connection, instance
-
-        unless os_instance
-          raise 'Instance not found'
-        end
-
-        pp os_instance.state
-
-        os_instance.state == STATE_ACTIVE
       end
 
       private
