@@ -11,14 +11,6 @@ module Ancor
         service = locator.service(endpoint.type, Provider::InstanceService)
         service.create(connection, instance)
 
-        wait_until do
-          if service.error?(connection, instance)
-            raise 'Error creating instance'
-          end
-
-          service.active?(connection, instance)
-        end
-
         return true
       end
     end # ProvisionInstance
