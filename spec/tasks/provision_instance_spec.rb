@@ -4,7 +4,7 @@ module Ancor
   module Tasks
     describe ProvisionInstance do
 
-      it 'provisions an instance' do
+      it 'provisions an instance', live: true do
         options = {
           openstack_api_key: 'user_one',
           openstack_username: 'user_one',

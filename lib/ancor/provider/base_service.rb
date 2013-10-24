@@ -1,6 +1,7 @@
 module Ancor
   module Provider
     class BaseService
+      include Loggable
       include Operational
 
       class << self

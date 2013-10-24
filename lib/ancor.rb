@@ -4,9 +4,26 @@ require 'ancor/concurrent_list'
 
 require 'ancor/extensions/mash'
 
-
+require 'ancor/loggable'
 require 'ancor/operational'
 require 'ancor/object_store'
+
+module Ancor
+  extend self
+
+  # @return [Logger]
+  attr_accessor :logger
+
+  def setup_logger
+    @logger = Logger.new $stdout
+    @logger.datetime_format = '%Y-%m-%d %I:%M%P'
+    @logger.formatter = proc do |severity, datetime, progname, msg|
+      "[#{severity}] [#{datetime}]: #{msg}\n"
+    end
+  end
+end
+
+Ancor.setup_logger
 
 require 'ancor/errors'
 
@@ -26,3 +43,4 @@ require 'ancor/tasks/initialize_instance'
 require 'ancor/tasks/provision_instance'
 require 'ancor/tasks/push_configuration'
 require 'ancor/tasks/update_security_group'
+

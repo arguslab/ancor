@@ -1,6 +1,7 @@
 module Ancor
   module Tasks
     class BaseExecutor
+      include Loggable
       include Operational
 
       # @return [Task]

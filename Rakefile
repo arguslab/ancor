@@ -5,3 +5,15 @@
 require File.expand_path('../config/application', __FILE__)
 
 Ancor::Application.load_tasks
+
+require 'rspec/core/rake_task'
+
+task :default => :spec
+
+RSpec::Core::RakeTask.new :spec do |t|
+  t.rspec_opts = '--color --format d --tag ~@live'
+end
+
+RSpec::Core::RakeTask.new :live do |t|
+  t.rspec_opts = '--color --format d --tag @live'
+end

@@ -2,9 +2,9 @@ require 'spec_helper'
 
 module Ancor
   module Tasks
-    describe createNetwork do
+    describe ProvisionNetwork do
 
-      it 'provisions a network' do
+      it 'provisions a network', live: true do
 
       end
 

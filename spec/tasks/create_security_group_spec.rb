@@ -4,7 +4,7 @@ module Ancor
   module Tasks
     describe CreateSecurityGroup do
 
-      it 'creates a security group for an instance' do
+      it 'creates a security group for an instance', live: true do
         options = {
           openstack_api_key: 'user_one',
           openstack_username: 'user_one',
