@@ -4,6 +4,9 @@ module Ancor
   module Tasks
     describe ProvisionInstance do
 
+      # No instance exists with ec428b08-3b36-11e3-bee0-ce3f5508acd9
+      # No instance exists with IP 10.97.226.20
+      # Ensure security group ec428b08-3b36-11e3-bee0-ce3f5508acd9 exists
       it 'provisions an instance', live: true do
         options = {
           openstack_api_key: 'user_one',
