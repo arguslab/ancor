@@ -1,6 +1,6 @@
-require 'ancor/provider/openstack_instance_service'
-require 'ancor/provider/openstack_network_service'
-require 'ancor/provider/openstack_security_group_service'
+require 'ancor/provider/openstack/instance_service'
+require 'ancor/provider/openstack/network_service'
+require 'ancor/provider/openstack/security_group_service'
 
 module Ancor
   module Provider
