@@ -23,7 +23,7 @@ end
 
 puts bold "Cloning required repositories"
 
-`git clone git://github.com/puppetlabs/marionette-collective.git -b 2.3.x #{vendordir}/marionette-collective`
+`git clone git://github.com/puppetlabs/marionette-collective.git -b 2.2.x #{vendordir}/marionette-collective`
 `git clone git://github.com/puppetlabs/mcollective-puppet-agent.git #{vendordir}/mcollective-puppet-agent`
 `git clone git://github.com/puppetlabs/mcollective-puppetca-agent.git #{vendordir}/mcollective-puppetca-agent`
 `git clone git://github.com/ripienaar/mcollective-server-provisioner.git #{vendordir}/mcollective-server-provisioner`
