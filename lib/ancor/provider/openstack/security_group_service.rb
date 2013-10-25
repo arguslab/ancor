@@ -47,7 +47,7 @@ module Ancor
       def delete(connection, instance)
         secgroup_id = instance.provider_details['secgroup_id']
 
-        return if secgroup_id && delete_by_id(secgroup_id)
+        return if secgroup_id && delete_by_id(connection, secgroup_id)
 
         # Instance did not have security group set, or the security group did not
         # exist. Make sure there is no similarly named security group.
@@ -55,7 +55,7 @@ module Ancor
           sg.name == instance.name
         end
 
-        delete_by_id(secgroup.id) if secgroup
+        delete_by_id(connection, secgroup.id) if secgroup
 
         # TODO Should we unset the secgroup_id provider detail?
       end

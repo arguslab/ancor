@@ -27,8 +27,7 @@ module OsInstanceHelper
     }.stringify_keys
 
     instance = Instance.create(
-      #name: 'ec428b08-3b36-11e3-bee0-ce3f5508acd9',
-      name: SecureRandom.uuid, 
+      name: SecureRandom.hex(8),
       provider_endpoint: endpoint,
       provider_details: instance_details)
 

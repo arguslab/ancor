@@ -86,7 +86,7 @@ module Ancor
         instance_id = instance.provider_details['instance_id']
 
         begin
-          connection.servers.get id
+          connection.servers.get instance_id
         rescue Fog::Compute::OpenStack::NotFound
           connection.servers.find { |i|
             i.name == instance.name
