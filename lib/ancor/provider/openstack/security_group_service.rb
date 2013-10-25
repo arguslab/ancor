@@ -7,6 +7,22 @@ module Ancor
       # @param [Instance] instance
       # @return [undefined]
       def create(connection, instance)
+        if instance.provider_details["secgroup_id"]
+          # TODO Check if security group is actually present
+          return
+        end
+
+        secgroup = connection.security_groups.find do |sg|
+          sg.name == instance.name
+        end
+
+        if secgroup
+          instance.provider_details["secgroup_id"] = secgroup.id
+          instance.save
+
+          return
+        end
+
         options = {
           name: instance.name,
           description: 'Maintained by ANCOR'

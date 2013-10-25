@@ -3,14 +3,22 @@ require 'spec_helper'
 module Ancor
   module Tasks
     describe DeleteInstance do
+      include OsInstanceHelper
 
-      # Ensure instance exists in db and 
-      # on the cloud infrastructure: ec428b08-3b36-11e3-bee0-ce3f5508acd9
+      let(:secgroup_task) { CreateSecurityGroup.new }
+      let(:provision_task) { ProvisionInstance.new }
+
       it 'deletes an instance', live: true do
-        instance_name = 'ec428b08-3b36-11e3-bee0-ce3f5508acd9'
-        instance = Instance.where(name: instance_name).first
-        subject.perform(instance.id)
+        instance_id = setup_instance_fixture
+
+        secgroup_task.perform instance_id
+        provision_task.perform instance_id
+
+        subject.perform instance_id
+
+        # TODO delete security group
       end
+
     end
   end
 end
