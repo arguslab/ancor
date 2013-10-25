@@ -3,13 +3,15 @@ require 'spec_helper'
 module Ancor
   module Tasks
     describe DeleteNetwork do
+      include OsNetworkHelper
 
-      # Ensure instance exists in db and 
-      # on the cloud infrastructure: ec428b08-3b36-11e3-bee0-ce3f5508acd9
+      let(:network_task) { ProvisionNetwork.new }
+      
       it 'deletes a network', live: true do
-        network_name = 'network-'
-        network = Network.where(name: network_name).first
-        subject.perform(network.id)
+        network_id = setup_network_fixture
+        network_task.perform network_id
+
+        subject.perform(network_id)
       end
     end
   end

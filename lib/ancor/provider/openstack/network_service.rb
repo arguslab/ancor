@@ -28,9 +28,7 @@ module Ancor
         # TODO You can look up network by ID directly. However, find can be used
         # in the case where network ID was not persisted to model and you need to find
         # the network by name
-        os_network = conection.networks.find do |p|
-          p.network_id == network_id
-        end
+        os_network = connection.networks.get network_id
 
         # Delete interface(s) from router
         router_id = network.provider_details['router_id']
