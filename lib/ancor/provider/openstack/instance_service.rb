@@ -48,7 +48,7 @@ module Ancor
       # @param [Instance] instance
       # @return [undefined]
       def delete(connection, instance)
-        os_instance = find_instance connection,instance
+        os_instance = find_instance connection, instance
 
         if os_instance
           os_instance.destroy
@@ -83,17 +83,15 @@ module Ancor
       # @param [Instance] instance
       # @return [Fog::Compute::OpenStack::Server]
       def find_instance(connection, instance)
-        id = instance.provider_details['instance_id']
-        os_instance = connection.servers.get id
+        instance_id = instance.provider_details['instance_id']
 
-        unless os_instance
-          # Find instance by name
-          os_instance = connection.servers.find { |i|
+        begin
+          connection.servers.get id
+        rescue Fog::Compute::OpenStack::NotFound
+          connection.servers.find { |i|
             i.name == instance.name
           }
         end
-
-        os_instance
       end
     end # OpenStackInstanceService
   end # Provider
