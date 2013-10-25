@@ -1,0 +1,53 @@
+#!/usr/bin/env ruby
+
+basedir = File.expand_path("../", File.dirname(__FILE__))
+
+libdir = File.join(basedir, "lib")
+plugindir = File.join(libdir, "mcollective")
+vendordir = File.join(basedir, "vendor")
+
+def silence_stream(stream)
+  old_stream = stream.dup
+  stream.reopen '/dev/null'
+  stream.sync = true
+  yield
+ensure
+  stream.reopen old_stream
+end
+
+def colorize(text, color_code)
+  "#{color_code}#{text}\e[0m"
+end
+
+def putsb(text)
+  puts colorize(text, "\e[1m\e[30m\e[42m")
+end
+
+putsb "Preparing portable install of MCollective at #{basedir}"
+
+silence_stream STDERR do
+  %x{rm #{libdir}/mcollective}
+  %x{rm -rf #{vendordir}/marionette-collective}
+  %x{rm -rf #{vendordir}/mcollective-puppet-agent}
+  %x{rm -rf #{vendordir}/mcollective-puppetca-agent}
+  %x{rm -rf #{vendordir}/mcollective-server-provisioner}
+end
+
+putsb "Cloning required repositories"
+
+%x{git clone git://github.com/puppetlabs/marionette-collective.git -b 2.2.x #{vendordir}/marionette-collective}
+%x{git clone git://github.com/puppetlabs/mcollective-puppet-agent.git #{vendordir}/mcollective-puppet-agent}
+%x{git clone git://github.com/puppetlabs/mcollective-puppetca-agent.git #{vendordir}/mcollective-puppetca-agent}
+%x{git clone git://github.com/ripienaar/mcollective-server-provisioner.git #{vendordir}/mcollective-server-provisioner}
+
+putsb "Shoveling bits"
+
+%x{ln -s #{vendordir}/marionette-collective/plugins/mcollective #{libdir}}
+
+%x{cp -r #{vendordir}/mcollective-puppet-agent/agent #{plugindir}}
+%x{cp -r #{vendordir}/mcollective-puppet-agent/util #{plugindir}}
+%x{cp -r #{vendordir}/mcollective-puppetca-agent/agent #{plugindir}}
+%x{cp -r #{vendordir}/mcollective-puppetca-agent/util #{plugindir}}
+%x{cp -r #{vendordir}/mcollective-server-provisioner/agent #{plugindir}}
+
+putsb "Finished"
