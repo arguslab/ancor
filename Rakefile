@@ -6,6 +6,8 @@ require File.expand_path('../config/application', __FILE__)
 
 Ancor::Application.load_tasks
 
+Rake::Task["spec"].clear
+
 require 'rspec/core/rake_task'
 
 task :default => :spec
