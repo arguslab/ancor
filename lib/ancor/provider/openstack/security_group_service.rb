@@ -46,7 +46,20 @@ module Ancor
       # @return [undefined]
       def delete(connection, instance)
         secgroup_id = instance.provider_details['secgroup_id']
-        connection.delete_security_group secgroup_id 
+
+        if secgroup_id
+          return if delete_by_id(secgroup_id)
+        end
+
+        secgroup = connection.security_groups.find do |sg|
+          sg.name == instance.name
+        end
+
+        if secgroup
+          delete_by_id(secgroup_id)
+        end
+
+        # TODO Should we unset the secgroup_id provider detail?
       end
 
       # @param [Fog::Compute::OpenStack] connection
@@ -58,6 +71,15 @@ module Ancor
         connection.create_security_group_rule id, 1, 65535, 'tcp'
         connection.create_security_group_rule id, 1, 65535, 'udp'
         connection.create_security_group_rule id, -1, -1, 'icmp'
+      end
+
+      private
+
+      def delete_by_id(connection, id)
+        connection.delete_security_group id
+        true
+      rescue Fog::Compute::OpenStack::NotFound
+        false
       end
     end # OpenStackSecurityGroupService
   end # Provider
