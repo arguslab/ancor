@@ -48,7 +48,7 @@ module Ancor
       # @param [Instance] instance
       # @return [undefined]
       def delete(connection, instance)
-        os_instance = find_instance connection, instance
+        os_instance = find_instance connection,instance
 
         if os_instance
           os_instance.destroy

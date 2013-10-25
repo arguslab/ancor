@@ -1,6 +1,6 @@
 module Ancor
   module Tasks
-    class ProvisionInstance < BaseExecutor
+    class DeleteInstance < BaseExecutor
       def perform(instance_id)
         instance = Instance.find instance_id
         locator = Provider::ServiceLocator.instance
@@ -9,10 +9,10 @@ module Ancor
 
         connection = locator.connection(endpoint)
         service = locator.service(endpoint.type, Provider::InstanceService)
-        service.create(connection, instance)
+        service.delete(connection, instance)
 
         return true
       end
-    end # ProvisionInstance
+    end # DeleteInstance
   end # Tasks
 end
