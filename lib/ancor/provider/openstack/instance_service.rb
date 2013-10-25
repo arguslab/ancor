@@ -52,6 +52,9 @@ module Ancor
 
         if os_instance
           os_instance.destroy
+          wait_while do
+            os_instance.reload
+          end
         end
       end
 

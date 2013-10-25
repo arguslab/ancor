@@ -38,7 +38,8 @@ module Ancor
       # @param [Instance] instance
       # @return [undefined]
       def delete(connection, instance)
-        # TODO Implement this method
+        secgroup_id = instance.provider_details['secgroup_id']
+        connection.delete_security_group secgroup_id 
       end
 
       # @param [Fog::Compute::OpenStack] connection

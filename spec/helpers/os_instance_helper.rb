@@ -1,3 +1,5 @@
+require 'securerandom'
+
 module OsInstanceHelper
   # @return [String] The instance id
   def setup_instance_fixture
@@ -19,14 +21,14 @@ module OsInstanceHelper
     network = Network.create(provider_details: network_details)
 
     instance_details = {
-      secgroup_id: '1b248365-29a7-461b-a0c7-2f2febdeb032',
       flavor_id: '1',
       image_id: '4fecad2d-0fa7-43f3-a2a3-91b789bf1883',
       user_data: ''
     }.stringify_keys
 
     instance = Instance.create(
-      name: 'ec428b08-3b36-11e3-bee0-ce3f5508acd9',
+      #name: 'ec428b08-3b36-11e3-bee0-ce3f5508acd9',
+      name: SecureRandom.uuid, 
       provider_endpoint: endpoint,
       provider_details: instance_details)
 
