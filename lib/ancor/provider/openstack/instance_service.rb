@@ -85,13 +85,14 @@ module Ancor
       def find_instance(connection, instance)
         instance_id = instance.provider_details['instance_id']
 
-        begin
-          connection.servers.get id
-        rescue Fog::Compute::OpenStack::NotFound
-          connection.servers.find { |i|
+        os_instance = connection.servers.get instance_id
+        unless os_instance
+          os_instance = connection.servers.find { |i|
             i.name == instance.name
           }
         end
+
+        os_instance
       end
     end # OpenStackInstanceService
   end # Provider
