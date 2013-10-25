@@ -14,28 +14,28 @@ end
 puts bold "Preparing portable install of MCollective at #{basedir}"
 
 quietly do
-  %x{rm #{libdir}/mcollective}
-  %x{rm -rf #{vendordir}/marionette-collective}
-  %x{rm -rf #{vendordir}/mcollective-puppet-agent}
-  %x{rm -rf #{vendordir}/mcollective-puppetca-agent}
-  %x{rm -rf #{vendordir}/mcollective-server-provisioner}
+  `rm #{libdir}/mcollective`
+  `rm -rf #{vendordir}/marionette-collective`
+  `rm -rf #{vendordir}/mcollective-puppet-agent`
+  `rm -rf #{vendordir}/mcollective-puppetca-agent`
+  `rm -rf #{vendordir}/mcollective-server-provisioner`
 end
 
 puts bold "Cloning required repositories"
 
-%x{git clone git://github.com/puppetlabs/marionette-collective.git -b 2.2.x #{vendordir}/marionette-collective}
-%x{git clone git://github.com/puppetlabs/mcollective-puppet-agent.git #{vendordir}/mcollective-puppet-agent}
-%x{git clone git://github.com/puppetlabs/mcollective-puppetca-agent.git #{vendordir}/mcollective-puppetca-agent}
-%x{git clone git://github.com/ripienaar/mcollective-server-provisioner.git #{vendordir}/mcollective-server-provisioner}
+`git clone git://github.com/puppetlabs/marionette-collective.git -b 2.3.x #{vendordir}/marionette-collective`
+`git clone git://github.com/puppetlabs/mcollective-puppet-agent.git #{vendordir}/mcollective-puppet-agent`
+`git clone git://github.com/puppetlabs/mcollective-puppetca-agent.git #{vendordir}/mcollective-puppetca-agent`
+`git clone git://github.com/ripienaar/mcollective-server-provisioner.git #{vendordir}/mcollective-server-provisioner`
 
 puts bold "Shoveling bits"
 
-%x{ln -s #{vendordir}/marionette-collective/plugins/mcollective #{libdir}}
+`ln -s #{vendordir}/marionette-collective/plugins/mcollective #{libdir}`
 
-%x{cp -r #{vendordir}/mcollective-puppet-agent/agent #{plugindir}}
-%x{cp -r #{vendordir}/mcollective-puppet-agent/util #{plugindir}}
-%x{cp -r #{vendordir}/mcollective-puppetca-agent/agent #{plugindir}}
-%x{cp -r #{vendordir}/mcollective-puppetca-agent/util #{plugindir}}
-%x{cp -r #{vendordir}/mcollective-server-provisioner/agent #{plugindir}}
+`cp -r #{vendordir}/mcollective-puppet-agent/agent #{plugindir}`
+`cp -r #{vendordir}/mcollective-puppet-agent/util #{plugindir}`
+`cp -r #{vendordir}/mcollective-puppetca-agent/agent #{plugindir}`
+`cp -r #{vendordir}/mcollective-puppetca-agent/util #{plugindir}`
+`cp -r #{vendordir}/mcollective-server-provisioner/agent #{plugindir}`
 
 puts bold "Finished"
