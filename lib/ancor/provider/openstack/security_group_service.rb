@@ -7,9 +7,16 @@ module Ancor
       # @param [Instance] instance
       # @return [undefined]
       def create(connection, instance)
-        if instance.provider_details["secgroup_id"]
-          # TODO Check if security group is actually present
-          return
+        secgroup_id = instance.provider_details['secgroup_id']
+
+        if secgroup_id
+          # Ensure that the security group actually exists
+          begin
+            connection.security_groups.get secgroup_id
+            return
+          rescue Fog::Compute::OpenStack::NotFound
+            # Identifier is incorrect
+          end
         end
 
         secgroup = connection.security_groups.find do |sg|
@@ -17,7 +24,7 @@ module Ancor
         end
 
         if secgroup
-          instance.provider_details["secgroup_id"] = secgroup.id
+          instance.provider_details['secgroup_id'] = secgroup.id
           instance.save
 
           return
