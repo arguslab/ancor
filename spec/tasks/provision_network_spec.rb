@@ -5,9 +5,12 @@ module Ancor
     describe ProvisionNetwork do
       include OsNetworkHelper
 
-      it 'creates a network', live: true do
+      let(:network_delete_task) { DeleteNetwork.new }
+
+      it 'creates and deletes a network', live: true do
         network_id = setup_network_fixture
         subject.perform(network_id)
+        network_delete_task.perform network_id
       end
     end
   end
