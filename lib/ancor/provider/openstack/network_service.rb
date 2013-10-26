@@ -28,7 +28,6 @@ module Ancor
         # TODO You can look up network by ID directly. However, find can be used
         # in the case where network ID was not persisted to model and you need to find
         # the network by name
-        os_network = connection.networks.get network_id
 
         # Delete interface(s) from router
         router_id = network.provider_details['router_id']
@@ -38,8 +37,15 @@ module Ancor
           connection.remove_router_interface router_id, subnet_id
         end
 
-        os_network.destroy
+        connection.delete_subnet subnet_id
 
+        os_network = connection.networks.get network_id
+
+        if os_network.subnets.empty?
+          os_network.destroy
+        else
+          logger.info "Network #{network_id} has other subnets"
+        end
       end
 
       private
