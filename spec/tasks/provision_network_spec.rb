@@ -12,7 +12,7 @@ module Ancor
         network_id = setup_network_fixture
 
         subject.perform network_id
-        #delete_task.perform network_id
+        delete_task.perform network_id
       end
     end
 

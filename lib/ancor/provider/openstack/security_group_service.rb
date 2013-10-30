@@ -65,10 +65,13 @@ module Ancor
       # @return [undefined]
       def update(connection, instance)
         secgroup_id = instance.provider_details['secgroup_id']
+        rules = instance.provider_details['secgroup_rules']
 
-        connection.create_security_group_rule id, 1, 65535, 'tcp'
-        connection.create_security_group_rule id, 1, 65535, 'udp'
-        connection.create_security_group_rule id, -1, -1, 'icmp'
+        unless rules.empty?
+          rules.each { |rule|
+            connection.create_security_group_rule secgroup_id, rule['protocol'], rule['from_port'], rule['to_port'], rule['source']
+          }
+        end
       end
 
       private

@@ -6,10 +6,33 @@ module OpenStackHelper
       type: :os_nova,
       options: openstack_options)
 
+    instance_secgroup_rules = Array.new { Hash.new }
+    instance_secgroup_rules[0] = {
+      protocol: 'tcp',
+      from_port: 5,
+      to_port: 65535,
+      source: '0.0.0.0/0'
+    }
+
+    instance_secgroup_rules[1] = {
+      protocol: 'icmp',
+      from_port: -1,
+      to_port: -1,
+      source: '0.0.0.0/0'
+    }
+
+    instance_secgroup_rules[2] = {
+      protocol: 'udp',
+      from_port: 10,
+      to_port: 10000,
+      source: '0.0.0.0/0'
+    }
+
     instance_details = {
       flavor_id: '1',
       image_id: '4fecad2d-0fa7-43f3-a2a3-91b789bf1883',
-      user_data: ''
+      user_data: '',
+      secgroup_rules: instance_secgroup_rules
     }.stringify_keys
 
     instance = Instance.create(
