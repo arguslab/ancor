@@ -58,9 +58,9 @@ module Ancor
           name: network.name
         }
 
-        provider_network = connection.networks.create options
+        os_network = connection.networks.create options
 
-        network.provider_details['network_id'] = provider_network.id
+        network.provider_details['network_id'] = os_network.id
         network.save
       end
 
@@ -72,13 +72,14 @@ module Ancor
           network_id: network.provider_details['network_id'],
           cidr: network.cidr,
           ip_version: network.ip_version,
+          dns_nameservers: network.dns_nameservers
         }
 
-        provider_subnet = attempt do
+        os_subnet = attempt do
           connection.subnets.create options
         end
 
-        network.provider_details['subnet_id'] = provider_subnet.id
+        network.provider_details['subnet_id'] = os_subnet.id
         network.save
       end
 
@@ -93,7 +94,6 @@ module Ancor
           connection.add_router_interface router_id, subnet_id
         end
       end
-
     end # OpenStackNetworkService
-  end
+  end # Provider
 end

@@ -7,6 +7,7 @@ class Network
 
   field :cidr, type: String
   field :ip_version, type: Integer, default: 4
+  field :dns_nameservers, type: Array
 
   field :state, type: Symbol, default: :planned
 end
