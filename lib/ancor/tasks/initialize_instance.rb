@@ -6,7 +6,7 @@ module Ancor
       def initialize
         @options = {
           puppet_ipaddress: '192.168.100.104',
-          puppet_host: 'ancor-edge'
+          puppet_host: 'ancor'
         }
       end
 
@@ -36,7 +36,7 @@ module Ancor
 
         return false unless inventory
 
-        certname = "dahcert"
+        certname = inventory[:data][:facts]['fqdn']
         ipaddress = @options[:puppet_ipaddress]
 
         ca_client = rpc_client :puppetca
@@ -45,22 +45,26 @@ module Ancor
         provision_client = rpc_client :provision
         provision_client.identity_filter instance.name
 
+        puts "Cleaning certificate #{certname} on CA"
         # Clean the certificate on the CA
         client_sync {
           ca_client.clean certname: certname
         }
 
+        puts "Setting puppet host to #{ipaddress}"
         # Set the Puppet HOSTS entry on the target instance
         client_sync {
           provision_client.set_puppet_host ipaddress: ipaddress
         }
 
         # Run puppet and request certificate from the master
+        puts "Running puppet on target node"
         client_sync {
           provision_client.bootstrap_puppet
         }
 
         # Sign the instance CSR on the CA
+        puts "Signing certificate #{certname} on CA"
         result = client_sync {
           ca_client.sign certname: certname
         }.first

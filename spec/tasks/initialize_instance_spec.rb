@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'pry'
 
 module Ancor
   module Tasks
@@ -31,12 +30,9 @@ module Ancor
         create_network_task.perform network_id
         create_instance_task.perform instance_id
 
-        binding.pry
-
         begin
           wait_for_initialize instance_id
         ensure
-          binding.pry
           delete_instance_task.perform instance_id
           delete_network_task.perform network_id
         end

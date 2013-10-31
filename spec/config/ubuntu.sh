@@ -74,11 +74,11 @@ echo "RUN=yes" > /etc/default/mcollective
 echo "$MCOLLECTIVE_CONFIG" > /etc/mcollective/server.cfg
 
 ## Clone the plugins repository for MCollective
-REPO_PATH=$HOME/mcollective
+REPO_PATH=/root/mcollective
 PLUGIN_PATH=/usr/share/mcollective/plugins/mcollective
 
 git clone git://github.com/ripienaar/mcollective-server-provisioner.git $REPO_PATH/mcollective-server-provisioner
-git clone git://github.com/ripienaar/mcollective-server-provisioner.git $REPO_PATH/mcollective-plugins
+git clone git://github.com/ripienaar/mcollective-plugins.git $REPO_PATH/mcollective-plugins
 
 cp $REPO_PATH/mcollective-server-provisioner/agent/provision* $PLUGIN_PATH/agent
 cp $REPO_PATH/mcollective-plugins/registration/meta* $PLUGIN_PATH/registration
@@ -87,4 +87,3 @@ cp $REPO_PATH/mcollective-plugins/registration/meta* $PLUGIN_PATH/registration
 rm -rf $REPO_PATH
 
 service mcollective restart
-
