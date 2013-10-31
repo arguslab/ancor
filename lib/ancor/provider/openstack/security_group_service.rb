@@ -68,15 +68,6 @@ module Ancor
         os_rules = os_secgroup.rules
         rules = secgroup.rules
 
-        rules_to_delete = os_rules.reject { |os_rule|
-          # The rule in the OS ruleset does not exist in the rules we want
-          rules.any? { |rule|
-            rule_equal? rule, os_rule
-          }
-        }
-
-        delete_rules connection, rules_to_delete
-
         rules_to_add = rules.reject { |rule|
           # The rule that we want already exists in the OS ruleset
           os_rules.any? { |os_rule|
@@ -85,6 +76,15 @@ module Ancor
         }
 
         add_rules connection, secgroup_id, rules_to_add
+
+        rules_to_delete = os_rules.reject { |os_rule|
+          # The rule in the OS ruleset does not exist in the rules we want
+          rules.any? { |rule|
+            rule_equal? rule, os_rule
+          }
+        }
+
+        delete_rules connection, rules_to_delete
       end
 
       private
