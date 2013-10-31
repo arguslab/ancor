@@ -9,7 +9,6 @@ class Role
   has_many :exports, class_name: "Channel", inverse_of: :exporter
   has_many :scenarios
 
-  
   def dependent_instances
   end
 end

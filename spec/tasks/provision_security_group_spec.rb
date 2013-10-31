@@ -8,11 +8,11 @@ module Ancor
 
       let(:delete_task) { DeleteSecurityGroup.new }
 
-      it 'creates and deletes a security group for an instance', live: true do
-        instance_id = setup_instance_fixture
+      it 'creates and deletes a security group', live: true do
+        secgroup_id = setup_secgroup_fixture
 
-        subject.perform instance_id
-        delete_task.perform instance_id
+        subject.perform secgroup_id
+        delete_task.perform secgroup_id
       end
     end
 

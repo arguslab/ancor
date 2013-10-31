@@ -21,13 +21,14 @@ module Ancor
         end
 
         nics = build_nic_specifications instance
+        secgroups = build_secgroups instance
 
         options = {
           name: instance.name,
           flavor_ref: instance.provider_details['flavor_id'],
           image_ref: instance.provider_details['image_id'],
           nics: nics,
-          security_groups: [instance.provider_details['secgroup_id']],
+          security_groups: secgroups,
           # TODO Add support for user data from an object store
           user_data: instance.provider_details['user_data']
         }
@@ -59,6 +60,16 @@ module Ancor
       end
 
       private
+
+      # Creates an array of security group identifiers that will be assigned to the instance
+      #
+      # @param [Instance] instance
+      # @return [Array]
+      def build_secgroups(instance)
+        instance.security_groups.map { |secgroup|
+          secgroup.provider_details['secgroup_id']
+        }.compact
+      end
 
       # Creates an array of specifications used to attach an instance to its associated networks
       #

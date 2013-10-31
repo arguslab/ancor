@@ -1,38 +1,35 @@
 require 'securerandom'
+
 module OpenStackHelper
-  # @return [String] The instance id
-  def setup_instance_fixture(network_id = nil)
+  # @return [String] The security group id
+  def setup_secgroup_fixture
     endpoint = ProviderEndpoint.create(
       type: :os_nova,
       options: openstack_options)
 
-    instance_secgroup_rules = Array.new { Hash.new }
-    instance_secgroup_rules[0] = {
-      protocol: 'tcp',
-      from_port: 234,
-      to_port: 65535,
-      source: '0.0.0.0/0'
-    }
+    cidr = '0.0.0.0/0'
 
-    instance_secgroup_rules[1] = {
-      protocol: 'icmp',
-      from_port: -1,
-      to_port: -1,
-      source: '0.0.0.0/0'
-    }
+    secgroup = SecurityGroup.new(provider_endpoint: endpoint)
+    secgroup.rules << SecurityGroupRule.new(protocol: :tcp, from: 1, to: 65535, cidr: cidr)
+    secgroup.rules << SecurityGroupRule.new(protocol: :udp, from: 1, to: 65535, cidr: cidr)
+    secgroup.rules << SecurityGroupRule.new(protocol: :icmp, from: -1, to: -1, cidr: cidr)
+    secgroup.save
 
-    instance_secgroup_rules[2] = {
-      protocol: 'udp',
-      from_port: 123,
-      to_port: 5000,
-      source: '0.0.0.0/0'
-    }
+    secgroup.id
+  end
+
+  # @param [String] network_id
+  # @param [String] secgroup_id
+  # @return [String] The instance id
+  def setup_instance_fixture(network_id = nil, secgroup_id = nil)
+    endpoint = ProviderEndpoint.create(
+      type: :os_nova,
+      options: openstack_options)
 
     instance_details = {
       flavor_id: '1',
       image_id: '4fecad2d-0fa7-43f3-a2a3-91b789bf1883',
       user_data: '',
-      secgroup_rules: instance_secgroup_rules
     }.stringify_keys
 
     instance = Instance.create(
@@ -49,6 +46,11 @@ module OpenStackHelper
         instance: instance,
         network: network,
         ip_address: ip_address)
+    end
+
+    if secgroup_id
+      secgroup = SecurityGroup.find secgroup_id
+      instance.security_groups << secgroup
     end
 
     instance.id

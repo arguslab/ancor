@@ -19,6 +19,8 @@ class Instance
 
   has_many :interfaces, class_name: "InstanceInterface"
 
+  has_and_belongs_to_many :security_groups
+
   def networks
     interfaces.map do |interface|
       interface.network
