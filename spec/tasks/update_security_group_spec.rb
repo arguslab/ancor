@@ -9,7 +9,7 @@ module Ancor
       let(:create_task) { CreateSecurityGroup.new }
       let(:delete_task) { DeleteSecurityGroup.new }
 
-      it 'creates and deletes a security group for an instance', live: true do
+      it 'updates security group rules for an instance', live: true do
         instance_id = setup_instance_fixture
 
         create_task.perform instance_id

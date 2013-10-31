@@ -9,7 +9,7 @@ module OpenStackHelper
     instance_secgroup_rules = Array.new { Hash.new }
     instance_secgroup_rules[0] = {
       protocol: 'tcp',
-      from_port: 5,
+      from_port: 234,
       to_port: 65535,
       source: '0.0.0.0/0'
     }
@@ -23,8 +23,8 @@ module OpenStackHelper
 
     instance_secgroup_rules[2] = {
       protocol: 'udp',
-      from_port: 10,
-      to_port: 10000,
+      from_port: 123,
+      to_port: 5000,
       source: '0.0.0.0/0'
     }
 
