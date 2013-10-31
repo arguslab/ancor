@@ -55,20 +55,27 @@ module Ancor
         execute_task task_id
       end
 
-      # Creating a new dependent task and an associated wait hanlde
+      # Creates a new task and wait handle that is associated with this task
       #
       # @param [Class] klass
       # @param [Object...] args
       # @return [String] The identifier of the created task
       def create_task(klass, *args)
-        dependent = Task.create(type: klass.name, arguments: args)
+        dependent = Task.create(type: klass.name, arguments: args).id.to_s
 
-        wh = WaitHandle.new(type: :task_completed)
-        wh.parameters["task_id"] = dependent.id
+        create_wait_handle(:task_completed, task_id: dependent)
+        dependent
+      end
+
+      # Creates a new wait handle and associates it with this task
+      #
+      # @param [Symbol] type
+      # @param [Hash] parameters
+      # @return [undefined]
+      def create_wait_handle(type, parameters)
+        wh = WaitHandle.new(type: type, parameters: parameters)
         wh.tasks << task
         wh.save
-
-        dependent.id.to_s
       end
 
       # Enqueues the task with the given identifier into the Sidekiq queue

@@ -7,7 +7,7 @@ class WebhookController < ApplicationController
     instance = Instance.where(name: host).first
 
     if instance
-      process_wait_handles :instance_started, instance.id
+      process_wait_handles :instance_registered, instance.id
     else
       # TODO Log missing instances
     end

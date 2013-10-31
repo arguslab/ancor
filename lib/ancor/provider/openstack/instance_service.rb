@@ -34,7 +34,8 @@ module Ancor
         }
         os_instance = connection.servers.create options
 
-        wait_until do
+        # TODO This should be customizable
+        wait_until(240) do
           os_instance.reload
 
           if os_instance.state == STATE_ERROR

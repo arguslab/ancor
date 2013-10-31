@@ -1,4 +1,6 @@
 require 'fog'
+require 'mcollective'
+require 'puppet'
 require 'thread_safe'
 require 'ancor/concurrent_list'
 
@@ -27,17 +29,21 @@ Ancor.setup_logger
 
 require 'ancor/errors'
 
-require 'ancor/provider/service_locator'
+require 'ancor/conductor/client_lock'
+require 'ancor/conductor/client_util'
 
+require 'ancor/provider/service_locator'
 require 'ancor/provider/base_service'
 require 'ancor/provider/instance_service'
 require 'ancor/provider/network_service'
 require 'ancor/provider/security_group_service'
-
 require 'ancor/provider/openstack'
 
 require 'ancor/tasks/base_executor'
 require 'ancor/tasks/create_security_group'
+require 'ancor/tasks/delete_instance'
+require 'ancor/tasks/delete_network'
+require 'ancor/tasks/delete_security_group'
 require 'ancor/tasks/deploy_instance'
 require 'ancor/tasks/initialize_instance'
 require 'ancor/tasks/provision_instance'
