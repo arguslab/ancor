@@ -1,5 +1,17 @@
 class WebhookController < ApplicationController
   def mcollective
+    body = request.body.read
+    meta = YAML.load body
+
+    host = meta[:identity].split('.')[0]
+    instance = Instance.where(name: host).first
+
+    if instance
+      process_wait_handles :instance_started, instance.id
+    else
+      # TODO Log missing instances
+    end
+
     puts request.body.read
     render nothing: true, status: 200
   end
