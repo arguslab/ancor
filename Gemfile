@@ -10,6 +10,9 @@ gem 'sidekiq'
 gem 'sinatra'
 gem 'thread_safe'
 
+gem 'mcollective', '~> 2.2.0'
+gem 'puppet', '~> 3.3.0'
+
 group :development, :testing do
   # Development dependencies
   gem 'guard'

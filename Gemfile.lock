@@ -42,6 +42,7 @@ GEM
     erubis (2.7.0)
     eventmachine (1.0.3)
     excon (0.27.6)
+    facter (1.7.3)
     ffi (1.9.0)
     fog (1.16.0)
       builder
@@ -65,10 +66,13 @@ GEM
       guard (>= 2.1.1)
       rspec (~> 2.14)
     hashie (2.0.5)
+    hiera (1.2.1)
+      json_pure
     hike (1.2.3)
     i18n (0.6.5)
     journey (1.0.4)
     json (1.8.1)
+    json_pure (1.8.1)
     listen (2.1.1)
       celluloid (>= 0.15.2)
       rb-fsevent (>= 0.9.3)
@@ -77,6 +81,10 @@ GEM
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
+    mcollective (2.2.3)
+      json
+      stomp
+      systemu
     method_source (0.8.2)
     mime-types (1.25)
     mini_portile (0.5.2)
@@ -98,6 +106,10 @@ GEM
       coderay (~> 1.0.5)
       method_source (~> 0.8)
       slop (~> 3.4)
+    puppet (3.3.1)
+      facter (~> 1.6)
+      hiera (~> 1.0)
+      rgen (~> 0.6.5)
     rack (1.4.5)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -131,6 +143,7 @@ GEM
     redis (3.0.5)
     redis-namespace (1.3.1)
       redis (~> 3.0.0)
+    rgen (0.6.6)
     rspec (2.14.1)
       rspec-core (~> 2.14.0)
       rspec-expectations (~> 2.14.0)
@@ -163,6 +176,8 @@ GEM
       multi_json (~> 1.0)
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
+    stomp (1.3.1)
+    systemu (2.5.2)
     thin (1.5.1)
       daemons (>= 1.0.9)
       eventmachine (>= 0.12.6)
@@ -188,7 +203,9 @@ DEPENDENCIES
   guard
   guard-rspec
   hashie
+  mcollective (~> 2.2.0)
   mongoid
+  puppet (~> 3.3.0)
   rails (= 3.2.14)
   rake
   rspec
