@@ -63,15 +63,9 @@ module Ancor
     end
 
     def process_wait_handles(type, task_id)
-      criteria = {
-        "type" => type,
-        "parameters.task_id" => task_id
-      }
-
-      wait_tasks = WaitHandle.where(criteria).pluck(:task_ids).flatten.uniq
-      wait_tasks.each do |wait_task_id|
-        TaskWorker.perform_async wait_task_id.to_s
+      WaitHandle.tasks_for(type, task_id: task_id).each do |id|
+        TaskWorker.perform_async id
       end
     end
-  end # Task Worker
+  end # TaskWorker
 end

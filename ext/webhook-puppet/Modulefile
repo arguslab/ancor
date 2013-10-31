@@ -1,4 +1,0 @@
-name    'ancor-puppet-webhook'
-version '0.1.0'
-author  'Ian Unruh'
-summary 'Puppet report handler that calls an ANCOR webhook'
