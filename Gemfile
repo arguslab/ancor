@@ -11,6 +11,7 @@ gem 'sinatra'
 gem 'thread_safe'
 
 gem 'mcollective', '~> 2.2.0'
+gem 'stomp', '1.2.2'
 gem 'puppet', '~> 3.3.0'
 
 group :development, :testing do
