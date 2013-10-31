@@ -14,6 +14,9 @@ module Ancor
 
         create_task.perform secgroup_id
         subject.perform secgroup_id
+
+        os_rules_for(secgroup_id).size.should == 3
+
         delete_task.perform secgroup_id
       end
 
@@ -26,12 +29,27 @@ module Ancor
         change_secgroup_rules secgroup_id
         subject.perform secgroup_id
 
-        # TODO Ensure that the rules are actually in sync
+        # Started with 3 rules (+3)
+        # Added 2 rules (+2)
+        # Removed 1 rule (-1)
+        os_rules_for(secgroup_id).size.should == 4
 
         delete_task.perform secgroup_id
       end
 
       private
+
+      # @param [String] id
+      # @return [Array] Contains hashes of rules in OpenStack format
+      def os_rules_for(id)
+        secgroup = SecurityGroup.find id
+        secgroup_id = secgroup.provider_details['secgroup_id']
+
+        locator = Provider::ServiceLocator.instance
+        connection = locator.connection secgroup.provider_endpoint
+
+        connection.security_groups.get(secgroup_id).rules
+      end
 
       # @param [String] id
       # @return [undefined]
