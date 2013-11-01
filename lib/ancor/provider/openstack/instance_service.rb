@@ -44,6 +44,9 @@ module Ancor
 
           os_instance.state == STATE_ACTIVE
         end
+
+        instance.provider_details['instance_id'] = os_instance.id
+        instance.save
       end
 
       # @param [Fog::Compute::OpenStack] connection
@@ -54,7 +57,8 @@ module Ancor
 
         if os_instance
           os_instance.destroy
-          wait_while do
+          # TODO This should be customizable
+          wait_while(240) do
             os_instance.reload
           end
         end
