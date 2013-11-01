@@ -1,7 +1,6 @@
-require 'ancor/extensions/mash'
-
 class Task
   include Mongoid::Document
+  include Ancor::Extensions::IndifferentAccess
   include Stateful
 
   field :type, type: String

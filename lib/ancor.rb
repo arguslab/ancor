@@ -1,14 +1,15 @@
 require 'fog'
+require 'hashie'
 require 'mcollective'
 require 'puppet'
 require 'thread_safe'
 require 'ancor/concurrent_list'
 
-require 'ancor/extensions/mash'
-
 require 'ancor/loggable'
 require 'ancor/operational'
 require 'ancor/object_store'
+
+require 'ancor/extensions/indifferent_access'
 
 module Ancor
   extend self
