@@ -25,12 +25,12 @@ module Ancor
 
         options = {
           name: instance.name,
-          flavor_ref: instance.provider_details['flavor_id'],
-          image_ref: instance.provider_details['image_id'],
+          flavor_ref: instance.provider_details[:flavor_id],
+          image_ref: instance.provider_details[:image_id],
           nics: nics,
           security_groups: secgroups,
           # TODO Add support for user data from an object store
-          user_data: instance.provider_details['user_data']
+          user_data: instance.provider_details[:user_data]
         }
         os_instance = connection.servers.create options
 
@@ -45,7 +45,7 @@ module Ancor
           os_instance.state == STATE_ACTIVE
         end
 
-        instance.provider_details['instance_id'] = os_instance.id
+        instance.provider_details[:instance_id] = os_instance.id
         instance.save
       end
 
@@ -72,7 +72,7 @@ module Ancor
       # @return [Array]
       def build_secgroups(instance)
         instance.security_groups.map { |secgroup|
-          secgroup.provider_details['secgroup_id']
+          secgroup.provider_details[:secgroup_id]
         }.compact
       end
 
@@ -86,7 +86,7 @@ module Ancor
           ip_address = interface.ip_address
 
           specification = {
-            net_id: network.provider_details['network_id'],
+            net_id: network.provider_details[:network_id],
             # this is not limited to IPv4 addresses, Fog is just weird
             v4_fixed_ip: ip_address
           }
@@ -99,7 +99,7 @@ module Ancor
       # @param [Instance] instance
       # @return [Fog::Compute::OpenStack::Server]
       def find_instance(connection, instance)
-        instance_id = instance.provider_details['instance_id']
+        instance_id = instance.provider_details[:instance_id]
 
         os_instance = connection.servers.get instance_id
         unless os_instance

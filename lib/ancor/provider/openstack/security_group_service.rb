@@ -7,7 +7,7 @@ module Ancor
       # @param [SecurityGroup] secgroup
       # @return [undefined]
       def create(connection, secgroup)
-        secgroup_id = secgroup.provider_details['secgroup_id']
+        secgroup_id = secgroup.provider_details[:secgroup_id]
 
         if secgroup_id
           # Ensure that the security group actually exists
@@ -24,7 +24,7 @@ module Ancor
         end
 
         if os_secgroup
-          secgroup.provider_details['secgroup_id'] = os_secgroup.id
+          secgroup.provider_details[:secgroup_id] = os_secgroup.id
           secgroup.save
 
           return
@@ -37,7 +37,7 @@ module Ancor
 
         os_secgroup = connection.security_groups.create options
 
-        secgroup.provider_details['secgroup_id'] = os_secgroup.id
+        secgroup.provider_details[:secgroup_id] = os_secgroup.id
         secgroup.save
       end
 
@@ -45,7 +45,7 @@ module Ancor
       # @param [SecurityGroup] secgroup
       # @return [undefined]
       def delete(connection, secgroup)
-        secgroup_id = secgroup.provider_details['secgroup_id']
+        secgroup_id = secgroup.provider_details[:secgroup_id]
 
         return if secgroup_id && delete_by_id(connection, secgroup_id)
 
@@ -62,10 +62,10 @@ module Ancor
       # @param [SecurityGroup] secgroup
       # @return [undefined]
       def update(connection, secgroup)
-        secgroup_id = secgroup.provider_details['secgroup_id']
+        secgroup_id = secgroup.provider_details[:secgroup_id]
         os_secgroup = connection.security_groups.get secgroup_id
 
-        os_rules = os_secgroup.rules
+        os_rules = os_secgroup.rules.map &:deep_symbolize_keys
         rules = secgroup.rules
 
         rules_to_add = rules.reject { |rule|
@@ -93,10 +93,10 @@ module Ancor
       # @param [Hash] os_rule
       # @param [Boolean]
       def rule_equal?(rule, os_rule)
-        rule.from == os_rule['from_port'] &&
-          rule.to == os_rule['to_port'] &&
-          rule.protocol == os_rule['ip_protocol'].to_sym &&
-          rule.cidr == os_rule['ip_range']['cidr']
+        rule.from == os_rule[:from_port] &&
+          rule.to == os_rule[:to_port] &&
+          rule.protocol == os_rule[:ip_protocol].to_sym &&
+          rule.cidr == os_rule[:ip_range][:cidr]
       end
 
       # @param [Fog::Compute::OpenStack] connection
@@ -114,7 +114,7 @@ module Ancor
       # @return [undefined]
       def delete_rules(connection, os_rules)
         os_rules.each do |os_rule|
-          connection.delete_security_group_rule os_rule['id']
+          connection.delete_security_group_rule os_rule[:id]
         end
       end
 
