@@ -30,7 +30,7 @@ module OpenStackHelper
       flavor_id: '1',
       image_id: '4fecad2d-0fa7-43f3-a2a3-91b789bf1883',
       user_data: '',
-    }.stringify_keys
+    }
 
     instance = Instance.create(
       name: 'instance-' + SecureRandom.hex(8),
@@ -64,7 +64,7 @@ module OpenStackHelper
 
     network_details = {
       router_id: 'a4097da1-8851-45fc-9738-26fd9af14f3c'
-    }.stringify_keys
+    }
 
     network = Network.create(
       name: 'network-' + SecureRandom.hex(8),
