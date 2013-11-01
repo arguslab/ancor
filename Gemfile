@@ -13,12 +13,16 @@ gem 'thread_safe'
 gem 'mcollective', '~> 2.2.0'
 gem 'stomp', '1.2.2'
 gem 'puppet', '~> 3.3.0'
+gem 'unf'
 
 group :development, :testing do
   # Development dependencies
   gem 'guard'
   gem 'guard-rspec'
   gem 'rake'
+
+  # Debugging dependencies
+  gem 'pry'
 
   # Testing dependencies
   gem 'database_cleaner'

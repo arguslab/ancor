@@ -190,6 +190,9 @@ GEM
       polyglot
       polyglot (>= 0.3.1)
     tzinfo (0.3.38)
+    unf (0.1.3)
+      unf_ext
+    unf_ext (0.0.6)
 
 PLATFORMS
   ruby
@@ -203,6 +206,7 @@ DEPENDENCIES
   hashie
   mcollective (~> 2.2.0)
   mongoid
+  pry
   puppet (~> 3.3.0)
   rails (= 3.2.14)
   rake
@@ -213,3 +217,4 @@ DEPENDENCIES
   stomp (= 1.2.2)
   thin
   thread_safe
+  unf
