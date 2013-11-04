@@ -12,7 +12,6 @@ class WebhookController < ApplicationController
       # TODO Log missing instances
     end
 
-    puts request.body.read
     render nothing: true, status: 200
   end
 
@@ -41,7 +40,7 @@ class WebhookController < ApplicationController
 
   def process_wait_handles(type, instance_id)
     WaitHandle.each_task(type, instance_id: instance_id) do |id|
-      TaskWorker.perform_async id
+      Ancor::TaskWorker.perform_async id
     end
   end
 end

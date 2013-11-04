@@ -63,7 +63,7 @@ module Ancor
     end
 
     def process_wait_handles(type, task_id)
-      WaitHandle.tasks_for(type, task_id: task_id).each do |id|
+      WaitHandle.each_task(type, task_id: task_id) do |id|
         TaskWorker.perform_async id
       end
     end

@@ -34,26 +34,13 @@ plugin.rabbitmq.pool.1.user = mcollective
 plugin.rabbitmq.pool.1.password = marionette
 
 # Registration
-# registerinterval = 7200
-# registration = Meta
+registerinterval = 300
+registration = Meta
 
 # Facts
 factsource = facter
 EOF
 )
-
-PUPPET_CONFIG=$(cat <<EOF
-[main]
-logdir = /var/log/puppet
-vardir = /var/lib/puppet
-ssldir = /var/lib/puppet/ssl
-rundir = /var/run/puppet
-factpath = \$vardir/lib/facter
-templatedir = \$confdir/templates
-
-[agent]
-report = true
-EOF)
 
 PATH=/bin:/sbin:/usr/sbin:/usr/bin
 KSPATH=/var/tmp/kickstart
@@ -85,9 +72,6 @@ apt-get install -y puppet facter mcollective mcollective-facter-facts mcollectiv
 ## Configure MCollective
 echo "RUN=yes" > /etc/default/mcollective
 echo "$MCOLLECTIVE_CONFIG" > /etc/mcollective/server.cfg
-
-## Configure Puppet
-echo "$PUPPET_CONFIG" > /etc/puppet/puppet.conf
 
 ## Clone the plugins repository for MCollective
 REPO_PATH=/root/mcollective

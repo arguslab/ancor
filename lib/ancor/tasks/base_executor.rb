@@ -70,10 +70,10 @@ module Ancor
       # Creates a new wait handle and associates it with this task
       #
       # @param [Symbol] type
-      # @param [Hash] parameters
+      # @param [Hash] correlations
       # @return [undefined]
-      def create_wait_handle(type, parameters)
-        wh = WaitHandle.new(type: type, parameters: parameters)
+      def create_wait_handle(type, correlations)
+        wh = WaitHandle.new(type: type, correlations: correlations)
         wh.tasks << task
         wh.save
       end
