@@ -5,21 +5,13 @@ module Ancor
 
     describe InitializeInstance do
       include OpenStackHelper
+      include InitializeHelper
 
       let(:create_instance_task) { ProvisionInstance.new }
       let(:delete_instance_task) { DeleteInstance.new }
 
       let(:create_network_task) { ProvisionNetwork.new }
       let(:delete_network_task) { DeleteNetwork.new }
-
-      before do
-        conf_path = Rails.root.join('spec', 'config', 'mcollective.conf')
-        lib_path = Rails.root.join('lib')
-
-        config = MCollective::Config.instance
-        config.loadconfig conf_path
-        config.libdir << lib_path
-      end
 
       it 'bootstraps an instance', long: true do
         network_id = setup_network_fixture
@@ -45,15 +37,6 @@ module Ancor
           puts "Waiting 10 seconds for instance to come up"
           sleep 10
         end
-      end
-
-      def inject_user_data(instance_id)
-        instance = Instance.find instance_id
-
-        user_data = File.read(Rails.root.join('spec', 'config', 'ubuntu.sh'))
-        instance.provider_details['user_data'] = user_data
-
-        instance.save
       end
     end
 
