@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+basedir = File.expand_path("../", File.dirname(__FILE__))
+
+if RUBY_PLATFORM =~ /darwin/
+  puts "Starting Redis using Brew configuration"
+  `redis-server /usr/local/etc/redis.conf`
+else
+  puts "Redis is managed by the OS, not starting"
+end
+
+
+puts "Starting Sidekiq on the default port in test env"
+`bundle exec sidekiq -e test -d -L #{basedir}/log/sidekiq.log -P #{basedir}/tmp/pids/sidekiq.pid`
+
+puts "Starting Rails on the default port in test env"
+Dir.chdir(basedir) do
+  `script/rails server -e test -d`
+end
+
+puts "Run `stop-services` when you are finished"

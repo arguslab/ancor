@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+
+%w(sidekiq rails redis).each do |name|
+  puts "Checking status of #{name}"
+  puts "----------------------------------------------------"
+
+  IO.popen("ps aux | grep #{name}") do |io|
+    io.each { |s| print s }
+  end
+
+  puts
+end

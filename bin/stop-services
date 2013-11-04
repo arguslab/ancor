@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+basedir = File.expand_path("../", File.dirname(__FILE__))
+
+begin
+  pid = File.read("#{basedir}/tmp/pids/sidekiq.pid")
+  `kill #{pid}`
+
+  puts "Stopped Sidekiq worker"
+rescue
+  puts "Could not stop Sidekiq worker"
+end
+
+begin
+  pid = File.read("#{basedir}/tmp/pids/server.pid")
+  `kill #{pid}`
+  
+  puts "Stopped Rails server"
+rescue
+  puts "Could not stop Rails server"
+end
+
+if RUBY_PLATFORM =~ /darwin/
+  begin
+    pid = File.read("/usr/local/var/run/redis.pid")
+    `kill #{pid}`
+
+    puts "Stopped Redis server"
+  rescue
+    puts "Could not stop Redis server"
+  end
+else
+  puts "Redis is managed by the OS, not stopping"
+end
