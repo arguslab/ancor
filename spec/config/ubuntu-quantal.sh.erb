@@ -8,6 +8,11 @@ PUPPETLABS_APT_PATH=/etc/apt/sources.list.d/puppetlabs.list
 RELEASE_FILE=puppetlabs-release-quantal.deb
 
 #
+# Put aptitude into unattended mode
+#
+DEBIAN_FRONTEND=noninteractive
+
+#
 # Use the Puppet Labs APT repository for a modern version of Puppet
 #
 if [ ! -f "$PUPPET_APT_PATH" ]; then
@@ -20,8 +25,8 @@ fi
 #
 # Install the bare minimum for Puppet
 #
-apt-get --yes --quiet update
-apt-get --yes --quiet install git puppet-common
+apt-get -q -y update
+apt-get -q -y install git puppet-common
 
 #
 # Pull down some initial Puppet configuration
