@@ -24,4 +24,14 @@ class Task
   def suspended?
     :suspended == state
   end
+
+  # Creates a wait handle that will trigger the given tasks when this task is completed
+  #
+  # @param [Task...] tasks
+  # @return [undefined]
+  def create_wait_handle(*tasks)
+    wh = WaitHandle.new(type: :task_completed, correlations: { task_id: id })
+    tasks.each { |task| wh.tasks << task }
+    wh.save
+  end
 end
