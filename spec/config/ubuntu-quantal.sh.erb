@@ -1,0 +1,53 @@
+#!/bin/sh
+set -e -x
+
+FACTS_DIR=/etc/facter/facts.d
+PUPPET_DIR=/etc/puppet
+PUPPET_DIST_DIR=/etc/puppet-dist
+PUPPETLABS_APT_PATH=/etc/apt/sources.list.d/puppetlabs.list
+RELEASE_FILE=puppetlabs-release-quantal.deb
+
+#
+# Use the Puppet Labs APT repository for a modern version of Puppet
+#
+if [ ! -f "$PUPPET_APT_PATH" ]; then
+  wget http://apt.puppetlabs.com/$RELEASE_FILE
+  dpkg -i $RELEASE_FILE
+
+  rm $RELEASE_FILE
+fi
+
+#
+# Install the bare minimum for Puppet
+#
+apt-get --yes --quiet update
+apt-get --yes --quiet install git puppet-common
+
+#
+# Pull down some initial Puppet configuration
+#
+if [ -d "$PUPPET_DIST_DIR" ]; then
+  rm -r $PUPPET_DIR
+else
+  mv $PUPPET_DIR $PUPPET_DIST_DIR
+fi
+
+git clone <%= git_puppet_url %> $PUPPET_DIR
+
+#
+# Setup external facts
+#
+mkdir -p $FACTS_DIR
+cat <<EOF > $FACTS_DIR/basic.yaml
+<%= facts %>
+EOF
+
+#
+# Install required Puppet modules
+#
+$PUPPET_DIR/install-modules
+
+#
+# Apply Puppet configuration
+#
+puppet apply $PUPPET_DIR/manifests/init.pp
