@@ -29,7 +29,6 @@ module Ancor
           image_ref: instance.provider_details[:image_id],
           nics: nics,
           security_groups: secgroups,
-          # TODO Add support for user data from an object store
           user_data: instance.provider_details[:user_data]
         }
         os_instance = connection.servers.create options

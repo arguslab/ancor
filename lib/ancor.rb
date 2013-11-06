@@ -7,7 +7,6 @@ require 'ancor/concurrent_list'
 
 require 'ancor/loggable'
 require 'ancor/operational'
-require 'ancor/object_store'
 
 require 'ancor/extensions/indifferent_access'
 
