@@ -10,5 +10,11 @@ class Role
   has_many :scenarios
 
   def dependent_instances
+    # Channel -> Role -> Instance
+    exports.map { |channel|
+      channel.importers.map { |role|
+        role.instances
+      }
+    }.flatten.compact
   end
 end
