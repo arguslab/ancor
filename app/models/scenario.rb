@@ -5,6 +5,8 @@ class Scenario
   field :description, type: String
   field :slug, type: Symbol
 
+  field :attributes, type: String
+
   belongs_to :role
 
   embeds_many :stages, class_name: "ScenarioStage"
