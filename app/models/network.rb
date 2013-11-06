@@ -10,4 +10,6 @@ class Network
   field :dns_nameservers, type: Array
 
   field :state, type: Symbol, default: :planned
+
+  has_many :connected_interfaces, class_name: "InstanceInterface"
 end
