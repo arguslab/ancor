@@ -5,7 +5,7 @@ class Scenario
   field :description, type: String
   field :slug, type: Symbol
 
-  field :attributes, type: String
+  field :data, type: String
 
   belongs_to :role
 

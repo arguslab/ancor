@@ -7,4 +7,6 @@ class ScenarioStage
   field :description, type: String
 
   field :profiles, type: Array
+
+  field :data, type: String
 end
