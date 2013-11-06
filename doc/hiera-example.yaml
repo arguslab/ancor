@@ -1,0 +1,29 @@
+# These two stanzas are generated automatically from the channel model
+exports:
+  http: { port: 80 }
+  https: { port: 443 }
+imports:
+  database_master:
+    querying:
+      instance-a: { ip_address: 1.1.1.1, port: 10000 }
+  database_slave:
+    querying:
+      instance-b: { ip_address: 2.2.2.2, port: 20000 }
+      instance-c: { ip_address: 3.3.3.3, port: 30000 }
+  kvstore:
+    redis:
+      instance-d: { ip_address: 4.4.4.4, port: 40000 }
+  filestorage:
+    nfs:
+      instance-e: { ip_address: 5.5.5.5, port: 50000 }
+    portmapper:
+      instance-e: { ip_address: 5.5.5.5, from_port: 51000, to_port: 52000 }
+
+# This stanza is generated from the targeted scenario stages { setup, deploy }
+classes:
+  - webapp_setup
+  - webapp_deploy
+
+# This stanza is taken from the scenario's attributes field
+webapp_deploy:
+  repo_url: git://github.com/ianunruh/ancor-rails.git
