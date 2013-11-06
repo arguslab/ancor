@@ -19,11 +19,10 @@ imports:
     portmapper:
       instance-e: { ip_address: 5.5.5.5, from_port: 51000, to_port: 52000 }
 
-# This stanza is generated from the targeted scenario stages { setup, deploy }
+# This stanza is generated from the targeted scenario stage
 classes:
-  - webapp_setup
-  - webapp_deploy
+  - ancor::webapp::deploy
 
 # This stanza is taken from the scenario's attributes field
-webapp_deploy:
+webapp:
   repo_url: git://github.com/ianunruh/ancor-rails.git
