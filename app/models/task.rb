@@ -1,7 +1,7 @@
 class Task
   include Mongoid::Document
   include Ancor::Extensions::IndifferentAccess
-  include Stateful
+  include Lockable
 
   field :type, type: String
   field :arguments, type: Array
@@ -15,6 +15,10 @@ class Task
 
   def error?
     :error == state
+  end
+
+  def in_progress?
+    :in_progress == state
   end
 
   def pending?
@@ -33,5 +37,9 @@ class Task
     wh = WaitHandle.new(type: :task_completed, correlations: { task_id: id })
     tasks.each { |task| wh.tasks << task }
     wh.save
+  end
+
+  def update_state(val)
+    update_attribute(:state, val)
   end
 end

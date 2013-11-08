@@ -3,62 +3,42 @@ module Ancor
     include Sidekiq::Worker
 
     def perform(task_id)
-      task = find_and_lock task_id
-      return unless task
-
-      # Get the most recent state
-      task.reload
+      task = Task.find(task_id)
+      task.lock(jid) unless task.locked?(jid)
 
       begin
-        klass = task.type.constantize
-        executor = klass.new
-        executor.task = task
-
-        unless execute_task task, executor
-          # The task exited, but was not finished
-          task.update_state :suspended
-          return
+        if task.pending? || task.suspended?
+          execute_task task
+          process_wait_handles :task_completed, task.id
         end
-      rescue
-        task.update_state :error
-        raise
+      ensure
+        task.unlock(jid)
       end
-
-      task.update_state :completed
-      process_wait_handles :task_completed, task.id
     end
 
     private
 
-    def execute_task(task, executor)
-      executor.perform(*task.arguments)
-    ensure
-      task.save
-    end
+    # @raise [Exception] If an error occured during execution
+    # @param [Task] task
+    # @return [undefined]
+    def execute_task(task)
+      executor = task.type.constantize.new
+      executor.task = task
 
-    def find_and_lock(task_id)
-      loop do
-        task = Task.find task_id
+      task.update_state :in_progress
 
-        if task.state == :completed
-          # Task is already finished
-          return false
+      begin
+        if executor.perform(*task.arguments)
+          task.update_state :completed
+        else
+          task.update_state :suspended
         end
-
-        if task.state == :in_progress
-          interval = rand 1..15
-
-          # Requeue this task for processing in 1-10 seconds
-          TaskWorker.perform_in(interval, task_id)
-          return false
-        end
-
-        # changing from (pending|suspended|error) to in_progress
-        if task.update_state :in_progress
-          return task
-        end
-
-        # CAS failed, try again
+      rescue
+        task.update_state :error
+        raise
+      ensure
+        # Ensure task context is persisted
+        task.save
       end
     end
 

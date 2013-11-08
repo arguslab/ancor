@@ -1,7 +1,7 @@
 class Network
   include Mongoid::Document
+  include Lockable
   include Providable
-  include Stateful
 
   field :name, type: String
 

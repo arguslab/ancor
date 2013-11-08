@@ -1,7 +1,7 @@
 class Instance
   include Mongoid::Document
+  include Lockable
   include Providable
-  include Stateful
 
   LIFECYCLE_STAGES = [
     :deploy,
@@ -10,7 +10,6 @@ class Instance
   ]
 
   field :name, type: String
-  field :state, type: Symbol, default: :planned
 
   field :lifecycle_stage, type: Symbol, default: :deploy
 
