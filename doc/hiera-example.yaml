@@ -5,19 +5,16 @@ exports:
 imports:
   database_master:
     querying:
-      instance-a: { ip_address: 1.1.1.1, port: 10000 }
-  database_slave:
-    querying:
-      instance-b: { ip_address: 2.2.2.2, port: 20000 }
-      instance-c: { ip_address: 3.3.3.3, port: 30000 }
-  kvstore:
-    redis:
-      instance-d: { ip_address: 4.4.4.4, port: 40000 }
-  filestorage:
-    nfs:
-      instance-e: { ip_address: 5.5.5.5, port: 50000 }
-    portmapper:
-      instance-e: { ip_address: 5.5.5.5, from_port: 51000, to_port: 52000 }
+      instance-a:
+        ip_address: 1.1.1.1
+        port: 10000
+        stage: deploy
+        planned: undeploy
+      instance-b:
+        ip_address: 2.2.2.2
+        port: 20000
+        stage: configure
+        planned: configure
 
 # This stanza is generated from the targeted scenario stage
 classes:

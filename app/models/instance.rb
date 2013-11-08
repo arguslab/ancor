@@ -3,15 +3,22 @@ class Instance
   include Lockable
   include Providable
 
-  LIFECYCLE_STAGES = [
+  STAGES = [
+    :setup,
+    :configure,
     :deploy,
-    :prepare_undeploy,
-    :undeploy
+    :undeploy,
+  ]
+
+  SPECIAL_STAGES = [
+    :error,
+    :undefined,
   ]
 
   field :name, type: String
 
-  field :lifecycle_stage, type: Symbol, default: :deploy
+  field :stage, type: Symbol, default: :undefined
+  field :planned_stage, type: Symbol, default: :undefined
 
   belongs_to :role
   belongs_to :scenario
@@ -24,9 +31,5 @@ class Instance
     interfaces.map do |interface|
       interface.network
     end
-  end
-
-  def usable?
-    :deploy == lifecycle_stage
   end
 end
