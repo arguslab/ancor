@@ -8,10 +8,13 @@ class ExampleTaskExecutor
   end
 
   def perform(*args)
-    if context[:ran_once]
+    if context[:second]
       true
+    elsif context[:first]
+      context[:second] = true
+      raise 'u wot m8'
     else
-      context[:ran_once] = true
+      context[:first] = true
       false
     end
   end
@@ -29,6 +32,9 @@ describe Ancor::TaskWorker do
 
     subject.perform(task.id)
     task.reload.should be_suspended
+
+    expect { subject.perform(task.id) }.to raise_error
+    task.reload.should be_error
 
     subject.perform(task.id)
     task.reload.should be_completed

@@ -7,7 +7,7 @@ module Ancor
       task.lock(jid) unless task.locked?(jid)
 
       begin
-        if task.pending? || task.suspended?
+        unless task.completed?
           execute_task task
           process_wait_handles :task_completed, task.id
         end
