@@ -27,10 +27,23 @@ class Instance
 
   has_and_belongs_to_many :security_groups
 
+  embeds_many :channel_selections
+
   validates :name, presence: true
-  def networks
-    interfaces.map do |interface|
-      interface.network
+
+  def planned_profiles
+    stage = scenario.stage planned_stage
+
+    if stage
+      stage.profiles
+    else
+      []
     end
+  end
+
+  def networks
+    interfaces.map { |interface|
+      interface.network
+    }
   end
 end

@@ -10,4 +10,10 @@ class Scenario
   belongs_to :role
 
   embeds_many :stages, class_name: "ScenarioStage"
+
+  def stage(slug)
+    stages.find { |stage|
+      stage.slug == slug
+    }
+  end
 end

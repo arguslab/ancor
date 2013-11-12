@@ -13,6 +13,13 @@ class Role
   has_many :instances
 
   validates :slug, presence: true
+
+  def dependencies
+    imports.map { |channel|
+      channel.exporter
+    }.uniq
+  end
+
   def dependent_roles
     exports.map { |channel|
       channel.importers
