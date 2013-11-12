@@ -27,6 +27,7 @@ class Instance
 
   has_and_belongs_to_many :security_groups
 
+  validates :name, presence: true
   def networks
     interfaces.map do |interface|
       interface.network
