@@ -1,4 +1,5 @@
 Ancor::Application.routes.draw do
+  get "hiera/:certname", controller: :hiera, action: :show
   post "webhook/mcollective"
   post "webhook/puppet"
 
