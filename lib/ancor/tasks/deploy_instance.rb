@@ -3,9 +3,13 @@ module Ancor
     class DeployInstance < BaseExecutor
 
       def perform(instance_id)
+        instance = Instance.find instance_id
+
         unless context["secgroup_created"]
           unless task_started? :create_secgroup
-            perform_task :create_secgroup, CreateSecurityGroup, instance_id
+            instance.security_groups.each do |secgr|
+              perform_task :create_secgroup, CreateSecurityGroup, secgr.id
+            end
             return false
           end
 
@@ -16,7 +20,9 @@ module Ancor
 
 
         unless task_started? :update_secgroup
-          perform_task :update_secgroup, UpdateSecurityGroup, instance_id
+            instance.security_groups.each do |secgr|
+              perform_task :update_secgroup, UpdateSecurityGroup, secgr.id
+            end
         end
 
         unless context["provisioned"]
@@ -60,7 +66,6 @@ module Ancor
           puts "Completely done"
           context["pushed"] = true
         end
-
 
         return true
       end
