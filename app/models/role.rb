@@ -8,10 +8,10 @@ class Role
   field :min, type: Integer, default: 1
   field :max, type: Integer
 
-  has_many :scenarios
+  has_many :scenarios, autosave: true
 
-  has_and_belongs_to_many :imports, class_name: "Channel", inverse_of: :importers
-  has_many :exports, class_name: "Channel", inverse_of: :exporter
+  has_many :exports, class_name: "Channel", inverse_of: :exporter, autosave: true
+  has_and_belongs_to_many :imports, class_name: "Channel", inverse_of: :importers, autosave: true
 
   has_many :instances
 

@@ -1,0 +1,22 @@
+goals:
+  ecommerce:
+    name: eCommerce frontend
+    roles:
+      - weblb
+      - webapp
+
+roles:
+  weblb:
+    name: Web application load balancer
+    min: 2
+    exports:
+      http: { type: single_port, protocol: tcp }
+      https: { type: single_port, protocol: tcp }
+    imports:
+      webapp: http
+
+  webapp:
+    name: Web application
+    min: 3
+    exports:
+      http: { type: single_port, protocol: tcp }

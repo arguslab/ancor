@@ -30,6 +30,7 @@ Ancor.setup_logger
 require 'ancor/errors'
 
 require 'ancor/adaptor/import_selector'
+require 'ancor/adaptor/yaml_builder'
 
 require 'ancor/conductor/client_lock'
 require 'ancor/conductor/client_util'
