@@ -5,6 +5,9 @@ class Role
   field :description, type: String
   field :slug, type: Symbol
 
+  field :min, type: Integer, default: 1
+  field :max, type: Integer
+
   has_many :scenarios
 
   has_and_belongs_to_many :imports, class_name: "Channel", inverse_of: :importers
