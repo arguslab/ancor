@@ -9,12 +9,12 @@ else
 end
 
 
-puts "Starting Sidekiq on the default port in test env"
-`bundle exec sidekiq -e test -d -L #{basedir}/log/sidekiq.log -P #{basedir}/tmp/pids/sidekiq.pid`
+puts "Starting Sidekiq on the default port in development"
+`bundle exec sidekiq -e development -d -L #{basedir}/log/sidekiq.log -P #{basedir}/tmp/pids/sidekiq.pid`
 
-puts "Starting Rails on the default port in test env"
+puts "Starting Rails on the default port in development"
 Dir.chdir(basedir) do
-  `script/rails server -e test -d`
+  `script/rails server -e development -d`
 end
 
 puts "Run `stop-services` when you are finished"
