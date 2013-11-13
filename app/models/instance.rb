@@ -31,16 +31,6 @@ class Instance
 
   validates :name, presence: true
 
-  def planned_profiles
-    stage = scenario.stage planned_stage
-
-    if stage
-      stage.profiles
-    else
-      []
-    end
-  end
-
   def networks
     interfaces.map { |interface|
       interface.network

@@ -26,9 +26,8 @@ module Ancor
           select_channel i, channel_redis
         }
 
-        pp subject.select(instance_web)
-
-        binding.pry
+        # TODO Write assertions for this
+        subject.select(instance_web)
       end
 
       private

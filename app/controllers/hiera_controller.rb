@@ -9,7 +9,9 @@ class HieraController < ApplicationController
       data = {
         exports: Hash[instance.channel_selections.map { |s| [s.slug, s.to_hash] }],
         imports: import_selector.select(instance),
-        classes: instance.planned_profiles,
+        classes: [
+          instance.scenario.profile
+        ],
       }
 
       render json: data, status: 200
