@@ -8,7 +8,7 @@ module Ancor
       include InitializeHelper
       include Operational
 
-      let(:create_secgr_task) { CreateSecurityGroup.new }
+      let(:create_secgr_task) { CreateUpdateSecurityGroup.new }
       let(:delete_secgr_task) { DeleteSecurityGroup.new }
 
       let(:create_instance_task) { ProvisionInstance.new }
@@ -24,6 +24,7 @@ module Ancor
         inject_user_data instance_id
 
         create_network_task.perform network_id
+        create_secgr_task.perform secgroup_id
 
         deploy_task = Task.create(type: DeployInstance.name, arguments: [instance_id])
 
