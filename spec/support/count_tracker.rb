@@ -1,38 +1,31 @@
 # Used to track the change in count for model objects
+#
+# Note that this can only be used with objects or classes that have a
+# consistent hash
 class CountTracker
-  # @param [Class...] sources
-  # @return [CountTracker]
-  def self.start(*sources)
-    tracker = new(*sources)
-    tracker.capture
-
-    tracker
-  end
-
-  # @param [Class...] sources
+  # @param [Object...] sources
   # @return [undefined]
   def initialize(*sources)
-    @sources = sources
-    @counts = {}
+    @sources = {}
+    sources.each { |s| @sources[s] = s.count }
   end
 
-  # @return [undefined]
-  def capture
-    @counts = Hash[@sources.map { |source|
-      [source.name, source.count]
-    }]
+  # @param [Object] source
+  # @param [Integer] expectation
+  # @return [Boolean]
+  def has_change?(source, expectation)
+    change(source) == expectation
   end
 
-  # @param [Class] source
+  # @param [Object] source
   # @return [Integer]
-  def difference(source)
-    source.count - @counts.fetch(source.name)
+  def change(source)
+    source.count - @sources.fetch(source)
   end
 
-  alias_method :[], :difference
-
-  # @return [Integer]
-  def all
-    @sources.reduce(0) { |sum, x| sum + difference(x) }
+  def changes
+    @sources.map { |source, count|
+      source.count - count
+    }
   end
 end

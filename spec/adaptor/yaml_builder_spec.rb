@@ -10,14 +10,14 @@ module Ancor
 
         subject.build_from path
 
-        tracker = CountTracker.start(Goal, Role, Scenario, Channel)
+        tracker = CountTracker.new(Goal, Role, Scenario, Channel)
 
         subject.commit
 
-        tracker[Goal].should == 1
-        tracker[Role].should == 2
-        tracker[Scenario].should == 2
-        tracker[Channel].should == 3
+        tracker.should have_change(Goal, 1)
+        tracker.should have_change(Role, 2)
+        tracker.should have_change(Scenario, 2)
+        tracker.should have_change(Channel, 3)
       end
 
     end
