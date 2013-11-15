@@ -3,38 +3,37 @@ require 'spec_helper'
 module Ancor
   module Tasks
 
-    describe UpdateSecurityGroup do
+    describe SyncSecurityGroup do
       include OpenStackHelper
 
-      let(:create_task) { CreateSecurityGroup.new }
       let(:delete_task) { DeleteSecurityGroup.new }
 
       it 'sets up initial security group rules', live: true do
         secgroup_id = setup_secgroup_fixture
 
-        create_task.perform secgroup_id
-        subject.perform secgroup_id
-
-        os_rules_for(secgroup_id).size.should == 3
-
-        delete_task.perform secgroup_id
+        begin
+          subject.perform secgroup_id
+          os_rules_for(secgroup_id).size.should == 3
+        ensure
+          delete_task.perform secgroup_id
+        end
       end
 
       it 'keeps security group rules in sync', live: true do
         secgroup_id = setup_secgroup_fixture
 
-        create_task.perform secgroup_id
+        begin
+          subject.perform secgroup_id
+          change_secgroup_rules secgroup_id
+          subject.perform secgroup_id
 
-        subject.perform secgroup_id
-        change_secgroup_rules secgroup_id
-        subject.perform secgroup_id
-
-        # Started with 3 rules (+3)
-        # Added 2 rules (+2)
-        # Removed 1 rule (-1)
-        os_rules_for(secgroup_id).size.should == 4
-
-        delete_task.perform secgroup_id
+          # Started with 3 rules (+3)
+          # Added 2 rules (+2)
+          # Removed 1 rule (-1)
+          os_rules_for(secgroup_id).size.should == 4
+        ensure
+          delete_task.perform secgroup_id
+        end
       end
 
       private

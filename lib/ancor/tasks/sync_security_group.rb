@@ -1,6 +1,6 @@
 module Ancor
   module Tasks
-    class CreateUpdateSecurityGroup < BaseExecutor
+    class SyncSecurityGroup < BaseExecutor
       def perform(secgroup_id)
         secgroup = SecurityGroup.find secgroup_id
         locator = Provider::ServiceLocator.instance
@@ -14,6 +14,6 @@ module Ancor
 
         return true
       end
-    end # CreateUpdateSecurityGroup
+    end # SyncSecurityGroup
   end # Tasks
 end
