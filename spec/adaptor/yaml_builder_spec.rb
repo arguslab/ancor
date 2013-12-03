@@ -14,10 +14,10 @@ module Ancor
 
         subject.commit
 
-        tracker.should have_change(Goal, 1)
-        tracker.should have_change(Role, 2)
-        tracker.should have_change(Scenario, 2)
-        tracker.should have_change(Channel, 3)
+        tracker.change(Goal).should == 1
+        tracker.change(Role).should == 6
+        tracker.change(Scenario).should == 6
+        tracker.change(Channel).should == 5
       end
 
     end

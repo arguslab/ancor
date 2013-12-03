@@ -11,8 +11,8 @@ module Ancor
 
         subject.plan
 
-        tracker.should have_change(Instance, 5)
-        tracker.should have_change(Network, 1)
+        tracker.change(Instance).should == 11
+        tracker.change(Network).should == 1
       end
 
       private
