@@ -1,4 +1,14 @@
 #!/bin/sh
+##
+# Bootstrap script for ANCOR OpenStack instances
+#
+# Compatible with:
+# - Ubuntu 12.10
+# - Ubuntu 13.04
+# - Ubuntu 13.10
+#
+# Author: Ian Unruh
+##
 set -e -x
 
 HIERA_DIR=/var/lib/hiera
@@ -7,14 +17,14 @@ PUPPET_DIST_DIR=/etc/puppet-dist
 PUPPETLABS_APT_PATH=/etc/apt/sources.list.d/puppetlabs.list
 RELEASE_FILE=puppetlabs-release-quantal.deb
 
-#
+##
 # Put aptitude into unattended mode
-#
+##
 DEBIAN_FRONTEND=noninteractive
 
-#
+##
 # Use the Puppet Labs APT repository for a modern version of Puppet
-#
+##
 if [ ! -f "$PUPPET_APT_PATH" ]; then
   wget http://apt.puppetlabs.com/$RELEASE_FILE
   dpkg -i $RELEASE_FILE
@@ -22,37 +32,37 @@ if [ ! -f "$PUPPET_APT_PATH" ]; then
   rm $RELEASE_FILE
 fi
 
-#
+##
 # Install the bare minimum for Puppet
-#
+##
 apt-get -q -y update
 apt-get -q -y install git puppet-common
 
-#
+##
 # Pull down some initial Puppet configuration
-#
+##
 if [ -d "$PUPPET_DIST_DIR" ]; then
   rm -r $PUPPET_DIR
 else
   mv $PUPPET_DIR $PUPPET_DIST_DIR
 fi
 
-git clone <%= git_puppet_url %> $PUPPET_DIR
+git clone -b <%= git_puppet_branch %> <%= git_puppet_url %> $PUPPET_DIR
 
-#
-# Setup external facts
-#
+##
+# Setup initial Hiera data
+##
 mkdir -p $HIERA_DIR
 cat <<EOF > $HIERA_DIR/defaults.yaml
-<%= facts %>
+<%= hiera_data %>
 EOF
 
-#
+##
 # Install required Puppet modules
-#
+##
 $PUPPET_DIR/install-modules
 
-#
+##
 # Apply Puppet configuration
-#
+##
 puppet apply $PUPPET_DIR/manifests/init.pp

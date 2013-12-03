@@ -20,8 +20,10 @@ module InitializeHelper
   def generate_user_data
     template = File.read(Rails.root.join('spec', 'config', 'ubuntu-quantal.sh.erb'))
 
-    facts = File.read(Rails.root.join('spec', 'config', 'defaults.yaml'))
+    # Template variables
+    hiera_data = File.read(Rails.root.join('spec', 'config', 'defaults.yaml'))
     git_puppet_url = 'git://github.com/ianunruh/ancor-puppet-bootstrap.git'
+    git_puppet_branch = 'master'
 
     ERB.new(template).result(binding)
   end

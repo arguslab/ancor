@@ -7,12 +7,11 @@ mcollective:
     port: 61613
     user: mcollective
     password: marionette
-  # Registration happens every 5 minutes using the Meta plugin
+  # Registration happens every 60 minutes using the Meta plugin
   registration:
-    interval: 300
+    interval: 3600
     plugin: Meta
 
-apt:
-  # Squid proxy on the management server
-  proxy_host: 192.168.100.104
-  proxy_port: 3128
+# Squid proxy on the management server
+apt::proxy_host: 192.168.100.104
+apt::proxy_port: 3128
