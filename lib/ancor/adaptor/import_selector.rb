@@ -37,8 +37,7 @@ module Ancor
             ip_address: ip_address,
             stage: instance.stage,
             planned_stage: instance.planned_stage,
-            channels: channel_selections,
-          }
+          }.merge(channel_selections)
         }
 
         instances

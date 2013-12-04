@@ -13,13 +13,17 @@ require 'rspec/core/rake_task'
 task :default => :spec
 
 RSpec::Core::RakeTask.new :spec do |t|
-  t.rspec_opts = '--color --format d --tag ~@live --tag ~@long'
+  t.rspec_opts = '--color --format d --tag ~live --tag ~long --tag ~integration'
 end
 
 RSpec::Core::RakeTask.new :live do |t|
-  t.rspec_opts = '--color --format d --tag @live'
+  t.rspec_opts = '--color --format d --tag live'
 end
 
 RSpec::Core::RakeTask.new :long do |t|
-  t.rspec_opts = '--color --format d --tag @long'
+  t.rspec_opts = '--color --format d --tag long'
+end
+
+RSpec::Core::RakeTask.new :integration do |t|
+  t.rspec_opts = '--color --format d --tag integration'
 end

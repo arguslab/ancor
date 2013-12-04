@@ -17,6 +17,7 @@ module Ancor
         instances = []
 
         Role.all.each do |role|
+          puts "Building #{role.min} instances for role #{role.slug}"
           role.min.times do |index|
             instances.push(build_instance(index, network, role))
           end
@@ -24,7 +25,19 @@ module Ancor
       end
 
       def launch
+        network = Network.first
 
+        instances = Instance.all
+        puts "Deploying #{instances.count} instances"
+
+        network_task = Task.create(type: Tasks::ProvisionNetwork.name, arguments: [network.id])
+
+        instances.each do |instance|
+          instance_task = Task.create(type: Tasks::DeployInstance.name, arguments: [instance.id])
+          network_task.create_wait_handle(instance_task)
+        end
+
+        TaskWorker.perform_async(network_task.id.to_s)
       end
 
       private
@@ -35,7 +48,7 @@ module Ancor
 
         @network_builder.call(network)
 
-        network.save
+        network.save!
 
         network
       end
@@ -45,8 +58,8 @@ module Ancor
         @next_ip += 1
 
         instance = Instance.new
-        instance.name = "#{role.slug}#{index}"
-        instance.interfaces.build(network: network, ip_address: ip_address)
+        # DNS names can't have underscores T_T
+        instance.name = "#{role.slug}#{index}".gsub "_", "-"
         instance.role = role
         instance.scenario = role.scenarios.first
         instance.planned_stage = :deploy
@@ -55,7 +68,9 @@ module Ancor
 
         @instance_builder.call(instance)
 
-        instance.save
+        instance.save!
+
+        interface = InstanceInterface.create!(network: network, instance: instance, ip_address: ip_address)
 
         instance
       end
