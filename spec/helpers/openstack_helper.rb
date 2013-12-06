@@ -70,7 +70,7 @@ module OpenStackHelper
       name: 'network-' + SecureRandom.hex(8),
       cidr: "10.#{rand(25..250)}.#{rand(25..250)}.0/24",
       ip_version: 4,
-      dns_nameservers: ['8.8.8.8', '8.8.4.4'],
+      dns_nameservers: ['192.168.1.1', '8.8.8.8', '8.8.4.4'],
       provider_endpoint: endpoint,
       provider_details: network_details
     )
