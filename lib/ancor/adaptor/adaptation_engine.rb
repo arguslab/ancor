@@ -90,5 +90,5 @@ module Ancor
         }
       end
     end # AdaptationEngine
-  end # Adapator
+  end # Adaptor
 end
