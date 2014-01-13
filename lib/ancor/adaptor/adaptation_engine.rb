@@ -3,7 +3,13 @@ module Ancor
     class AdaptationEngine
       include Loggable
 
-      attr_accessor :network_builder, :instance_builder
+      # Function that populates details for new network model objects
+      # @return [Proc]
+      attr_accessor :network_builder
+
+      # Function that populates details for new instance model objects
+      # @return [Proc]
+      attr_accessor :instance_builder
 
       def initialize
         @network_builder = proc {}
@@ -12,6 +18,8 @@ module Ancor
         @next_ip = 10
       end
 
+      # Queries the requirement model and creates a suitable system model
+      # @return [undefined]
       def plan
         network = build_network
         instances = []
@@ -24,6 +32,11 @@ module Ancor
         end
       end
 
+      # Starts the deployment of planned networks and instances
+      #
+      # This method call is asynchronous
+      #
+      # @return [undefined]
       def launch
         network = Network.first
 
@@ -42,6 +55,8 @@ module Ancor
 
       private
 
+      # Creates a new network model object
+      # @return [Network]
       def build_network
         network = Network.new
         network.cidr = "10.#{rand(0..254)}.#{rand(0..254)}.0/24"
@@ -53,6 +68,12 @@ module Ancor
         network
       end
 
+      # Creates a new instance model object
+      #
+      # @param [Integer] index
+      # @param [Network] network
+      # @param [Role] role
+      # @return [Instance]
       def build_instance(index, network, role)
         ip_address = network.cidr.split("0/24")[0] + @next_ip.to_s
         @next_ip += 1
@@ -64,7 +85,9 @@ module Ancor
         instance.scenario = role.scenarios.first
         instance.planned_stage = :deploy
 
-        select_channels(instance, role.exports).each { |cs| instance.channel_selections << cs }
+        role.exports.each do |channel|
+          instance.channel_selections.push(select_channel(channel))
+        end
 
         @instance_builder.call(instance)
 
@@ -75,19 +98,21 @@ module Ancor
         instance
       end
 
-      def select_channels(instance, channels)
-        channels.map { |channel|
-          case channel
-          when SinglePortChannel
-            SinglePortChannelSelection.new(channel: channel, port: rand(10_000..50_000))
-          when PortRangeChannel
-            from_port = rand(10_000..50_000)
-            to_port = from_port + channel.size
-            PortRangeChannelSelection.new(channel: channel, from_port: from_port, to_port: to_port)
-          else
-            raise ArgumentError
-          end
-        }
+      # Creates a channel selection for the given channel
+      #
+      # @param [Channel] channel
+      # @return [ChannelSelection]
+      def select_channel(channel)
+        case channel
+        when SinglePortChannel
+          SinglePortChannelSelection.new(channel: channel, port: rand(10_000..50_000))
+        when PortRangeChannel
+          from_port = rand(10_000..50_000)
+          to_port = from_port + channel.size
+          PortRangeChannelSelection.new(channel: channel, from_port: from_port, to_port: to_port)
+        else
+          raise ArgumentError
+        end
       end
     end # AdaptationEngine
   end # Adaptor
