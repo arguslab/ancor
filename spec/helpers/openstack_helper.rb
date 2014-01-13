@@ -27,8 +27,8 @@ module OpenStackHelper
       options: openstack_options)
 
     instance_details = {
-      flavor_id: '1',
-      image_id: '4fecad2d-0fa7-43f3-a2a3-91b789bf1883',
+      flavor_id: '2',
+      image_id: 'b185e1a1-89bc-441e-b9dc-caf3d4a2d55a',
       user_data: '',
     }
 
@@ -63,14 +63,14 @@ module OpenStackHelper
       options: openstack_options)
 
     network_details = {
-      router_id: 'a4097da1-8851-45fc-9738-26fd9af14f3c'
+      router_id: 'b415d94f-450a-4129-9c22-2bd07114300a'
     }
 
     network = Network.create(
       name: 'network-' + SecureRandom.hex(8),
       cidr: "10.#{rand(25..250)}.#{rand(25..250)}.0/24",
       ip_version: 4,
-      dns_nameservers: ['192.168.1.1', '8.8.8.8', '8.8.4.4'],
+      dns_nameservers: ['172.17.0.1', '8.8.8.8', '8.8.4.4'],
       provider_endpoint: endpoint,
       provider_details: network_details
     )
@@ -84,7 +84,7 @@ module OpenStackHelper
     {
       openstack_api_key: 'user_one',
       openstack_username: 'user_one',
-      openstack_auth_url: 'http://192.168.100.51:5000/v2.0/tokens',
+      openstack_auth_url: 'http://172.16.200.10:5000/v2.0/tokens',
       openstack_tenant: 'project_one'
     }
   end
