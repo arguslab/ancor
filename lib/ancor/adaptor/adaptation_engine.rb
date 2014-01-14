@@ -15,7 +15,7 @@ module Ancor
         @network_builder = proc {}
         @instance_builder = proc {}
 
-        @next_ip = 10
+        @next_addresses = {}
       end
 
       # Queries the requirement model and creates a suitable system model
@@ -64,7 +64,6 @@ module Ancor
         @network_builder.call(network)
 
         network.save!
-
         network
       end
 
@@ -75,30 +74,51 @@ module Ancor
       # @param [Role] role
       # @return [Instance]
       def build_instance(index, network, role)
-        ip_address = network.cidr.split("0/24")[0] + @next_ip.to_s
-        @next_ip += 1
-
         instance = Instance.new
-        # DNS names can't have underscores T_T
-        instance.name = "#{role.slug}#{index}".gsub "_", "-"
+
+        # Instance host names are not allowed to have underscores
+        instance.name = "#{role.slug}#{index}".dasherize
         instance.role = role
         instance.scenario = role.scenarios.first
-        instance.planned_stage = :deploy
 
-        role.exports.each do |channel|
-          instance.channel_selections.push(select_channel(channel))
-        end
+        attach_interface(instance, network)
+        select_channels(instance, role.exports)
 
         @instance_builder.call(instance)
 
         instance.save!
-
-        interface = InstanceInterface.create!(network: network, instance: instance, ip_address: ip_address)
-
         instance
       end
 
+      # Attaches the given instance to the given network
+      #
+      # @param [Instance] instance
+      # @param [Network] network
+      # @return [InstanceInterface]
+      def attach_interface(instance, network)
+        last_octet = @next_addresses.fetch(network, 10)
+        @next_addresses.store(network, last_octet + 1)
+
+        ip_address = network.cidr.split('0/24')[0] + last_octet.to_s
+
+        InstanceInterface.create!(network: network, instance: instance, ip_address: ip_address)
+      end
+
+      # Selects the given channels for the given instance
+      #
+      # @param [Instance] instance
+      # @param [Enumerable] channels
+      # @return [undefined]
+      def select_channels(instance, channels)
+        channels.each do |channel|
+          instance.channel_selections.push(select_channel(channel))
+        end
+      end
+
       # Creates a channel selection for the given channel
+      #
+      # SinglePortChannel(tcp) -> SinglePortChannelSelection(10343)
+      # PortRangeChannel(udp, 10) -> PortRangeChannelSelection(20100, 20110)
       #
       # @param [Channel] channel
       # @return [ChannelSelection]
