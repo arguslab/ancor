@@ -16,8 +16,8 @@ module Ancor
       # @return [MCollective::RPC::Client]
       def rpc_client(agent_name, options = {})
         options = {
-          progress_bar: false
-        }.merge options
+          # progress_bar: false,
+        }.merge(options)
 
         MCollective::RPC::Client.new(agent_name.to_s, options: options)
       end

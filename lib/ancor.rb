@@ -50,5 +50,6 @@ require 'ancor/tasks/deploy_instance'
 require 'ancor/tasks/initialize_instance'
 require 'ancor/tasks/provision_instance'
 require 'ancor/tasks/push_configuration'
+require 'ancor/tasks/sink'
 require 'ancor/tasks/sync_security_group'
 

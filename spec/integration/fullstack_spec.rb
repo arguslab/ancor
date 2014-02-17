@@ -23,8 +23,8 @@ describe 'Integration suite for full application stack' do
     engine.instance_builder = proc do |instance|
       instance.provider_endpoint = compute_endpoint
       instance.provider_details = {
-        flavor_id: '1',
-        image_id: '4fecad2d-0fa7-43f3-a2a3-91b789bf1883',
+        flavor_id: '2',
+        image_id: '2fb3fc44-677c-42a1-8f69-374dc0e875cc',
         user_data: generate_user_data
       }
     end
@@ -32,9 +32,9 @@ describe 'Integration suite for full application stack' do
     engine.network_builder = proc do |network|
       network.provider_endpoint = network_endpoint
       network.provider_details = {
-        router_id: 'a4097da1-8851-45fc-9738-26fd9af14f3c'
+        router_id: '1e2df6fc-6b03-4c02-8a21-ba93eddc68e6'
       }
-      network.dns_nameservers = ['8.8.8.8', '8.8.4.4']
+      network.dns_nameservers = ['172.17.0.10', '8.8.8.8', '8.8.4.4']
     end
 
     engine.plan

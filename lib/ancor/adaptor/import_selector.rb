@@ -28,6 +28,8 @@ module Ancor
       def resolve_instances(target, dependency)
         instances = {}
         dependency.instances.each { |instance|
+          next if instance.planned_stage == :undeploy
+
           ip_address = find_reachable_ip target, instance
           next unless ip_address
 

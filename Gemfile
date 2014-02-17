@@ -10,9 +10,10 @@ gem 'sidekiq'
 gem 'sinatra'
 gem 'thread_safe'
 
-gem 'mcollective', '~> 2.2.0'
-gem 'stomp', '1.2.2'
-gem 'puppet', '~> 3.3.0'
+gem 'json'
+gem 'systemu'
+gem 'stomp'
+gem 'puppet', '~> 3.4.2'
 gem 'unf'
 
 group :development, :testing do

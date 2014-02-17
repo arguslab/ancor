@@ -3,15 +3,11 @@ mcollective:
   # Our manifests support only 1 RabbitMQ broker at a time
   rabbitmq:
     vhost: /mcollective
-    host: 192.168.100.104
+    host: 172.16.200.140
     port: 61613
     user: mcollective
     password: marionette
-  # Registration happens every 60 minutes using the Meta plugin
-  registration:
-    interval: 3600
-    plugin: Meta
 
-# Squid proxy on the management server
-apt::proxy_host: 192.168.100.104
+# Squid proxy on the cloud gateway
+apt::proxy_host: 172.17.0.6
 apt::proxy_port: 3128

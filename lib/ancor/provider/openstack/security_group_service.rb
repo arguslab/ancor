@@ -66,7 +66,7 @@ module Ancor
         os_secgroup = connection.security_groups.get secgroup_id
 
         os_rules = os_secgroup.rules.map &:deep_symbolize_keys
-        rules = secgroup.rules
+        rules = secgroup.securty_group_rules
 
         rules_to_add = rules.reject { |rule|
           # The rule that we want already exists in the OS ruleset

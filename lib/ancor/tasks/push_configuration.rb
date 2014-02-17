@@ -7,11 +7,13 @@ module Ancor
         instance = Instance.find instance_id
 
         unless context[:ran]
-          puppet_client = rpc_client :puppet, timeout: 3
+          puppet_client = rpc_client :puppet
           puppet_client.identity_filter instance.name
 
+          puts "Pushing configuration to #{instance.name}"
+
           client_sync {
-            puppet_client.runonce
+            puppet_client.runonce(force: true)
           }
 
           context[:ran] = true
@@ -20,6 +22,8 @@ module Ancor
 
           return false
         end
+
+        puts "Puppet run finished for #{instance.name}"
 
         return true
       end

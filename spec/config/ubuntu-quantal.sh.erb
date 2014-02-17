@@ -1,8 +1,9 @@
 #!/bin/sh
-##
+#
 # Bootstrap script for ANCOR OpenStack instances
 #
 # Compatible with:
+# - Ubuntu 12.04
 # - Ubuntu 12.10
 # - Ubuntu 13.04
 # - Ubuntu 13.10
@@ -20,7 +21,12 @@ RELEASE_FILE=puppetlabs-release-quantal.deb
 ##
 # Put aptitude into unattended mode
 ##
-DEBIAN_FRONTEND=noninteractive
+export DEBIAN_FRONTEND=noninteractive
+
+##
+# Replace default mirror with local mirror
+##
+sed -i 's/nova.clouds.archive.ubuntu.com/mirror.cis.ksu.edu/g' /etc/apt/sources.list
 
 ##
 # Use the Puppet Labs APT repository for a modern version of Puppet
@@ -47,7 +53,7 @@ else
   mv $PUPPET_DIR $PUPPET_DIST_DIR
 fi
 
-git clone -b <%= git_puppet_branch %> <%= git_puppet_url %> $PUPPET_DIR
+git clone -q -b <%= git_puppet_branch %> <%= git_puppet_url %> $PUPPET_DIR
 
 ##
 # Setup initial Hiera data
@@ -66,3 +72,8 @@ $PUPPET_DIR/install-modules
 # Apply Puppet configuration
 ##
 puppet apply $PUPPET_DIR/manifests/init.pp
+
+echo "172.16.200.140   puppet" >> /etc/hosts
+
+service mcollective restart
+puppet agent -t

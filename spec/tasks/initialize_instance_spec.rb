@@ -3,6 +3,8 @@ require 'spec_helper'
 module Ancor
   module Tasks
 
+    # Great integration test for making sure the bare minimum works
+    # OpenStack provisioning, bootstrap scripts, MCollective, Puppet
     describe InitializeInstance do
       include OpenStackHelper
       include InitializeHelper
@@ -25,6 +27,9 @@ module Ancor
         begin
           wait_for_initialize instance_id
         ensure
+          require 'pry'
+          binding.pry
+
           delete_instance_task.perform instance_id
           delete_network_task.perform network_id
         end
@@ -34,7 +39,7 @@ module Ancor
 
       def wait_for_initialize(instance_id)
         until subject.perform instance_id
-          puts "Waiting 10 seconds for instance to come up"
+          puts 'Waiting 10 seconds for instance to come up'
           sleep 10
         end
       end

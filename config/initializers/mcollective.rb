@@ -10,5 +10,7 @@ unless config.configured
   end
 
   config.loadconfig conf_path
-  config.libdir << lib_path
+  # getting pretty tired of your shit, mcollective
+  # https://github.com/puppetlabs/marionette-collective/blob/2.4.x/lib/mcollective/config.rb#L128
+  # config.libdir << lib_path
 end

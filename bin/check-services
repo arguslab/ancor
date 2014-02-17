@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-%w(sidekiq rails redis).each do |name|
+%w(mongodb sidekiq rails redis).each do |name|
   puts "Checking status of #{name}"
   puts "----------------------------------------------------"
 

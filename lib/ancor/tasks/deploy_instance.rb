@@ -12,30 +12,13 @@ module Ancor
           end
 
           return false unless task_completed? :provision
-          puts "Provision finished"
           context["provisioned"] = true
         end
 
-        unless context["initialized"]
-          unless task_started? :initialize
-            perform_task :initialize, InitializeInstance, instance_id
-            return false
-          end
-
-          return false unless task_completed? :initialize
-          puts "Initialize finished"
-          context["initialized"] = true
-        end
-
         unless context["pushed"]
-          unless task_started? :push
-            perform_task :push, PushConfiguration, instance_id
-            return false
-          end
-
-          return false unless task_completed? :push
-          puts "Completely done"
+          create_wait_handle(:run_completed, instance_id: instance.id)
           context["pushed"] = true
+          return false
         end
 
         return true

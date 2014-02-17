@@ -53,6 +53,57 @@ module Ancor
         TaskWorker.perform_async(network_task.id.to_s)
       end
 
+      def add_instance(role_slug)
+        role = Role.find_by(slug: role_slug)
+
+        network = Network.first
+
+        instance = build_instance(rand(100..10_000), network, role)
+        instance_task = Task.create(type: Tasks::DeployInstance.name, arguments: [instance.id])
+
+        puts "Planning to deploy instance #{instance.name}"
+
+        push_tasks = role.dependent_instances.map { |ai|
+          puts "Planning push configuration for instance #{ai.name}"
+          Task.create(type: Tasks::PushConfiguration.name, arguments: [ai.id])
+        }
+
+        instance_task.create_wait_handle(*push_tasks)
+
+        TaskWorker.perform_async(instance_task.id.to_s)
+      end
+
+      def remove_instance(role_slug)
+        role = Role.find_by(slug: role_slug)
+        instance = role.instances.find_by(planned_stage: :deploy)
+
+        puts "Planning to undeploy instance #{instance.name}"
+
+        instance.planned_stage = :undeploy
+        instance.save
+
+        sink_task = Task.new(type: Tasks::Sink.name)
+
+        push_tasks = role.dependent_instances.map { |ai|
+          puts "Planning push configuration for instance #{ai.name}"
+          Task.create(type: Tasks::PushConfiguration.name, arguments: [ai.id]).tap { |t|
+            t.create_wait_handle(sink_task)
+          }
+        }
+
+        task_ids = push_tasks.map { |t| t.id.to_s }
+
+        sink_task.arguments = [task_ids]
+        sink_task.save
+
+        delete_task = Task.create(type: Tasks::DeleteInstance.name, arguments: [instance.id])
+        sink_task.create_wait_handle(delete_task)
+
+        task_ids.each do |id|
+          TaskWorker.perform_async(id)
+        end
+      end
+
       private
 
       # Creates a new network model object
@@ -80,6 +131,7 @@ module Ancor
         instance.name = "#{role.slug}#{index}".dasherize
         instance.role = role
         instance.scenario = role.scenarios.first
+        instance.planned_stage = :deploy
 
         attach_interface(instance, network)
         select_channels(instance, role.exports)
