@@ -20,7 +20,7 @@ sudo apt-get install curl git mongodb-server redis-server
 sudo reboot
 ```
 
-- Ensure your terminal of choice is using bash/zsh as a [[login shell|https://rvm.io/support/faq]]
+- Ensure your terminal of choice is using bash/zsh as a [login shell](https://rvm.io/support/faq)
 - Install RVM
 
 ```
