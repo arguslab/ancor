@@ -81,6 +81,12 @@ Install bundler
 gem install bundler
 ```
 
+Install fog
+```
+
+gem install fog
+```
+
 Pull repository from GitHub (make sure you have defined a Github public/private keypair)
 ```
 mkdir workspace
