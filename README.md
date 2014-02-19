@@ -83,7 +83,6 @@ gem install bundler
 
 Install fog
 ```
-
 gem install fog
 ```
 
