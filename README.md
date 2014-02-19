@@ -6,103 +6,51 @@ are notified and reconfigured.
 
 Think of it like OpsWorks with dependency management.
 
-## What is ancor-puppet?
+## Developing ANCOR
 
-To demonstrate zero-downtime changes in clusters, I put together a stack that you'll typically
-see in modern web application deployments:
+### Ubuntu
 
-- Rails application (contained in Unicorn + Nginx, Ruby managed by RVM)
-- Sidekiq worker application
-- MySQL (with master-slave replication)
-- Redis (used as a work queue between the Rails app and Sidekiq workers)
-- Varnish for load-balancing and caching
+This framework is developed on Ubuntu 12.04 x64
 
-The configuration for these components are the minimum necessary to wire everything up. They have
-not been tuned, but they do work, if deployed correctly.
+- Update packages and install some essential packages
 
-Because ANCOR does random port and IP selection, every single service that will be exposed to
-other instances will not make assumptions about which port/IP to use.
-
-## Setting Up the Development Environment
-
-### Ubuntu (>= 12.04 LTS)
-
-Update the OS (if needed)
 ```
-sudo apt-get update
 sudo apt-get dist-upgrade
+sudo apt-get install curl git mongodb-server redis-server
 sudo reboot
 ```
 
-Make sure the following packages are installed
-```
-sudo apt-get install vim curl git htop
-```
+- Ensure your terminal of choice is using bash/zsh as a [[login shell|https://rvm.io/support/faq]]
+- Install RVM
 
-Download and run RVM
 ```
 curl -L https://get.rvm.io | bash -s stable
-source ~/.profile 
-rvm
-rvm get stable
+source ~/.rvm/scripts/rvm
 ```
 
-Install Ruby 1.9.3
+- Install Ruby 1.9.3, make it the default Ruby and install Bundler
+
 ```
 rvm install ruby-1.9.3
-```
-Teriminal Preferences - Select "Run Command as Login Shell" option
-Exit and reopen terminal
-
-```
-ruby -v
 rvm use --default ruby-1.9.3
-```
-
-Install Sublime 3
-Download sublime form http://www.sublimetext.com/3
-```
-sudo dpkg -i /home/andu/Desktop/sublime-text_build-xxxx_amd64.deb
-subl
-```
-
-Install MongoDB Server
-```
-sudo apt-get install mongodb-server
-```
-
-Install Redis
-```
-sudo apt-get install redis-server
-```
-
-Install bundler
-```
+ruby -v
 gem install bundler
 ```
 
-Install fog
-```
-gem install fog
-```
+- Configure Git, generate keypair for GitHub
 
-Pull repository from GitHub (make sure you have defined a Github public/private keypair)
-```
-mkdir workspace
-cd workspace/
-git clone git@github.com:ianunruh/ancor.git
-cd ancor/
-bundle install
-```
-
-Configure Git
 ```
 git config --global user.name "John Doe"
 git config --global user.email "eid@ksu.edu"
 git config --global core.editor "vim"
+ssh-keygen -t rsa
+cat ~/.ssh/id_rsa.pub
 ```
 
-(Optional) In case terminal colors were disabled after installing RVM, edit ~/.bash_profile:
+- Pull repository from GitHub
+
 ```
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" && source "$HOME/.bashrc" # Load RVM into a shell session *as a function*
+git clone git@github.com:/ancor.git ~/workspace/ancor
+cd ~/workspace/ancor
+bundle install
 ```
