@@ -10,8 +10,7 @@ Think of it like OpsWorks with dependency management.
 
 ### Ubuntu
 
-This framework is developed on Ubuntu 12.04 x64
-
+This framework is developed on Ubuntu 12.04 x64. An [automated installer](https://github.com/arguslab/ancor-environment) is also available.
 - Update packages and install some essential packages
 
 ```
