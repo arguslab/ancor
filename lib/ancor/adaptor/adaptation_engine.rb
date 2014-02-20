@@ -25,7 +25,6 @@ module Ancor
         instances = []
 
         Role.all.each do |role|
-          puts "Building #{role.min} instances for role #{role.slug}"
           role.min.times do |index|
             instances.push(build_instance(index, network, role))
           end
@@ -53,6 +52,10 @@ module Ancor
         TaskWorker.perform_async(network_task.id.to_s)
       end
 
+      # Adds an instance for the given role
+      #
+      # @param [Symbol] role_slug
+      # @return [undefined]
       def add_instance(role_slug)
         role = Role.find_by(slug: role_slug)
 
@@ -73,6 +76,10 @@ module Ancor
         TaskWorker.perform_async(instance_task.id.to_s)
       end
 
+      # Removes an instance for the given role
+      #
+      # @param [Symbol] role_slug
+      # @return [undefined]
       def remove_instance(role_slug)
         role = Role.find_by(slug: role_slug)
         instance = role.instances.find_by(planned_stage: :deploy)
