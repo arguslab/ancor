@@ -1,30 +1,51 @@
 #!/usr/bin/env ruby
+require 'active_support/core_ext/hash'
+require 'erb'
+require 'yaml'
+
+started_at = Time.now
+
 basedir = File.expand_path("../", File.dirname(__FILE__))
 
-libdir = File.join(basedir, "lib")
-plugindir = File.join(libdir, "mcollective")
+configdir = File.join(basedir, "config")
 vendordir = File.join(basedir, "vendor")
+libdir = File.join(vendordir, "marionette-collective", "plugins")
+plugindir = File.join(libdir, "mcollective")
+
+configfile = File.join(configdir, "ancor.yml")
+
+unless File.exists?(configfile)
+  raise "Configuration file expected at #{configfile}"
+end
+
+config = YAML.load(File.read(configfile)).with_indifferent_access
 
 puts "Preparing portable install of MCollective at #{basedir}"
 
-`rm -rf #{libdir}/mcollective`
 `rm -rf #{vendordir}/marionette-collective`
 `rm -rf #{vendordir}/mcollective-puppet-agent`
 `rm -rf #{vendordir}/mcollective-puppetca-agent`
 
 puts "Cloning required repositories"
 
-`git clone -q git://github.com/ianunruh/marionette-collective.git -b 2.4.x #{vendordir}/marionette-collective`
+`git clone -q git://github.com/puppetlabs/marionette-collective.git -b 2.4.x #{vendordir}/marionette-collective`
 `git clone -q git://github.com/puppetlabs/mcollective-puppet-agent.git #{vendordir}/mcollective-puppet-agent`
 `git clone -q git://github.com/puppetlabs/mcollective-puppetca-agent.git #{vendordir}/mcollective-puppetca-agent`
 
 puts "Installing plugins"
-
-`ln -s #{vendordir}/marionette-collective/plugins/mcollective #{libdir}`
 
 `cp -r #{vendordir}/mcollective-puppet-agent/agent #{plugindir}`
 `cp -r #{vendordir}/mcollective-puppet-agent/util #{plugindir}`
 `cp -r #{vendordir}/mcollective-puppetca-agent/agent #{plugindir}`
 `cp -r #{vendordir}/mcollective-puppetca-agent/util #{plugindir}`
 
-puts "Finished"
+puts "Generating MCollective configuration"
+
+template = File.read(File.join(configdir, "mcollective.cfg.erb"))
+output = ERB.new(template).result(binding)
+
+File.open(File.join(configdir, "mcollective.cfg"), "w+") do |f|
+  f.write(output)
+end
+
+puts "Finished in #{Time.now - started_at} seconds"

@@ -16,4 +16,6 @@
 
 # Ignore portable MCollective installation
 vendor
-lib/mcollective
+
+# Ignore generated MCollective configuration
+config/mcollective.cfg

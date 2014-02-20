@@ -1,0 +1,22 @@
+main_collective = mcollective
+collectives = mcollective
+libdir = /usr/share/mcollective/plugins
+logfile = /var/log/mcollective.log
+loglevel = info
+daemonize = 1
+
+# Plugins
+securityprovider = psk
+plugin.psk = <%= config[:mcollective][:psk] %>
+
+connector = rabbitmq
+plugin.rabbitmq.vhost = <%= config[:mcollective][:vhost] %>
+plugin.rabbitmq.heartbeat_interval = <%= config[:mcollective][:heartbeat_interval] %>
+plugin.rabbitmq.pool.size = 1
+plugin.rabbitmq.pool.1.host = <%= config[:mcollective][:host] %>
+plugin.rabbitmq.pool.1.port = <%= config[:mcollective][:port] %>
+plugin.rabbitmq.pool.1.user = <%= config[:mcollective][:user] %>
+plugin.rabbitmq.pool.1.password = <%= config[:mcollective][:password] %>
+
+# Facts
+factsource = facter

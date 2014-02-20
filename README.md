@@ -46,10 +46,11 @@ ssh-keygen -t rsa
 cat ~/.ssh/id_rsa.pub
 ```
 
-- Pull repository from GitHub
+- Pull repository from GitHub, install dependencies
 
 ```
 git clone git@github.com:/ancor.git ~/workspace/ancor
 cd ~/workspace/ancor
 bundle install
+bin/setup-mcollective
 ```

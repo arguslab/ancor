@@ -1,0 +1,41 @@
+#!/bin/bash
+##
+# Bootstrap script for Ubuntu Server 12.04 cloud instances
+##
+set -e -x
+
+export DEBIAN_FRONTEND=noninteractive
+<% if config[:proxy] %>
+export http_proxy="http://<%= config[:proxy][:host] %>:<%= config[:proxy][:port] %>/"
+<% end %>
+
+##
+# Use the official Puppetlabs repository
+##
+curl -O http://apt.puppetlabs.com/puppetlabs-release-precise.deb
+dpkg -i puppetlabs-release-precise.deb
+
+apt-get update
+apt-get install -y -qq puppet mcollective mcollective-facter-facts mcollective-puppet-agent ruby-stomp
+
+##
+# Configure and restart the MCollective server
+##
+cat <<EOF > /etc/mcollective/server.cfg
+<%= ERB.new(File.read(File.expand_path('../mcollective/server.cfg.erb', __FILE__))).result(binding) %>
+EOF
+
+service mcollective restart
+
+##
+# Configure the hosts file
+##
+cat <<EOF >> /etc/hosts
+127.0.1.1 `hostname`
+<%= config[:puppet][:host] %> puppet
+EOF
+
+##
+# Perform a first-time Puppet run
+##
+puppet agent --no-daemonize --onetime

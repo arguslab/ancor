@@ -3,8 +3,9 @@ require 'hashie'
 require 'mcollective'
 require 'puppet'
 require 'thread_safe'
-require 'ancor/concurrent_list'
+require 'yaml'
 
+require 'ancor/concurrent_list'
 require 'ancor/loggable'
 require 'ancor/operational'
 
@@ -13,8 +14,15 @@ require 'ancor/extensions/indifferent_access'
 module Ancor
   extend self
 
+  # @return [Hash]
+  attr_accessor :config
+
   # @return [Logger]
   attr_accessor :logger
+
+  def load_config(path)
+    @config = YAML.load(File.read(path)).with_indifferent_access
+  end
 
   def setup_logger
     @logger = Logger.new $stdout

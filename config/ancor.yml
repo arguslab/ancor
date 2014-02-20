@@ -1,0 +1,30 @@
+mcollective:
+  psk: unset
+  vhost: /mcollective
+  heartbeat_interval: 30
+  host: 172.16.200.140
+  port: 61613
+  user: mcollective
+  password: marionette
+
+puppet:
+  master: 172.16.200.140
+
+proxy:
+  host: 172.17.0.6
+  port: 3128
+
+openstack:
+  # API parameters
+  username: admin
+  api_key: admin
+  tenant: admin
+  auth_url: http://172.16.200.2:5000/v2.0/tokens
+  # Project-specific parameters
+  router_id: 1e2df6fc-6b03-4c02-8a21-ba93eddc68e6
+  image_id: 2fb3fc44-677c-42a1-8f69-374dc0e875cc
+  flavor_id: 2
+  dns_nameservers:
+    - 172.17.0.10
+    - 8.8.8.8
+    - 8.8.4.4

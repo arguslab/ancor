@@ -27,8 +27,8 @@ module OpenStackHelper
       options: openstack_options)
 
     instance_details = {
-      flavor_id: '2',
-      image_id: '2fb3fc44-677c-42a1-8f69-374dc0e875cc',
+      flavor_id: openstack_config[:flavor_id],
+      image_id: openstack_config[:image_id],
       user_data: '',
     }
 
@@ -63,14 +63,14 @@ module OpenStackHelper
       options: openstack_options)
 
     network_details = {
-      router_id: '1e2df6fc-6b03-4c02-8a21-ba93eddc68e6'
+      router_id: openstack_config[:router_id]
     }
 
     network = Network.create(
       name: 'network-' + SecureRandom.hex(8),
       cidr: "10.#{rand(25..250)}.#{rand(25..250)}.0/24",
       ip_version: 4,
-      dns_nameservers: ['172.17.0.10', '8.8.8.8', '8.8.4.4'],
+      dns_nameservers: openstack_config[:dns_nameservers],
       provider_endpoint: endpoint,
       provider_details: network_details
     )
@@ -82,10 +82,14 @@ module OpenStackHelper
 
   def openstack_options
     {
-      openstack_api_key: 'admin',
-      openstack_username: 'admin',
-      openstack_auth_url: 'http://172.16.200.2:5000/v2.0/tokens',
-      openstack_tenant: 'admin'
+      openstack_api_key: openstack_config[:api_key],
+      openstack_username: openstack_config[:username],
+      openstack_auth_url: openstack_config[:auth_url],
+      openstack_tenant: openstack_config[:tenant]
     }
+  end
+
+  def openstack_config
+    @openstack_config ||= Ancor.config[:openstack]
   end
 end
