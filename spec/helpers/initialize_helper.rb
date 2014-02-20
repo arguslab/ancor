@@ -19,9 +19,17 @@ module InitializeHelper
   # @return [String]
   def generate_user_data
     config = Ancor.config
-    template = File.read(Rails.root.join('spec', 'config', 'ubuntu-precise.sh.erb'))
 
-    ERB.new(template).result(binding)
+    template = ERB.new(
+      File.read(File.expand_path('spec/config/ubuntu-precise.sh.erb', Rails.root))
+    )
+    mco_template = ERB.new(
+      File.read(File.expand_path('spec/config/mcollective/server.cfg.erb', Rails.root))
+    )
+
+    mcollective_server_config = mco_template.result(binding)
+
+    template.result(binding)
   end
 
 end
