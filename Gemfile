@@ -24,6 +24,7 @@ group :development, :testing do
 
   # Debugging dependencies
   gem 'pry'
+  gem 'pry-rails'
 
   # Testing dependencies
   gem 'database_cleaner'

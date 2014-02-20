@@ -101,6 +101,8 @@ GEM
       coderay (~> 1.0)
       method_source (~> 0.8)
       slop (~> 3.4)
+    pry-rails (0.3.2)
+      pry (>= 0.9.10)
     puppet (3.4.2)
       facter (~> 1.6)
       hiera (~> 1.0)
@@ -204,6 +206,7 @@ DEPENDENCIES
   json
   mongoid
   pry
+  pry-rails
   puppet (~> 3.4.2)
   rails (= 3.2.14)
   rake
