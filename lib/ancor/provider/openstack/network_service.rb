@@ -14,6 +14,8 @@ module Ancor
         provision_network connection, network
         provision_subnet  connection, network
         attach_router_interface connection, network
+
+        sleep 15
       end
 
       # @param [Fog::Network::OpenStack] connection
