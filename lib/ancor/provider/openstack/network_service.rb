@@ -11,11 +11,9 @@ module Ancor
       def create(connection, network)
         # TODO Lock the network for this operation
 
-        provision_network connection, network
-        provision_subnet  connection, network
-        attach_router_interface connection, network
-
-        sleep 15
+        network_id = provision_network(connection, network)
+        subnet_id = provision_subnet(connection, network)
+        attach_router_interface(connection, network)
       end
 
       # @param [Fog::Network::OpenStack] connection
@@ -54,7 +52,7 @@ module Ancor
 
       # @param [Fog::Network::OpenStack] connection
       # @param [Network] Network
-      # @return [undefined]
+      # @return [String] Identifier of the network on OpenStack
       def provision_network(connection, network)
         options = {
           name: network.name
@@ -64,11 +62,13 @@ module Ancor
 
         network.provider_details[:network_id] = os_network.id
         network.save
+
+        os_network.id
       end
 
       # @param [Fog::Network::OpenStack] connection
       # @param [Network] network
-      # @return [undefined]
+      # @return [String] Identifier of the subnet on OpenStack
       def provision_subnet(connection, network)
         options = {
           network_id: network.provider_details[:network_id],
@@ -83,6 +83,8 @@ module Ancor
 
         network.provider_details[:subnet_id] = os_subnet.id
         network.save
+
+        os_subnet.id
       end
 
       # @param [Fog::Network::OpenStack] connection

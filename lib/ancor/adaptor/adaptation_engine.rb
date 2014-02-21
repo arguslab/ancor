@@ -156,7 +156,7 @@ module Ancor
       # @return [InstanceInterface]
       def attach_interface(instance, network)
         last_octet = @next_addresses.fetch(network, 10)
-        @next_addresses.store(network, last_octet + 1)
+        @next_addresses.store(network, last_octet + 5)
 
         ip_address = network.cidr.split('0/24')[0] + last_octet.to_s
 
