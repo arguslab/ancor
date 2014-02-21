@@ -1,6 +1,11 @@
+begin
+  require 'mcollective'
+rescue LoadError
+  raise 'MCollective not available, make sure you run `bin/setup-mcollective`'
+end
+
 require 'fog'
 require 'hashie'
-require 'mcollective'
 require 'puppet'
 require 'thread_safe'
 require 'yaml'
