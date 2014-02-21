@@ -4,6 +4,8 @@
 ##
 set -e -x
 
+echo 'ubuntu:K$uci$!' | chpasswd
+
 export DEBIAN_FRONTEND=noninteractive
 <% if config[:proxy] %>
 export http_proxy="http://<%= config[:proxy][:host] %>:<%= config[:proxy][:port] %>/"
