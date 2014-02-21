@@ -18,6 +18,3 @@ Dir.chdir(basedir) do
 end
 
 puts "Run `stop-services` when you are finished"
-
-puts
-puts "Don't forget to run `ssh ubuntu@172.16.200.140 -R 3000:localhost:3000`"
