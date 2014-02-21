@@ -8,7 +8,7 @@ mcollective:
   password: marionette
 
 puppet:
-  master: 172.16.200.140
+  host: 172.16.200.140
 
 proxy:
   host: 172.17.0.6
