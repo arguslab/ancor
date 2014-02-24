@@ -31,43 +31,44 @@ API
 
 ## Command-line interface
 
-ancor <subject> <verb> <targets> <--options>
-ancor version
-ancor import <path to arml file> - import an ARML specification
-ancor deploy - deploy instances for roles that have not been deployed
-ancor instance list
-ancor instance replace <old instance id>
-ancor instance add <role slug>
-ancor instance remove <role slug>
-ancor goal list
-ancor role list
-ancor task list
+    ancor <subject> <verb> <targets> <--options>
+    ancor version
+    ancor import <path to arml file> - import an ARML specification
+    ancor deploy - deploy instances for roles that have not been deployed
+    ancor instance list
+    ancor instance replace <old instance id>
+    ancor instance add <role slug>
+    ancor instance remove <role slug>
+    ancor goal list
+    ancor role list
+    ancor task list
 
 ## HTTP REST interface
 
-GET /api/version
+`GET /api/version`
 
-   "1.2.3"
+    "1.2.3"
 
-POST /api/import
+`POST /api/import`
 
     Content-Type: application/yaml
 
     CONTENT OF ARML FILE
 
-POST /api/deploy
+`POST /api/deploy`
 
-GET /api/instances
+`GET /api/instances`
 
     [
       { "id": 123 },
       { "id": 456 }
     ]
 
-GET /api/instances?role=web
-GET /api/instances?role=dbmaster&state=deployed
+`GET /api/instances?role=web`
 
-GET /api/instances/123
+`GET /api/instances?role=dbmaster&state=deployed`
+
+`GET /api/instances/123`
 
     {
       "id": "123",
@@ -76,7 +77,7 @@ GET /api/instances/123
       ]
     }
 
-POST /api/instances
+`POST /api/instances`
 
     ## Replacing an old instance
     {
@@ -89,7 +90,10 @@ POST /api/instances
       "n": 123
     }
 
-DELETE /api/instances/123
-GET /api/goals
-GET /api/roles
-GET /api/tasks
+`DELETE /api/instances/123`
+
+`GET /api/goals`
+
+`GET /api/roles`
+
+`GET /api/tasks`
