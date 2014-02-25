@@ -1,0 +1,80 @@
+
+// Requirement model
+Role(name, scenarios, exported_channels, imported_channels, min_instances, max_instances)
+Scenario(name, puppet_class)
+
+Channel(name, _) // This is an abstract class
+SinglePortChannel(name, protocol)
+PortRangeChannel(name, protocol, n_ports)
+
+// System model
+ChannelSelection(channel, instance)
+Network(name, cidr)
+NetworkInterface(network, ip_address)
+Instance(name, role, scenario, channel_selections, interfaces)
+
+ChannelSelection(channel, _) // This is an abstract class
+SinglePortChannelSelection(channel, port)
+PortRangeChannelSelection(channel, port_range)
+
+
+plan_deployment(roles) {
+
+  network = new Network(random_name(), random_cidr())
+
+  ip_sequence = 10
+
+  foreach(role in roles) {
+    for(i = 0; i <= role.min_instances; i++) {
+
+      plan_instance(network, role, ip_sequence)
+
+      ip_sequence += 5
+
+    }
+  }
+
+}
+
+plan_instance(network, role, ip_sequence) {
+
+  scenario = role.scenarios.random
+
+  channel_selections = []
+  foreach(channel in role.exported_channels) {
+    channel_selections.append(select_channel(channel, instance))
+  }
+
+  interfaces = [
+    new NetworkInterface(network, seq_to_ip(network.cidr, ip_sequence))
+  ]
+
+  instance = new Instance(random_name(), role, scenario, channel_selections, interfaces)
+
+}
+
+select_channel(channel, instance) {
+
+  if(channel is SinglePortChannel) {
+
+    new SinglePortChannelSelection(channel, random_port())
+
+  } else if(channel is PortRangeChannel) {
+
+    new PortRangeChannelSelection(channel, random_port_range())
+
+  } else {
+
+    // Unsupported channel type
+
+  }
+
+}
+
+random_name() { }
+random_cidr() { }
+seq_to_ip(cidr, ip_sequence) { }
+random_port() { }
+random_port_range() { }
+
+
