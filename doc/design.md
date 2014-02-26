@@ -33,8 +33,7 @@ API
 
     ancor <subject> <verb> <targets> <--options>
     ancor version
-    ancor import <path to arml file> - import an ARML specification
-    ancor deploy - deploy instances for roles that have not been deployed
+    ancor deploy <path to arml file> - imports an ARML specification and deploys it
     ancor instance list
     ancor instance replace <old instance id>
     ancor instance add <role slug>
@@ -49,13 +48,11 @@ API
 
     "1.2.3"
 
-`POST /api/import`
+`POST /api/deploy`
 
     Content-Type: application/yaml
 
     CONTENT OF ARML FILE
-
-`POST /api/deploy`
 
 `GET /api/instances`
 
