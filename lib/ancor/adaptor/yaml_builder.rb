@@ -41,7 +41,11 @@ module Ancor
       end
 
       def build_from(filename)
-        tree = YAML.load(File.read(filename))
+        build(File.read(filename))
+      end
+
+      def build(spec)
+        tree = YAML.load(spec)
 
         process_roles tree[KEY_ROLES]
         process_goals tree[KEY_GOALS]

@@ -1,0 +1,2 @@
+class InstanceSerializer < CompactInstanceSerializer
+end
