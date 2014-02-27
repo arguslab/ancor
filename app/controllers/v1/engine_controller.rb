@@ -1,5 +1,6 @@
 module V1
   class EngineController < ApplicationController
+    include EngineHelper
 
     def plan
       unless request.content_type =~ /yaml/
@@ -30,12 +31,5 @@ module V1
       engine.commit
       render nothing: true, status: 202
     end
-
-    private
-
-    def engine
-      @engine ||= Ancor::Adaptor::AdaptationEngine.new
-    end
-
   end
 end

@@ -1,5 +1,8 @@
 module V1
   class InstancesController < ApplicationController
+
+    include EngineHelper
+
     def index
       @instances = Instance.all
       render json: @instances, each_serializer: CompactInstanceSerializer
@@ -17,12 +20,6 @@ module V1
 
     def destory
       engine.remove_instance params[:id]
-    end
-
-    private
-
-    def engine
-      @engine ||= Ancor::Adaptor::AdaptationEngine.new
     end
 
   end
