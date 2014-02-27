@@ -53,11 +53,15 @@ API
 
 ### Engine control
 
+Import an ARML file into the engine for planning
+
 `POST /api/plan`
 
     Content-Type: application/yaml
 
     CONTENT OF ARML FILE
+
+Commit pending changes
 
 `POST /api/commit`
 
