@@ -76,13 +76,12 @@ module Ancor
         TaskWorker.perform_async(instance_task.id.to_s)
       end
 
-      # Removes an instance for the given role
+      # Removes a given instance
       #
       # @param [Symbol] role_slug
       # @return [undefined]
-      def remove_instance(role_slug)
-        role = Role.find_by(slug: role_slug)
-        instance = role.instances.find_by(planned_stage: :deploy)
+      def remove_instance(instance_id)
+        instance = Instance.find instance_id
 
         puts "Planning to undeploy instance #{instance.name}"
 
@@ -91,7 +90,7 @@ module Ancor
 
         sink_task = Task.new(type: Tasks::Sink.name)
 
-        push_tasks = role.dependent_instances.map { |ai|
+        push_tasks = instance.role.dependent_instances.map { |ai|
           puts "Planning push configuration for instance #{ai.name}"
           Task.create(type: Tasks::PushConfiguration.name, arguments: [ai.id]).tap { |t|
             t.create_wait_handle(sink_task)

@@ -3,9 +3,12 @@ Ancor::Application.routes.draw do
   namespace(:v1, defaults: { format: :json }) do
     # General API resources
     post "plan" => "engine#plan"
-    post "deploy" => "engine#deploy"
+    post "commit" => "engine#commit"
 
     resources :instances, except: [:new, :edit]
+    resources :goals, only: [:index]
+    resources :roles, only: [:index]
+    resources :tasks, only: [:index]
 
     # Webhooks and special resources
     # TODO Fold hiera into instance resource
