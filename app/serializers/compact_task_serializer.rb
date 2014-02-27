@@ -1,3 +1,3 @@
-class CompactTaskSerializer < ActiveModel::Serialzier
+class CompactTaskSerializer < ActiveModel::Serializer
   attributes :id, :type, :arguments, :state
 end
