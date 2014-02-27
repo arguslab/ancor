@@ -1,4 +1,4 @@
-class EngineHelper
+module EngineHelper
   def engine
     unless @engine
       network_endpoint = ProviderEndpoint.create(
