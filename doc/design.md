@@ -33,7 +33,8 @@ API
 
     ancor <subject> <verb> <targets> <--options>
     ancor version
-    ancor deploy <path to arml file> - imports an ARML specification and deploys it
+    ancor plan <path to arml file> - imports an ARML specification and deploys it
+    ancor commit
     ancor instance list
     ancor instance replace <old instance id>
     ancor instance add <role slug>
@@ -44,15 +45,29 @@ API
 
 ## HTTP REST interface
 
+### System info
+
 `GET /api/version`
 
     "1.2.3"
 
-`POST /api/deploy`
+### Engine control
+
+Import an ARML file into the engine for planning
+
+`POST /api/plan`
 
     Content-Type: application/yaml
 
     CONTENT OF ARML FILE
+
+Commit pending changes
+
+`POST /api/commit`
+
+### Instances
+
+List instances
 
 `GET /api/instances`
 
@@ -61,9 +76,13 @@ API
       { "id": 456 }
     ]
 
+List interfaces and filter by query
+
 `GET /api/instances?role=web`
 
 `GET /api/instances?role=dbmaster&state=deployed`
+
+Retrieve summary of an instance
 
 `GET /api/instances/123`
 
@@ -74,23 +93,38 @@ API
       ]
     }
 
+Create a new instance for a given role
+
 `POST /api/instances`
 
-    ## Replacing an old instance
     {
-      "old_instance": "xxx"
+      "role": "web"
     }
+    
+Mark an instance for replacement
 
-    ## Deploying a new instance
-    {
-      "role": "web",
-      "n": 123
-    }
+`POST /api/instances/123`
+
+    { "replace": true }
+
+Remove an instance
 
 `DELETE /api/instances/123`
 
+### Goals
+
+List goals
+
 `GET /api/goals`
 
+### Roles
+
+List roles
+
 `GET /api/roles`
+
+### Tasks
+
+List tasks
 
 `GET /api/tasks`
