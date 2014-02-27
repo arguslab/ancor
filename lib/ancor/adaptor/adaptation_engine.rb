@@ -36,7 +36,7 @@ module Ancor
       # This method call is asynchronous
       #
       # @return [undefined]
-      def launch
+      def commit
         network = Network.first
 
         instances = Instance.all
