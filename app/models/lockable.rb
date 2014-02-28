@@ -6,37 +6,37 @@ module Lockable
   LockAcquisitionError = Class.new RuntimeError
 
   included do
-    field :locked, default: false
     field :locked_by, default: false
   end
 
+  def synchronized
+    lock
+
+    begin
+      yield
+    ensure
+      unlock
+    end
+  end
+
   # @raise [LockAcquisitionError] If lock could not be acquired
-  # @param [String] key
   # @return [Lockable]
-  def lock(key)
-    unless update_locked(false, key.to_s)
-      raise LockAcquisitionError
-    end
-
-    self.locked_by = Process.pid
-    save
+  def lock
+    raise LockAcquisitionError unless cas_locked_by(Process.pid)
+    self
   end
 
-  def locked?(key)
-    locked == key.to_s
+  # @return [Boolean]
+  def locked?
+    !!locked_by
   end
 
-  # @raise [IllegalLockUsageError] If lock was not held by the given key
-  # @param [String] key
+  # @raise [IllegalLockUsageError] If lock was not held
   # @return [Lockable]
-  def unlock(key)
-    unless locked == key.to_s
-      raise IllegalLockUsageError
-    end
+  def unlock
+    raise IllegalLockUsageError unless locked?
 
-    self.locked = false
     self.locked_by = false
-
     save
   end
 
@@ -44,24 +44,21 @@ module Lockable
 
   # Atomic compare and swap of the lock field
   #
-  # @param [Object] expected
   # @param [Object] value
   # @return [Boolean] True if the operation was successful
-  def update_locked(expected, value)
+  def cas_locked_by(value)
     criteria = {
-      :id => id,
-      :locked => expected
+      id: id,
+      locked_by: false
     }
 
     update = {
-      "$set" => { :locked => value }
+      "$set" => { locked_by: value }
     }
 
-    if self.class.where(criteria).find_and_modify(update)
-      reload
-      true
-    else
-      false
-    end
+    result = self.class.where(criteria).find_and_modify(update)
+    reload
+
+    result
   end
 end

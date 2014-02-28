@@ -4,7 +4,7 @@ module Ancor
 
     def perform(task_id)
       task = Task.find(task_id)
-      task.lock(jid) unless task.locked?(jid)
+      task.lock
 
       begin
         unless task.completed?
@@ -12,7 +12,7 @@ module Ancor
           process_wait_handles :task_completed, task.id
         end
       ensure
-        task.unlock(jid)
+        task.unlock
       end
     end
 

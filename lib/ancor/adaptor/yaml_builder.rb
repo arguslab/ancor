@@ -35,7 +35,8 @@ module Ancor
 
       #!@endgroup
 
-      def initialize
+      def initialize(environment)
+        @environment = environment
         @roles = HashWithIndifferentAccess.new
         @goals = HashWithIndifferentAccess.new
       end
@@ -62,6 +63,8 @@ module Ancor
         # First pass, creates roles and the exported channels for each
         roles.each do |slug, spec|
           role = Role.new
+
+          role.environment = @environment
 
           role.name = spec[KEY_NAME] || slug
           role.description = spec[KEY_DESCRIPTION]

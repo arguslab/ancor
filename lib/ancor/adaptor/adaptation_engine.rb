@@ -19,15 +19,21 @@ module Ancor
       end
 
       # Queries the requirement model and creates a suitable system model
+      #
+      # @param [Environment] environment
       # @return [undefined]
-      def plan
-        network = build_network
-        instances = []
+      def plan(environment)
+        environment.synchronized do
 
-        Role.all.each do |role|
-          role.min.times do |index|
-            instances.push(build_instance(index, network, role))
+          network = build_network
+          instances = []
+
+          Role.all.each do |role|
+            role.min.times do |index|
+              instances.push(build_instance(index, network, role))
+            end
           end
+
         end
       end
 
@@ -35,82 +41,151 @@ module Ancor
       #
       # This method call is asynchronous
       #
+      # 1. Locks the environment
+      # 2. Provisions the network
+      # 3. Deploys the instances
+      # 4. Unlocks the environment
+      #
       # @return [undefined]
-      def commit
-        network = Network.first
+      def commit(environment)
+        environment.lock
 
-        instances = Instance.all
-        puts "Deploying #{instances.count} instances"
+        begin
+          network = Network.first
 
-        network_task = Task.create(type: Tasks::ProvisionNetwork.name, arguments: [network.id])
+          instances = Instance.all
+          puts "Deploying #{instances.count} instances"
 
-        instances.each do |instance|
-          instance_task = Task.create(type: Tasks::DeployInstance.name, arguments: [instance.id])
-          network_task.create_wait_handle(instance_task)
+          network_task = Task.create(type: Tasks::ProvisionNetwork.name, arguments: [network.id])
+
+          deploy_tasks = instances.map { |di|
+            Task.create(type: Tasks::DeployInstance.name, arguments: [instance.id])
+          }
+
+          network_task.create_wait_handle(*deploy_tasks)
+
+          sink_task = Task.new(type: Tasks::Sink.name)
+          add_tasks_to_sink(sink_task, deploy_tasks)
+
+          # Unlock environment once all instances have been deployed
+          unlock_task = Task.create(type: Tasks::UnlockEnvironment, arguments: [environment.id.to_s])
+          sink_task.create_wait_handle(unlock_task)
+
+          TaskWorker.perform_async(network_task.id.to_s)
+        rescue
+          # Something went wrong, unlock the environment immediately
+          environment.unlock
         end
-
-        TaskWorker.perform_async(network_task.id.to_s)
       end
 
       # Adds an instance for the given role
+      #
+      # This method call is asynchronous
+      #
+      # 1. Locks the environment
+      # 2. Deploys an instance
+      # 3. Pushes configuration to affected instances
+      # 4. Unlocks the environment
       #
       # @param [Symbol] role_slug
       # @return [undefined]
       def add_instance(role_slug)
         role = Role.find_by(slug: role_slug)
+        environment = role.environment
 
-        network = Network.first
+        environment.lock
 
-        instance = build_instance(rand(100..10_000), network, role)
-        instance_task = Task.create(type: Tasks::DeployInstance.name, arguments: [instance.id])
+        begin
+          network = Network.first
 
-        puts "Planning to deploy instance #{instance.name}"
+          instance = build_instance(rand(100..10_000), network, role)
+          instance_task = Task.create(type: Tasks::DeployInstance.name, arguments: [instance.id])
 
-        push_tasks = role.dependent_instances.map { |ai|
-          puts "Planning push configuration for instance #{ai.name}"
-          Task.create(type: Tasks::PushConfiguration.name, arguments: [ai.id])
-        }
+          puts "Planning to deploy instance #{instance.name}"
 
-        instance_task.create_wait_handle(*push_tasks)
+          push_tasks = role.dependent_instances.map { |ai|
+            puts "Planning push configuration for instance #{ai.name}"
+            Task.create(type: Tasks::PushConfiguration.name, arguments: [ai.id])
+          }
 
-        TaskWorker.perform_async(instance_task.id.to_s)
+          instance_task.create_wait_handle(*push_tasks)
+
+          sink_task = Task.new(type: Tasks::Sink.name)
+          add_tasks_to_sink(sink_task, push_tasks)
+
+          # Unlock environment once affected instances have been updated
+          unlock_task = Task.create(type: Tasks::UnlockEnvironment, arguments: [environment.id.to_s])
+          sink_task.create_wait_handle(unlock_task)
+
+          TaskWorker.perform_async(instance_task.id.to_s)
+        rescue
+          # Something went wrong, unlock the environment immediately
+          environment.unlock
+        end
       end
 
       # Removes a given instance
       #
-      # @param [Symbol] role_slug
+      # This method call is asynchronous
+      #
+      # 1. Locks the environment
+      # 2. Marks instance for undeploy
+      # 3. Pushes configuration to affected instances
+      # 4. Deletes the instance
+      # 5. Unlocks the enviroment
+      #
       # @return [undefined]
       def remove_instance(instance_id)
         instance = Instance.find instance_id
+        role = instance.role
+        environment = role.environment
 
-        puts "Planning to undeploy instance #{instance.name}"
+        environment.lock
 
-        instance.planned_stage = :undeploy
-        instance.save
+        begin
+          puts "Planning to undeploy instance #{instance.name}"
 
-        sink_task = Task.new(type: Tasks::Sink.name)
+          instance.planned_stage = :undeploy
+          instance.save
 
-        push_tasks = instance.role.dependent_instances.map { |ai|
-          puts "Planning push configuration for instance #{ai.name}"
-          Task.create(type: Tasks::PushConfiguration.name, arguments: [ai.id]).tap { |t|
-            t.create_wait_handle(sink_task)
+          push_tasks = role.dependent_instances.map { |ai|
+            puts "Planning push configuration for instance #{ai.name}"
+            Task.create(type: Tasks::PushConfiguration.name, arguments: [ai.id])
           }
-        }
 
-        task_ids = push_tasks.map { |t| t.id.to_s }
+          sink_task = Task.new(type: Tasks::Sink.name)
+          add_tasks_to_sink(sink_task, push_tasks)
 
-        sink_task.arguments = [task_ids]
-        sink_task.save
+          delete_task = Task.create(type: Tasks::DeleteInstance.name, arguments: [instance.id])
+          sink_task.create_wait_handle(delete_task)
 
-        delete_task = Task.create(type: Tasks::DeleteInstance.name, arguments: [instance.id])
-        sink_task.create_wait_handle(delete_task)
+          # Unlock environment once instance is deleted
+          unlock_task = Task.create(type: Tasks::UnlockEnvironment, arguments: [environment.id.to_s])
+          delete_task.create_wait_handle(unlock_task)
 
-        task_ids.each do |id|
-          TaskWorker.perform_async(id)
+          task_ids.each do |id|
+            TaskWorker.perform_async(id)
+          end
+        rescue
+          # Something went wrong, unlock the environment
+          environment.unlock
         end
+
       end
 
       private
+
+      def add_tasks_to_sink(sink_task, tasks_to_sink)
+        task_ids = []
+        tasks_to_sink.each do |task_to_sink|
+          # Wake up the sink task
+          task_to_sink.create_wait_handle(sink_task)
+          task_ids << task_to_sink.id.to_s
+        end
+
+        sink_task.arguments = [task_ids]
+        sink_task.save
+      end
 
       # Creates a new network model object
       # @return [Network]
@@ -168,6 +243,7 @@ module Ancor
         end
 
         network.last_ip = last_ip.address
+        network.save
 
         InstanceInterface.create!(network: network, instance: instance, ip_address: last_ip.address)
       end

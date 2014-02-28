@@ -5,6 +5,10 @@ Ancor::Application.routes.draw do
     post "plan" => "engine#plan"
     post "commit" => "engine#commit"
 
+    resources :environments, except: [:new, :edit] do
+      post "plan"
+    end
+
     resources :instances, except: [:new, :edit]
     resources :goals, only: [:index]
     resources :roles, only: [:index]

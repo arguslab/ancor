@@ -8,6 +8,8 @@ class Role
   field :min, type: Integer, default: 1
   field :max, type: Integer
 
+  belongs_to :environment
+
   has_many :scenarios, autosave: true
 
   has_many :exports, class_name: "Channel", inverse_of: :exporter, autosave: true
