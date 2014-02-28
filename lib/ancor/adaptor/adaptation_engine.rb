@@ -102,7 +102,7 @@ module Ancor
             Task.create(type: Tasks::DeleteNetwork.name, arguments: [network.id])
           }
 
-          instance_sink_task.create_wait_handle(*delete_tasks)
+          instance_sink_task.create_wait_handle(*instance_delete_tasks)
 
           network_sink_task = Task.new(type: Tasks::Sink.name)
           add_tasks_to_sink(network_sink_task, network_delete_tasks)
