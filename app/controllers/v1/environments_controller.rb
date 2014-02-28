@@ -39,6 +39,8 @@ module V1
       find_environment
 
       engine.destroy(@environment)
+
+      render nothing: true, status: 200
     end
 
     # POST /environments/:id/plan
