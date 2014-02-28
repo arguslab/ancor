@@ -95,7 +95,7 @@ module Ancor
           }
 
           instance_sink_task = Task.new(type: Tasks::Sink.name)
-          add_tasks_to_sink(instance_sink_tasks, delete_tasks)
+          add_tasks_to_sink(instance_sink_task, delete_tasks)
 
           networks = instances.flat_map { |i| i.networks }.uniq
           delete_tasks = networks.map { |network|
@@ -105,7 +105,7 @@ module Ancor
           instance_sink_task.create_wait_handle(*delete_tasks)
 
           network_sink_task = Task.new(type: Tasks::Sink.name)
-          add_tasks_to_sink(network_sink_tasks, delete_tasks)
+          add_tasks_to_sink(network_sink_task, delete_tasks)
 
           unlock_task = Task.create(type: Tasks::UnlockEnvironment, arguments: [environment.id.to_s])
           network_sink_task.create_wait_handle(unlock_task)
