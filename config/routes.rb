@@ -2,9 +2,6 @@ Ancor::Application.routes.draw do
 
   namespace(:v1, defaults: { format: :json }) do
     # General API resources
-    post "plan" => "engine#plan"
-    post "commit" => "engine#commit"
-
     resources :environments, except: [:new, :edit] do
       post "plan"
     end

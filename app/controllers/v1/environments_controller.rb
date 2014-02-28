@@ -46,7 +46,7 @@ module V1
       begin
         find_environment
       rescue Mongoid::Errors::DocumentNotFound
-        @environment = Environment.create slug: params[:id]
+        @environment = Environment.create! slug: params[:environment_id]
       end
 
       unless request.content_type =~ /yaml/
