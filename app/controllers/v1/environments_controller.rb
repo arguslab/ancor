@@ -22,11 +22,11 @@ module V1
       render json: @environment, status: :created
     end
 
-    # POST /environments/:id
+    # PUT /environments/:id
     def update
       find_environment
 
-      if param[:commit]
+      if params[:commit]
         engine.commit(@environment)
         render nothing: true, status: 202
       else
