@@ -58,7 +58,7 @@ module Ancor
 
           network_task = Task.create(type: Tasks::ProvisionNetwork.name, arguments: [network.id])
 
-          deploy_tasks = instances.map { |di|
+          deploy_tasks = instances.map { |instance|
             Task.create(type: Tasks::DeployInstance.name, arguments: [instance.id])
           }
 
@@ -72,9 +72,10 @@ module Ancor
           sink_task.create_wait_handle(unlock_task)
 
           TaskWorker.perform_async(network_task.id.to_s)
-        rescue
+        rescue => ex
           # Something went wrong, unlock the environment immediately
           environment.unlock
+          raise ex
         end
       end
 
@@ -118,9 +119,10 @@ module Ancor
           sink_task.create_wait_handle(unlock_task)
 
           TaskWorker.perform_async(instance_task.id.to_s)
-        rescue
+        rescue => ex
           # Something went wrong, unlock the environment immediately
           environment.unlock
+          raise ex
         end
       end
 
@@ -166,9 +168,10 @@ module Ancor
           task_ids.each do |id|
             TaskWorker.perform_async(id)
           end
-        rescue
+        rescue => ex
           # Something went wrong, unlock the environment
           environment.unlock
+          raise ex
         end
 
       end
