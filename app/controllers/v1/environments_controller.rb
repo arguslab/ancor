@@ -38,7 +38,7 @@ module V1
     def destroy
       find_environment
 
-      # TODO
+      engine.destroy(@environment)
     end
 
     # POST /environments/:id/plan

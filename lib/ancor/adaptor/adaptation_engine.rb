@@ -20,6 +20,7 @@ module Ancor
 
       # Queries the requirement model and creates a suitable system model
       #
+      # @raise [LockAcquisitionError]
       # @param [Environment] environment
       # @return [undefined]
       def plan(environment)
@@ -46,6 +47,8 @@ module Ancor
       # 3. Deploys the instances
       # 4. Unlocks the environment
       #
+      # @raise [LockAcquisitionError]
+      # @param [Environment] environment
       # @return [undefined]
       def commit(environment)
         environment.lock
@@ -79,6 +82,43 @@ module Ancor
         end
       end
 
+      # @raise [LockAcquisitionError]
+      # @param [Environment] environment
+      # @return [undefined]
+      def destroy(environment)
+        environment.lock
+
+        begin
+          instances = environment.roles.flat_map { |r| r.instances }
+          delete_tasks = instances.map { |instance|
+            Task.create(type: Tasks::DeleteInstance.name, arguments: [instance.id])
+          }
+
+          instance_sink_task = Task.new(type: Tasks::Sink.name)
+          add_tasks_to_sink(instance_sink_tasks, delete_tasks)
+
+          networks = instances.flat_map { |i| i.networks }.uniq
+          delete_tasks = networks.map { |network|
+            Task.create(type: Tasks::DeleteNetwork.name, arguments: [network.id])
+          }
+
+          instance_sink_task.create_wait_handle(*delete_tasks)
+
+          network_sink_task = Task.new(type: Tasks::Sink.name)
+          add_tasks_to_sink(network_sink_tasks, delete_tasks)
+
+          unlock_task = Task.create(type: Tasks::UnlockEnvironment, arguments: [environment.id.to_s])
+          network_sink_task.create_wait_handle(unlock_task)
+
+          delete_tasks.each do |task|
+            TaskWorker.perform_async(task.id.to_s)
+          end
+        rescue => ex
+          environment.unlock
+          raise ex
+        end
+      end
+
       # Adds an instance for the given role
       #
       # This method call is asynchronous
@@ -88,6 +128,7 @@ module Ancor
       # 3. Pushes configuration to affected instances
       # 4. Unlocks the environment
       #
+      # @raise [LockAcquisitionError]
       # @param [Symbol] role_slug
       # @return [undefined]
       def add_instance(role_slug)
@@ -136,6 +177,8 @@ module Ancor
       # 4. Deletes the instance
       # 5. Unlocks the enviroment
       #
+      # @raise [LockAcquisitionError]
+      # @param [String] instance_id
       # @return [undefined]
       def remove_instance(instance_id)
         instance = Instance.find instance_id
