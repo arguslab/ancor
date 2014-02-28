@@ -18,7 +18,7 @@ module V1
       render json: @instance
     end
 
-    def destory
+    def destroy
       engine.remove_instance params[:id]
     end
 
