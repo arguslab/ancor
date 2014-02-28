@@ -11,6 +11,7 @@ gem 'sidekiq'
 gem 'sinatra'
 gem 'thread_safe'
 
+gem 'ipaddress'
 gem 'json'
 gem 'systemu'
 gem 'stomp'

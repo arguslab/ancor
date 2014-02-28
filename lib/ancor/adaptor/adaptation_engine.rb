@@ -1,3 +1,5 @@
+require 'ipaddress'
+
 module Ancor
   module Adaptor
     class AdaptationEngine
@@ -14,8 +16,6 @@ module Ancor
       def initialize
         @network_builder = proc {}
         @instance_builder = proc {}
-
-        @next_addresses = {}
       end
 
       # Queries the requirement model and creates a suitable system model
@@ -154,12 +154,22 @@ module Ancor
       # @param [Network] network
       # @return [InstanceInterface]
       def attach_interface(instance, network)
-        last_octet = @next_addresses.fetch(network, 10)
-        @next_addresses.store(network, last_octet + 5)
+        block = IPAddress.parse(network.cidr)
 
-        ip_address = network.cidr.split('0/24')[0] + last_octet.to_s
+        if network.last_ip
+          last_ip = IPAddress.parse(network.last_ip)
+          last_ip = IPAddress::IPv4.parse_u32(last_ip.to_u32 + 3)
+        else
+          last_ip = IPAddress::IPv4.parse_u32(block.to_u32 + 10)
+        end
 
-        InstanceInterface.create!(network: network, instance: instance, ip_address: ip_address)
+        unless block.include?(last_ip)
+          raise "Instance IP address out of range of network block"
+        end
+
+        network.last_ip = last_ip.address
+
+        InstanceInterface.create!(network: network, instance: instance, ip_address: last_ip.address)
       end
 
       # Selects the given channels for the given instance
