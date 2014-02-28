@@ -205,11 +205,11 @@ module Ancor
           sink_task.create_wait_handle(delete_task)
 
           # Unlock environment once instance is deleted
-          unlock_task = Task.create(type: Tasks::UnlockEnvironment, arguments: [environment.id.to_s])
+          unlock_task = Task.create(type: Tasks::UnlockEnvironment, arguments: [environment.id])
           delete_task.create_wait_handle(unlock_task)
 
-          task_ids.each do |id|
-            TaskWorker.perform_async(id)
+          push_tasks.each do |task|
+            TaskWorker.perform_async(task.id.to_s)
           end
         rescue => ex
           # Something went wrong, unlock the environment
