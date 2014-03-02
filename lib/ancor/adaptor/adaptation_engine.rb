@@ -314,7 +314,11 @@ module Ancor
       def select_channel(channel)
         case channel
         when SinglePortChannel
-          SinglePortChannelSelection.new(channel: channel, port: rand(10_000..50_000))
+          if number then
+            SinglePortChannelSelection.new(channel: channel, port: number)
+          else
+            SinglePortChannelSelection.new(channel: channel, port: rand(10_000..50_000))
+          end
         when PortRangeChannel
           from_port = rand(10_000..50_000)
           to_port = from_port + channel.size
