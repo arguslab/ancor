@@ -314,15 +314,27 @@ module Ancor
       def select_channel(channel)
         case channel
         when SinglePortChannel
-          if channel.number != 0 then
-            SinglePortChannelSelection.new(channel: channel, port: channel.number)
+          port = channel.port_no
+          if !port.nil? && (port.is_a? Integer) && port.between?(1,65535) then
+            SinglePortChannelSelection.new(channel: channel, port: port)
           else
             SinglePortChannelSelection.new(channel: channel, port: rand(10_000..50_000))
           end
         when PortRangeChannel
-          from_port = rand(10_000..50_000)
-          to_port = from_port + channel.size
-          PortRangeChannelSelection.new(channel: channel, from_port: from_port, to_port: to_port)
+          from_port = channel.from_port
+          range = 65535 - channel.size
+          if !from_port.nil? && (from_port.is_a? Integer) && from_port.between?(1,range) then
+            to_port = from_port + channel.size
+            PortRangeChannelSelection.new(channel: channel, from_port: from_port, to_port: to_port)
+          else
+            if channel.size < 65535 then
+              from_port = rand(10_000..range)
+              to_port = from_port + channel.size
+              PortRangeChannelSelection.new(channel: channel, from_port: from_port, to_port: to_port)
+            else
+              raise 'Exception: Port range is NOT valid'
+            end
+          end
         else
           raise ArgumentError
         end

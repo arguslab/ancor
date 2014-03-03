@@ -27,7 +27,7 @@ module Ancor
       # Channel keys
       KEY_TYPE = 'type'
       KEY_PROTOCOL = 'protocol'
-      KEY_NUMBER = 'number'
+      KEY_PORT_NO = 'port_no'
       KEY_SIZE = 'size'
 
       # Channel types

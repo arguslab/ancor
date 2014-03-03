@@ -1,4 +1,4 @@
 class SinglePortChannel < Channel
   field :protocol, type: Symbol
-  field :number, type: Integer
+  field :port_no, type: Integer
 end
