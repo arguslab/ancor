@@ -14,7 +14,7 @@ roles:
     name: Web application load balancer
     min: 2
     exports:
-      http: { type: single_port, protocol: tcp }
+      http: { type: single_port, protocol: tcp, port_no: 80 }
     imports:
       webapp: http
 
