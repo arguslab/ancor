@@ -37,6 +37,6 @@ module Ancor
         fip_id = public_ip.provider_details.fetch(:fip_id)
         connection.disassociate_floating_ip(fip_id)
       end
-    end # PublicIpService
+    end # OpenStackPublicIpService
   end # Provider
 end

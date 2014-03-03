@@ -20,6 +20,7 @@ module V1
 
     def destroy
       engine.remove_instance params[:id]
+      render nothing: true, status: 200
     end
 
   end

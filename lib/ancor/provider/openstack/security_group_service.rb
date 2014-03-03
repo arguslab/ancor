@@ -23,19 +23,14 @@ module Ancor
           sg.name == secgroup.name
         end
 
-        if os_secgroup
-          secgroup.provider_details[:secgroup_id] = os_secgroup.id
-          secgroup.save
+        unless os_secgroup
+          options = {
+            name: secgroup.name,
+            description: 'Maintained by ANCOR'
+          }
 
-          return
+          os_secgroup = connection.security_groups.create options
         end
-
-        options = {
-          name: secgroup.name,
-          description: 'Maintained by ANCOR'
-        }
-
-        os_secgroup = connection.security_groups.create options
 
         secgroup.provider_details[:secgroup_id] = os_secgroup.id
         secgroup.save

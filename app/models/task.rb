@@ -1,5 +1,6 @@
 class Task
   include Mongoid::Document
+  include Mongoid::Timestamps
   include Ancor::Extensions::IndifferentAccess
   include Lockable
 
@@ -38,6 +39,8 @@ class Task
     tasks.each { |task| wh.tasks << task }
     wh.save
   end
+
+  alias_method :trigger, :create_wait_handle
 
   def update_state(val)
     update_attribute(:state, val)

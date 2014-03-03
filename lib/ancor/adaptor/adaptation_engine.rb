@@ -65,14 +65,13 @@ module Ancor
             Task.create(type: Tasks::DeployInstance.name, arguments: [instance.id])
           }
 
-          network_task.create_wait_handle(*deploy_tasks)
+          network_task.trigger(*deploy_tasks)
 
-          sink_task = Task.new(type: Tasks::Sink.name)
-          add_tasks_to_sink(sink_task, deploy_tasks)
+          deploy_sink = sink_tasks(deploy_tasks)
 
           # Unlock environment once all instances have been deployed
           unlock_task = Task.create(type: Tasks::UnlockEnvironment, arguments: [environment.id.to_s])
-          sink_task.create_wait_handle(unlock_task)
+          deploy_sink.trigger(unlock_task)
 
           TaskWorker.perform_async(network_task.id.to_s)
         rescue => ex
@@ -94,21 +93,19 @@ module Ancor
             Task.create(type: Tasks::DeleteInstance.name, arguments: [instance.id])
           }
 
-          instance_sink_task = Task.new(type: Tasks::Sink.name)
-          add_tasks_to_sink(instance_sink_task, instance_delete_tasks)
+          instance_delete_sink = sink_tasks(instance_delete_tasks)
 
           networks = instances.flat_map { |i| i.networks }.uniq
           network_delete_tasks = networks.map { |network|
             Task.create(type: Tasks::DeleteNetwork.name, arguments: [network.id])
           }
 
-          instance_sink_task.create_wait_handle(*network_delete_tasks)
+          instance_delete_sink.trigger(*network_delete_tasks)
 
-          network_sink_task = Task.new(type: Tasks::Sink.name)
-          add_tasks_to_sink(network_sink_task, network_delete_tasks)
+          network_delete_sink = sink_tasks(network_delete_tasks)
 
           unlock_task = Task.create(type: Tasks::UnlockEnvironment, arguments: [environment.id])
-          network_sink_task.create_wait_handle(unlock_task)
+          network_delete_sink.trigger(unlock_task)
 
           instance_delete_tasks.each do |task|
             TaskWorker.perform_async(task.id.to_s)
@@ -150,14 +147,13 @@ module Ancor
             Task.create(type: Tasks::PushConfiguration.name, arguments: [ai.id])
           }
 
-          instance_task.create_wait_handle(*push_tasks)
+          instance_task.trigger(*push_tasks)
 
-          sink_task = Task.new(type: Tasks::Sink.name)
-          add_tasks_to_sink(sink_task, push_tasks)
+          push_sink_task = sink_tasks(push_tasks)
 
           # Unlock environment once affected instances have been updated
           unlock_task = Task.create(type: Tasks::UnlockEnvironment, arguments: [environment.id])
-          sink_task.create_wait_handle(unlock_task)
+          push_sink_task.trigger(unlock_task)
 
           TaskWorker.perform_async(instance_task.id.to_s)
         rescue => ex
@@ -198,15 +194,14 @@ module Ancor
             Task.create(type: Tasks::PushConfiguration.name, arguments: [ai.id])
           }
 
-          sink_task = Task.new(type: Tasks::Sink.name)
-          add_tasks_to_sink(sink_task, push_tasks)
+          push_sink_task = sink_tasks(push_tasks)
 
           delete_task = Task.create(type: Tasks::DeleteInstance.name, arguments: [instance.id])
-          sink_task.create_wait_handle(delete_task)
+          push_sink_task.trigger(delete_task)
 
           # Unlock environment once instance is deleted
           unlock_task = Task.create(type: Tasks::UnlockEnvironment, arguments: [environment.id])
-          delete_task.create_wait_handle(unlock_task)
+          delete_task.trigger(unlock_task)
 
           push_tasks.each do |task|
             TaskWorker.perform_async(task.id.to_s)
@@ -220,16 +215,18 @@ module Ancor
 
       private
 
-      def add_tasks_to_sink(sink_task, tasks_to_sink)
-        task_ids = []
-        tasks_to_sink.each do |task_to_sink|
-          # Wake up the sink task
-          task_to_sink.create_wait_handle(sink_task)
-          task_ids << task_to_sink.id.to_s
-        end
+      def sink_tasks(tasks_to_sink)
+        sink_task = Task.new(type: Tasks::Sink.name)
+
+        ids = tasks_to_sink.map { |task|
+          task.trigger(sink_task)
+          task.id.to_s
+        }
 
         sink_task.arguments = [task_ids]
         sink_task.save
+
+        sink_task
       end
 
       # Creates a new network model object
@@ -332,7 +329,7 @@ module Ancor
       def valid_port_input(port)
         if !port.nil? && (port.is_a? Integer) && port.between?(1,65535) then
           return true
-        else 
+        else
           return false
         end
       end
