@@ -25,7 +25,8 @@ module EngineHelper
       @engine.network_builder = proc do |network|
         network.provider_endpoint = network_endpoint
         network.provider_details = {
-          router_id: openstack_config[:router_id]
+          router_id: openstack_config[:router_id],
+          ext_network_id: openstack_config[:ext_network_id]
         }
         network.dns_nameservers = openstack_config[:dns_nameservers]
       end
