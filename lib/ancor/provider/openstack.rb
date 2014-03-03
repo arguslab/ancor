@@ -1,5 +1,6 @@
 require 'ancor/provider/openstack/instance_service'
 require 'ancor/provider/openstack/network_service'
+require 'ancor/provider/openstack/public_ip_service'
 require 'ancor/provider/openstack/security_group_service'
 
 module Ancor
