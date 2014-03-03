@@ -16,6 +16,7 @@ module Ancor
       def initialize
         @network_builder = proc {}
         @instance_builder = proc {}
+        @public_ip_builder = proc {}
       end
 
       # Queries the requirement model and creates a suitable system model
@@ -54,26 +55,43 @@ module Ancor
         environment.lock
 
         begin
-          network = Network.first
+          instances = environment.roles.flat_map { |r| r.instances }
+          networks = instances.flat_map { |i| i.network }.uniq
+          public_ips = instances.map { |i| i.public_ip }.compact
 
-          instances = Instance.all
           puts "Deploying #{instances.count} instances"
 
-          network_task = Task.create(type: Tasks::ProvisionNetwork.name, arguments: [network.id])
+          network_tasks = networks.map { |network|
+            Task.create(type: Tasks::ProvisionNetwork.name, arguments: [network.id])
+          }
+
+          network_sink = sink_tasks(network_tasks)
 
           deploy_tasks = instances.map { |instance|
             Task.create(type: Tasks::DeployInstance.name, arguments: [instance.id])
           }
 
-          network_task.trigger(*deploy_tasks)
+          network_sink.trigger(*deploy_tasks)
 
-          deploy_sink = sink_tasks(deploy_tasks)
+          allocate_tasks = public_ips.map { |public_ip|
+            Task.create(type: Tasks::AllocatePublicIp.name, arguments: [public_ip.id])
+          }
+
+          deploy_sink = sink_tasks(deploy_tasks + allocate_tasks)
+
+          associate_tasks = public_ips.map { |public_ip|
+            Task.create(type: Tasks::AssociatePublicIp.name, arguments: [public_ip.id])
+          }
+          deploy_sink.trigger(*associate_tasks)
+          associate_sink = sink_tasks(associate_tasks)
 
           # Unlock environment once all instances have been deployed
           unlock_task = Task.create(type: Tasks::UnlockEnvironment, arguments: [environment.id.to_s])
-          deploy_sink.trigger(unlock_task)
+          associate_sink.trigger(unlock_task)
 
-          TaskWorker.perform_async(network_task.id.to_s)
+          (network_tasks + allocate_tasks).each do |task|
+            TaskWorker.perform_async(task.id.to_s)
+          end
         rescue => ex
           # Something went wrong, unlock the environment immediately
           environment.unlock
@@ -258,11 +276,26 @@ module Ancor
 
         attach_interface(instance, network)
         select_channels(instance, role.exports)
+        assign_public_ip(instance, network)
 
         @instance_builder.call(instance)
 
         instance.save!
         instance
+      end
+
+      # @param [Instance] instance
+      # @param [Network] network
+      # @return [undefined]
+      def assign_public_ip(instance, network)
+        if instance.role.public?
+          public_ip = PublicIp.new
+
+          @public_ip_builder.call(public_ip, instance, network)
+
+          instance.public_ip = public_ip
+          public_ip.save
+        end
       end
 
       # Attaches the given instance to the given network
@@ -311,26 +344,22 @@ module Ancor
       def select_channel(channel)
         case channel
         when SinglePortChannel
-          if valid_port_input(channel.port_no) then
-            SinglePortChannelSelection.new(channel: channel, port: channel.port_no)
+          if channel.number
+            SinglePortChannelSelection.new(channel: channel, port: channel.number)
           else
             SinglePortChannelSelection.new(channel: channel, port: rand(10_000..50_000))
           end
         when PortRangeChannel
-          to_port = channel.from_port + channel.size
-          if valid_port_input(channel.from_port) && valid_port_input(to_port) then
-            PortRangeChannelSelection.new(channel: channel, from_port: channel.from_port, to_port: to_port)
+          if channel.number
+            from_port = channel.number
+          else
+            from_port = rand(10_000..50_000)
           end
+          to_port = from_port + channel.size
+
+          PortRangeChannelSelection.new(channel: channel, from_port: from_port, to_port: to_port)
         else
           raise ArgumentError
-        end
-      end
-
-      def valid_port_input(port)
-        if !port.nil? && (port.is_a? Integer) && port.between?(1,65535) then
-          return true
-        else
-          return false
         end
       end
     end # AdaptationEngine

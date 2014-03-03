@@ -4,7 +4,7 @@ module Ancor
       interacts_with :os_neutron
 
       def create(connection, public_ip)
-        ext_network_id = public_ip.provider_details.fetch(:ext_network_ip)
+        ext_network_id = public_ip.provider_details.fetch(:ext_network_id)
 
         # TODO Check if PublicIp already allocated
         os_fip = connection.floating_ips.create(ext_network_id)
@@ -22,7 +22,9 @@ module Ancor
         public_ip.destroy
       end
 
-      def associate(connection, public_ip, instance)
+      def associate(connection, public_ip)
+        instance = public_ip.instance
+
         fip_id = public_ip.provider_details.fetch(:fip_id)
         instance_id = instance.provider_details.fetch(:instance_id)
 

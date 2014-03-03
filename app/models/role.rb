@@ -8,6 +8,9 @@ class Role
   field :min, type: Integer, default: 1
   field :max, type: Integer
 
+  field :is_public, type: Boolean, default: false
+  alias_method :public?, :is_public
+
   belongs_to :environment
 
   has_many :scenarios, autosave: true

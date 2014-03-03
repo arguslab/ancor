@@ -16,6 +16,8 @@ module Ancor
         end
 
         unless context["pushed"]
+          # TODO This could be delayed until after a Puppet run is complete, meaning that this
+          # task may never be finished
           create_wait_handle(:run_completed, instance_id: instance.id)
           context["pushed"] = true
           return false

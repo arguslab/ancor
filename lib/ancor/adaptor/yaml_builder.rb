@@ -17,6 +17,7 @@ module Ancor
       KEY_SCENARIOS = 'scenarios'
       KEY_MAX = 'max'
       KEY_MIN = 'min'
+      KEY_IS_PUBLIC = 'is_public'
       KEY_EXPORTS = 'exports'
       KEY_IMPORTS = 'imports'
 
@@ -26,9 +27,6 @@ module Ancor
 
       # Channel keys
       KEY_TYPE = 'type'
-      KEY_PROTOCOL = 'protocol'
-      KEY_PORT_NO = 'port_no'
-      KEY_SIZE = 'size'
 
       # Channel types
       CHANNEL_TYPE_SINGLE_PORT = 'single_port'
@@ -71,6 +69,7 @@ module Ancor
           role.description = spec[KEY_DESCRIPTION]
           role.slug = slug.to_sym
 
+          role.is_public = spec[KEY_IS_PUBLIC] || false
           role.min = spec[KEY_MIN] || 1
           role.max = spec[KEY_MAX] || spec[KEY_MIN] || 1
 

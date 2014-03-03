@@ -23,6 +23,8 @@ class Instance
   belongs_to :role
   belongs_to :scenario
 
+  has_one :public_ip
+
   has_many :interfaces, class_name: "InstanceInterface"
 
   has_and_belongs_to_many :security_groups

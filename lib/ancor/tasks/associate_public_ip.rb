@@ -1,9 +1,8 @@
 module Ancor
   module Tasks
     class AssociatePublicIp < BaseExecutor
-      def perform(pip_id, instance_id)
+      def perform(pip_id)
         public_ip = PublicIp.find pip_id
-        instance = Instance.find instance_id
 
         locator = Provider::ServiceLocator.instance
 
@@ -11,7 +10,7 @@ module Ancor
 
         connection = locator.connection(endpoint)
         service = locator.service(endpoint.type, Provider::PublicIpService)
-        service.associate(connection, public_ip, instance)
+        service.associate(connection, public_ip)
 
         true
       end
