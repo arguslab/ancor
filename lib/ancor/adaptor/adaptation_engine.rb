@@ -239,7 +239,7 @@ module Ancor
       def sink_tasks(tasks_to_sink)
         sink_task = Task.new(type: Tasks::Sink.name)
 
-        ids = tasks_to_sink.map { |task|
+        task_ids = tasks_to_sink.map { |task|
           task.trigger(sink_task)
           task.id.to_s
         }
