@@ -13,6 +13,7 @@ roles:
   weblb:
     name: Web application load balancer
     min: 2
+    is_public: true
     exports:
       http: { type: single_port, protocol: tcp, number: 80 }
     imports:

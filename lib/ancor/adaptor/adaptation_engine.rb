@@ -59,7 +59,7 @@ module Ancor
 
         begin
           instances = environment.roles.flat_map { |r| r.instances }
-          networks = instances.flat_map { |i| i.network }.uniq
+          networks = instances.flat_map { |i| i.networks }.uniq
           public_ips = instances.map { |i| i.public_ip }.compact
 
           puts "Deploying #{instances.count} instances"
