@@ -13,6 +13,9 @@ module Ancor
       # @return [Proc]
       attr_accessor :instance_builder
 
+      # @return [Proc]
+      attr_accessor :public_ip_builder
+
       def initialize
         @network_builder = proc {}
         @instance_builder = proc {}
