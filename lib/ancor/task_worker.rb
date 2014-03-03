@@ -4,13 +4,12 @@ module Ancor
 
     def perform(task_id)
       task = Task.find(task_id)
-      task.lock
 
+      return if task.completed?
+
+      task.lock
       begin
-        unless task.completed?
-          execute_task task
-          process_wait_handles :task_completed, task.id
-        end
+        execute_task(task)
       ensure
         task.unlock
       end
@@ -30,6 +29,7 @@ module Ancor
       begin
         if executor.perform(*task.arguments)
           task.update_state :completed
+          process_wait_handles(:task_completed, task.id)
         else
           task.update_state :suspended
         end
