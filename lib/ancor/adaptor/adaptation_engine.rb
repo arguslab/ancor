@@ -102,12 +102,12 @@ module Ancor
             Task.create(type: Tasks::DeleteNetwork.name, arguments: [network.id])
           }
 
-          instance_sink_task.create_wait_handle(*instance_delete_tasks)
+          instance_sink_task.create_wait_handle(*network_delete_tasks)
 
           network_sink_task = Task.new(type: Tasks::Sink.name)
           add_tasks_to_sink(network_sink_task, network_delete_tasks)
 
-          unlock_task = Task.create(type: Tasks::UnlockEnvironment, arguments: [environment.id.to_s])
+          unlock_task = Task.create(type: Tasks::UnlockEnvironment, arguments: [environment.id])
           network_sink_task.create_wait_handle(unlock_task)
 
           instance_delete_tasks.each do |task|
@@ -140,7 +140,7 @@ module Ancor
         begin
           network = Network.first
 
-          instance = build_instance(rand(100..10_000), network, role)
+          instance = build_instance(rand(100..10000), network, role)
           instance_task = Task.create(type: Tasks::DeployInstance.name, arguments: [instance.id])
 
           puts "Planning to deploy instance #{instance.name}"
@@ -156,7 +156,7 @@ module Ancor
           add_tasks_to_sink(sink_task, push_tasks)
 
           # Unlock environment once affected instances have been updated
-          unlock_task = Task.create(type: Tasks::UnlockEnvironment, arguments: [environment.id.to_s])
+          unlock_task = Task.create(type: Tasks::UnlockEnvironment, arguments: [environment.id])
           sink_task.create_wait_handle(unlock_task)
 
           TaskWorker.perform_async(instance_task.id.to_s)
@@ -216,7 +216,6 @@ module Ancor
           environment.unlock
           raise ex
         end
-
       end
 
       private
@@ -315,13 +314,26 @@ module Ancor
       def select_channel(channel)
         case channel
         when SinglePortChannel
-          SinglePortChannelSelection.new(channel: channel, port: rand(10_000..50_000))
+          if valid_port_input(channel.port_no) then
+            SinglePortChannelSelection.new(channel: channel, port: channel.port_no)
+          else
+            SinglePortChannelSelection.new(channel: channel, port: rand(10_000..50_000))
+          end
         when PortRangeChannel
-          from_port = rand(10_000..50_000)
-          to_port = from_port + channel.size
-          PortRangeChannelSelection.new(channel: channel, from_port: from_port, to_port: to_port)
+          to_port = channel.from_port + channel.size
+          if valid_port_input(channel.from_port) && valid_port_input(to_port) then
+            PortRangeChannelSelection.new(channel: channel, from_port: channel.from_port, to_port: to_port)
+          end
         else
           raise ArgumentError
+        end
+      end
+
+      def valid_port_input(port)
+        if !port.nil? && (port.is_a? Integer) && port.between?(1,65535) then
+          return true
+        else 
+          return false
         end
       end
     end # AdaptationEngine
