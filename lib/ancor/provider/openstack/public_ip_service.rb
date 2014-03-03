@@ -7,7 +7,7 @@ module Ancor
         ext_network_id = public_ip.provider_details.fetch(:ext_network_id)
 
         # TODO Check if PublicIp already allocated
-        os_fip = connection.floating_ips.create(ext_network_id)
+        os_fip = connection.floating_ips.create(floating_network_id: ext_network_id)
 
         public_ip.ip_address = os_fip.floating_ip_address
         public_ip.provider_details[:fip_id] = os_fip.id
