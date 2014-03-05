@@ -231,22 +231,27 @@ module Ancor
           instance.planned_stage = :undeploy
           instance.save
 
-          push_tasks = role.dependent_instances.map { |ai|
-            puts "Planning push configuration for instance #{ai.name}"
-            Task.create(type: Tasks::PushConfiguration.name, arguments: [ai.id])
-          }
-
-          push_sink_task = sink_tasks(push_tasks)
-
           delete_task = Task.create(type: Tasks::DeleteInstance.name, arguments: [instance.id])
-          push_sink_task.trigger(delete_task)
 
           # Unlock environment once instance is deleted
           unlock_task = Task.create(type: Tasks::UnlockEnvironment, arguments: [environment.id])
           delete_task.trigger(unlock_task)
 
-          push_tasks.each do |task|
-            TaskWorker.perform_async(task.id.to_s)
+          dependent_instances = role.dependent_instances
+          if dependent_instances.empty?
+            TaskWorker.perform_async(delete_task.id.to_s)
+          else
+            push_tasks = role.dependent_instances.map { |ai|
+              puts "Planning push configuration for instance #{ai.name}"
+              Task.create(type: Tasks::PushConfiguration.name, arguments: [ai.id])
+            }
+
+            push_sink_task = sink_tasks(push_tasks)
+            push_sink_task.trigger(delete_task)
+
+            push_tasks.each do |task|
+              TaskWorker.perform_async(task.id.to_s)
+            end
           end
         rescue => ex
           # Something went wrong, unlock the environment

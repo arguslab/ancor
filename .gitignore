@@ -20,3 +20,6 @@ vendor
 # Ignore generated MCollective configuration
 config/ancor.yml
 config/mcollective.cfg
+
+# Ignore Vagrant temp files
+.vagrant
