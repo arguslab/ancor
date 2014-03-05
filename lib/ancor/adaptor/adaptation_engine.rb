@@ -169,27 +169,26 @@ module Ancor
           }
 
           instance_task.trigger(*push_tasks)
-          
-          if instance.public_ip
-            allocate_task = Task.create(type: Tasks::AllocatePublicIp.name, arguments: [instance.public_ip.id])
-            push_sink_task = sink_tasks(push_tasks + [allocate_task])
-          else
-            push_sink_task = sink_tasks(push_tasks)
-          end
-          
+
           unlock_task = Task.create(type: Tasks::UnlockEnvironment, arguments: [environment.id])
 
           if instance.public_ip
+            allocate_task = Task.create(type: Tasks::AllocatePublicIp.name, arguments: [instance.public_ip.id])
+            push_sink_task = sink_tasks(push_tasks + [allocate_task])
+
             associate_task = Task.create(type: Tasks::AssociatePublicIp.name, arguments: [instance.public_ip.id])
             push_sink_task.trigger(associate_task)
             associate_task.trigger(unlock_task)
+
+            [instance_task, allocate_task].each do |task|
+              TaskWorker.perform_async(task.id.to_s)
+            end
           else
+            push_sink_task = sink_tasks(push_tasks)
             push_sink_task.trigger(unlock_task)
+            TaskWorker.perform_async(instance_task.id.to_s)
           end
 
-          [instance_task, allocate_task].each do |task|
-            TaskWorker.perform_async(task.id.to_s)
-          end
         rescue => ex
           # Something went wrong, unlock the environment immediately
           environment.unlock
