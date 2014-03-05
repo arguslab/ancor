@@ -11,6 +11,8 @@ module Ancor
         service = locator.service(endpoint.type, Provider::SecurityGroupService)
         service.delete(connection, secgroup)
 
+        secgroup.destroy
+
         return true
       end
     end # DeleteSecurityGroup

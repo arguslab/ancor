@@ -11,6 +11,8 @@ module Ancor
         service = locator.service(endpoint.type, Provider::InstanceService)
         service.delete(connection, instance)
 
+        instance.destroy
+
         return true
       end
     end # DeleteInstance

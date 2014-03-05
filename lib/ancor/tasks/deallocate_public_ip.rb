@@ -11,6 +11,8 @@ module Ancor
         service = locator.service(endpoint.type, Provider::PublicIpService)
         service.delete(connection, public_ip)
 
+        public_ip.destroy
+
         true
       end
     end # DeallocatePublicIp

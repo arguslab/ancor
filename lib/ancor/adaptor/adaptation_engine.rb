@@ -121,12 +121,21 @@ module Ancor
             Task.create(type: Tasks::DeleteNetwork.name, arguments: [network.id])
           }
 
-          instance_delete_sink.trigger(*network_delete_tasks)
+          public_ips = environment.roles.flat_map { |r| r.public_ips }
+          if public_ips.empty?
+            instance_delete_sink.trigger(*network_delete_tasks)
+            unlock_sink = sink_tasks(network_delete_tasks)
+          else
+            deallocate_tasks = public_ips.map { |public_ip|
+              Task.create(type: Tasks::DeallocatePublicIp.name, arguments: [public_ip.id])
+            }
 
-          network_delete_sink = sink_tasks(network_delete_tasks)
+            instance_delete_sink.trigger(*(network_delete_tasks + deallocate_tasks))
+            unlock_sink = sink_tasks(network_delete_tasks + deallocate_tasks)
+          end
 
           unlock_task = Task.create(type: Tasks::UnlockEnvironment, arguments: [environment.id])
-          network_delete_sink.trigger(unlock_task)
+          unlock_sink.trigger(unlock_task)
 
           instance_delete_tasks.each do |task|
             TaskWorker.perform_async(task.id.to_s)
@@ -303,10 +312,17 @@ module Ancor
       # @param [Network] network
       # @return [undefined]
       def assign_public_ip(instance, network)
-        if instance.role.public?
-          public_ip = PublicIp.new
+        role = instance.role
 
-          @public_ip_builder.call(public_ip, instance, network)
+        if role.public?
+          public_ip = role.public_ips.find { |public_ip|
+            !!public_ip.instance
+          }
+
+          unless public_ip
+            public_ip = PublicIp.new
+            @public_ip_builder.call(public_ip, instance, network)
+          end
 
           instance.public_ip = public_ip
           public_ip.save

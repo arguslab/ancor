@@ -6,4 +6,5 @@ class PublicIp
   field :ip_address, type: String
 
   belongs_to :instance
+  belongs_to :role
 end

@@ -13,6 +13,8 @@ class Role
 
   belongs_to :environment
 
+  has_many :public_ips
+
   has_many :scenarios, autosave: true
 
   has_many :exports, class_name: "Channel", inverse_of: :exporter, autosave: true

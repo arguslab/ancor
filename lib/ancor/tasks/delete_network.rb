@@ -11,6 +11,8 @@ module Ancor
         service = locator.service(endpoint.type, Provider::NetworkService)
         service.delete(connection, network)
 
+        network.destroy
+
         return true
       end
     end # DeleteNetwork

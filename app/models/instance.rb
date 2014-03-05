@@ -23,7 +23,7 @@ class Instance
   belongs_to :role
   belongs_to :scenario
 
-  has_one :public_ip
+  has_one :public_ip, dependent: :nullify
 
   has_many :interfaces, class_name: "InstanceInterface"
 

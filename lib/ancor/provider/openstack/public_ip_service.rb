@@ -5,8 +5,10 @@ module Ancor
 
       def create(connection, public_ip)
         ext_network_id = public_ip.provider_details.fetch(:ext_network_id)
+        fip_id = public_ip.provider_details.fetch(:fip_id)
 
-        # TODO Check if PublicIp already allocated
+        return if fip_id && connection.floating_ips.get(fip_id)
+
         os_fip = connection.floating_ips.create(floating_network_id: ext_network_id)
 
         public_ip.ip_address = os_fip.floating_ip_address
@@ -16,10 +18,9 @@ module Ancor
 
       def delete(connection, public_ip)
         fip_id = public_ip.provider_details.fetch(:fip_id)
-
-        connection.delete_floating_ip(fip_id)
-
-        public_ip.destroy
+        if fip_id
+          connection.delete_floating_ip(fip_id)
+        end
       end
 
       def associate(connection, public_ip)
@@ -28,11 +29,15 @@ module Ancor
         fip_id = public_ip.provider_details.fetch(:fip_id)
         instance_id = instance.provider_details.fetch(:instance_id)
 
+        os_fip = connection.floating_ips.get(fip_id)
+
         os_ports = connection.ports.all(device_id: instance_id)
         # TODO Be smarter about selection
         os_port = os_ports.first
 
-        connection.associate_floating_ip(fip_id, os_port.id)
+        unless os_fip.port_id == os_port.id
+          connection.associate_floating_ip(fip_id, os_port.id)
+        end
       end
 
       def disassociate(connection, public_ip)
