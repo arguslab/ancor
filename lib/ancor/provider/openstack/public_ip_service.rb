@@ -5,9 +5,11 @@ module Ancor
 
       def create(connection, public_ip)
         ext_network_id = public_ip.provider_details.fetch(:ext_network_id)
-        fip_id = public_ip.provider_details.fetch(:fip_id)
 
-        return if fip_id && connection.floating_ips.get(fip_id)
+        if public_ip.provider_details.key?(:fip_id)
+          fip_id = public_ip.provider_details.fetch(:fip_id)
+          return if connection.floating_ips.get(fip_id)
+        end
 
         os_fip = connection.floating_ips.create(floating_network_id: ext_network_id)
 
