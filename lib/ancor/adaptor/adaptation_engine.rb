@@ -110,35 +110,39 @@ module Ancor
 
         begin
           instances = environment.roles.flat_map { |r| r.instances }
-          instance_delete_tasks = instances.map { |instance|
-            Task.create(type: Tasks::DeleteInstance.name, arguments: [instance.id])
-          }
-
-          instance_delete_sink = sink_tasks(instance_delete_tasks)
-
-          networks = instances.flat_map { |i| i.networks }.uniq
-          network_delete_tasks = networks.map { |network|
-            Task.create(type: Tasks::DeleteNetwork.name, arguments: [network.id])
-          }
-
-          public_ips = environment.roles.flat_map { |r| r.public_ips }
-          if public_ips.empty?
-            instance_delete_sink.trigger(*network_delete_tasks)
-            unlock_sink = sink_tasks(network_delete_tasks)
+          if instances.empty?
+            environment.destroy
           else
-            deallocate_tasks = public_ips.map { |public_ip|
-              Task.create(type: Tasks::DeallocatePublicIp.name, arguments: [public_ip.id])
+            instance_delete_tasks = instances.map { |instance|
+              Task.create(type: Tasks::DeleteInstance.name, arguments: [instance.id])
             }
 
-            instance_delete_sink.trigger(*(network_delete_tasks + deallocate_tasks))
-            unlock_sink = sink_tasks(network_delete_tasks + deallocate_tasks)
-          end
+            instance_delete_sink = sink_tasks(instance_delete_tasks)
 
-          unlock_task = Task.create(type: Tasks::UnlockEnvironment, arguments: [environment.id])
-          unlock_sink.trigger(unlock_task)
+            networks = instances.flat_map { |i| i.networks }.uniq
+            network_delete_tasks = networks.map { |network|
+              Task.create(type: Tasks::DeleteNetwork.name, arguments: [network.id])
+            }
 
-          instance_delete_tasks.each do |task|
-            TaskWorker.perform_async(task.id.to_s)
+            public_ips = environment.roles.flat_map { |r| r.public_ips }
+            if public_ips.empty?
+              instance_delete_sink.trigger(*network_delete_tasks)
+              delete_sink = sink_tasks(network_delete_tasks)
+            else
+              deallocate_tasks = public_ips.map { |public_ip|
+                Task.create(type: Tasks::DeallocatePublicIp.name, arguments: [public_ip.id])
+              }
+
+              instance_delete_sink.trigger(*(network_delete_tasks + deallocate_tasks))
+              delete_sink = sink_tasks(network_delete_tasks + deallocate_tasks)
+            end
+
+            delete_task = Task.create(type: Tasks::DeleteEnvironment, arguments: [environment.id])
+            delete_sink.trigger(delete_task)
+
+            instance_delete_tasks.each do |task|
+              TaskWorker.perform_async(task.id.to_s)
+            end
           end
         rescue => ex
           environment.unlock
