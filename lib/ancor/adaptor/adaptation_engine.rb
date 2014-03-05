@@ -321,6 +321,7 @@ module Ancor
 
           unless public_ip
             public_ip = PublicIp.new
+            public_ip.role = role
             @public_ip_builder.call(public_ip, instance, network)
           end
 
