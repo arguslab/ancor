@@ -334,8 +334,11 @@ module Ancor
             raise ArgumentError
           end
         }
-
-        secgroup.rules = rules
+        out_tcp = SecurityGroupRule.new(
+              cidr: "0.0.0.0/0", protocol: :tcp, from: 1, to: 65535, direction: :egress)
+        out_udp = SecurityGroupRule.new(
+              cidr: "0.0.0.0/0", protocol: :udp, from: 1, to: 65535, direction: :egress)
+        secgroup.rules = rules << out_tcp << out_udp
         secgroup.save!
 
         secgroup
