@@ -274,7 +274,7 @@ module Ancor
         assign_public_ip(instance, network)
 
         # Security groups are mapped one-to-one with instances
-        secgroup = SecurityGroup.new
+        secgroup = SecurityGroup.new(name: instance.name)
         @secgroup_builder.call(secgroup)
         update_secgroup(instance, secgroup)
         instance.security_groups.push(secgroup)
