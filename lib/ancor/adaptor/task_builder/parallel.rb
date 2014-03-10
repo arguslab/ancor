@@ -30,8 +30,7 @@ module Ancor
       # @return [undefined]
       def initialize
         @heads = Array.new
-        @tail_ids = Array.new
-        @tail = create_task(Tasks::Sink, @tail_ids)
+        @tail = create_task(Tasks::Sink, Array.new)
       end
 
       # @return [Boolean]
@@ -49,10 +48,7 @@ module Ancor
           tail = builder.tail
 
           @heads.push(*heads)
-          @tail_ids.push(tail.id)
-          tail.trigger(@tail)
-
-          @tail.save
+          insert_task(tail)
         end
       end
 
@@ -69,10 +65,20 @@ module Ancor
         task = create_task(type, *args)
 
         @heads.push(task)
-        @tail_ids.push(task.id)
-        task.trigger(@tail)
+        insert_task(task)
+      end
 
+      private
+
+      # Appends the given task to the sink's list of tasks
+      #
+      # @param [Task] task
+      # @return [undefined]
+      def insert_task(task)
+        @tail.arguments.first << task.id
         @tail.save
+
+        task.trigger(@tail)
       end
     end # ParallelTaskBuilder
   end # Adaptor
