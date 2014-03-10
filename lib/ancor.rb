@@ -42,7 +42,9 @@ Ancor.setup_logger
 
 require 'ancor/errors'
 
+require 'ancor/adaptor/adaptation_engine'
 require 'ancor/adaptor/import_selector'
+require 'ancor/adaptor/task_builder'
 require 'ancor/adaptor/yaml_builder'
 
 require 'ancor/conductor/client_lock'
