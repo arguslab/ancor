@@ -203,7 +203,6 @@ module Ancor
           instance.planned_stage = :undeploy
           instance.save
 
-
           build_task_chain do
             parallel do
               # TODO Update security groups for dependent instances
@@ -231,6 +230,8 @@ module Ancor
         builder = ChainTaskBuilder.build(&block)
 
         unless builder.empty?
+          # TODO This should only be enabled for debug environments
+          GraphvizDumper.dump_to_tmp(*builder.heads)
           builder.heads.each do |task|
             TaskWorker.perform_async(task.id.to_s)
           end

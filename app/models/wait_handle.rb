@@ -11,12 +11,16 @@ class WaitHandle
   end
 
   def self.correlated_tasks(type, correlations = {})
+    by_correlations(type, correlations).pluck(:task_ids).flatten.uniq.map(&:to_s)
+  end
+
+  def self.by_correlations(type, correlations = {})
     criteria = {
       type: type,
       correlations: normalize_hash(correlations)
     }
 
-    where(criteria).pluck(:task_ids).flatten.uniq.map(&:to_s)
+    where(criteria)
   end
 
   def self.each_task(type, correlations = {}, &block)

@@ -6,37 +6,44 @@ module Ancor
     ExampleTask = Class.new
 
     describe ChainTaskBuilder do
-      it 'structures tasks in a chain' do
+      after(:each) do
+        puts "Task graph generated, available at:", GraphvizDumper.dump_to_tmp(*subject.heads)
+      end
 
+      it 'structures tasks in a chain' do
         subject.build do
           task ExampleTask, 1
           task ExampleTask, 2
           task ExampleTask, 3
         end
-
-        # GraphvizDumper.dump_and_open(*subject.heads)
-
       end
 
       it 'structures tasks in a chain with parallel tasks' do
-
         subject.build do
-          task ExampleTask, 1
-
           parallel do
-            task ExampleTask, 2
-            task ExampleTask, 3
+            task ExampleTask
+            task ExampleTask
           end
 
+          task ExampleTask
+          task ExampleTask
+
           parallel do
-            task ExampleTask, 5
+            chain do
+              parallel do
+                task ExampleTask
+                task ExampleTask
+              end
+              task ExampleTask
+            end
+            chain do
+              task ExampleTask
+              task ExampleTask
+            end
           end
 
-          task ExampleTask, 4
+          task ExampleTask
         end
-
-        # GraphvizDumper.dump_and_open(*subject.heads)
-
       end
     end
 

@@ -2,53 +2,68 @@ require 'graphviz'
 
 module Ancor
   module Adaptor
+    # Utility for dumping a task graph using GraphViz
     class GraphvizDumper
-
-      def self.dump_and_open(*args)
-        graphviz = new.dump(*args)
-
-        path = "/tmp/#{SecureRandom.uuid}.png"
+      # Builds and dumps a task graph, starting with the given tasks
+      #
+      # @param [String] path
+      # @param [Task...] args
+      # @return [String] The given path
+      def self.dump_to(path, *args)
+        dumper = new
+        graphviz = dumper.dump(*args)
         graphviz.output(png: path)
-        system "open #{path}"
+
+        path
       end
 
-      def initialize
-        @graphviz = GraphViz.new(:G, type: :digraph)
-        @tasks = Set.new
+      # Dumps a task graph to the operating system's temporary directory
+      #
+      # @param [Task...] args
+      # @return [String] The randomly generated path
+      def self.dump_to_tmp(*args)
+        filename = SecureRandom.uuid + ".png"
+        dump_to(File.join(Dir.tmpdir, filename), *args)
       end
 
+      # @param [Task...] args
+      # @return [GraphViz]
       def dump(*args)
-        start = Time.now
-        recursive_build_graph(*args)
-        elapsed = Time.now - start
+        graphviz = GraphViz.new(:G, type: :digraph)
+        visited = Set.new
 
-        puts "Built task graph in #{elapsed} seconds"
+        recursive_dump(graphviz, visited, *args)
 
-        @graphviz
+        graphviz
       end
 
       private
 
-      def recursive_build_graph(*tasks)
+      # @param [GraphViz] graphviz
+      # @param [Set] visited
+      # @param [Task...] tasks
+      # @return [undefined]
+      def recursive_dump(graphviz, visited, *tasks)
         tasks.each do |task|
-          @graphviz.add_node(task.id.to_s, label: task.type)
+          graphviz.add_node(task.id.to_s, label: task.type)
 
-          each_wait_handle(task.id) do |wh|
-            wh.tasks.each do |target|
-              @graphviz.add_edge(task.id.to_s, target.id.to_s)
-              recursive_build_graph(target) if @tasks.add?(target)
-            end
+          correlated_tasks(task) do |wh, target|
+            graphviz.add_edge(task.id.to_s, target.id.to_s)
+            recursive_dump(graphviz, visited, target) if visited.add?(target)
           end
         end
       end
 
-      def each_wait_handle(task_id, &block)
-        criteria = {
-          type: :task_completed,
-          correlations: { task_id: task_id.to_s }.stringify_keys
-        }
-
-        WaitHandle.where(criteria).each(&block)
+      # @yieldparam [WaitHandle] Wait handle correlated with the given task
+      # @yieldparam [Task] Task that will be triggered by the associated wait handle
+      # @param [Task] task
+      # @return [undefined]
+      def correlated_tasks(task)
+        WaitHandle.by_correlations(:task_completed, task_id: task.id.to_s).each do |wh|
+          wh.tasks.each do |task|
+            yield wh, task
+          end
+        end
       end
     end # GraphvizDumper
   end # Adaptor
