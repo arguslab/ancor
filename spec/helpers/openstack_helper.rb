@@ -4,15 +4,15 @@ module OpenStackHelper
   # @return [String] The security group id
   def setup_secgroup_fixture
     endpoint = ProviderEndpoint.create(
-      type: :os_nova,
+      type: :os_neutron,
       options: openstack_options)
 
     cidr = '0.0.0.0/0'
 
     secgroup = SecurityGroup.new(provider_endpoint: endpoint)
-    secgroup.rules << SecurityGroupRule.new(protocol: :tcp, from: 1, to: 65535, cidr: cidr)
-    secgroup.rules << SecurityGroupRule.new(protocol: :udp, from: 1, to: 65535, cidr: cidr)
-    secgroup.rules << SecurityGroupRule.new(protocol: :icmp, from: -1, to: -1, cidr: cidr)
+    secgroup.rules << SecurityGroupRule.new(protocol: :tcp, from: 22, to: 22, cidr: cidr)
+    secgroup.rules << SecurityGroupRule.new(protocol: :udp, from: 3306, to: 3306, cidr: cidr)
+    secgroup.rules << SecurityGroupRule.new(protocol: :tcp, from: 50, to: 50, cidr: cidr)
     secgroup.save
 
     secgroup.id

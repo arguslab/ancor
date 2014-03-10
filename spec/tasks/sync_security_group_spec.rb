@@ -27,7 +27,7 @@ module Ancor
           change_secgroup_rules secgroup_id
           subject.perform secgroup_id
 
-          # Started with 3 rules (+3)
+          # Started with 2 rules (+3)
           # Added 2 rules (+2)
           # Removed 1 rule (-1)
           os_rules_for(secgroup_id).size.should == 4
@@ -47,7 +47,7 @@ module Ancor
         locator = Provider::ServiceLocator.instance
         connection = locator.connection secgroup.provider_endpoint
 
-        connection.security_groups.get(secgroup_id).rules
+        connection.security_groups.get(secgroup_id).security_group_rules
       end
 
       # @param [String] id
@@ -63,7 +63,7 @@ module Ancor
         rules << SecurityGroupRule.new(protocol: :tcp, from: 443, to: 443, cidr: cidr)
 
         rules.each { |rule|
-          rule.delete if rule.protocol == :icmp
+          rule.delete if rule.from == 50
         }
 
         secgroup.save

@@ -19,10 +19,14 @@ module Ancor
       # @return [Proc]
       attr_accessor :public_ip_builder
 
+      # @return [Proc]
+      attr_accessor :secgroup_builder
+
       def initialize
         @network_builder = proc {}
         @instance_builder = proc {}
         @public_ip_builder = proc {}
+        @secgroup_builder = proc {}
       end
 
       # Queries the requirement model and creates a suitable system model
@@ -271,6 +275,7 @@ module Ancor
 
         # Security groups are mapped one-to-one with instances
         secgroup = SecurityGroup.new
+        @secgroup_builder.call(secgroup)
         update_secgroup(instance, secgroup)
         instance.security_groups.push(secgroup)
 

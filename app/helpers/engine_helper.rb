@@ -36,6 +36,10 @@ module EngineHelper
           ext_network_id: openstack_config[:ext_network_id]
         }
       end
+
+      @engine.secgroup_builder = proc do |secgroup|
+        secgroup.provider_endpoint = network_endpoint
+      end
     end
 
     @engine
