@@ -4,6 +4,7 @@ module Ancor
   module Adaptor
     class AdaptationEngine
       include Loggable
+      include Tasks
 
       # Function that populates details for new network model objects
       # @return [Proc]
@@ -64,36 +65,22 @@ module Ancor
 
           puts "Deploying #{instances.count} instances"
 
-          network_tasks = networks.map { |network|
-            Task.create(type: Tasks::ProvisionNetwork.name, arguments: [network.id])
-          }
+          build_task_chain do
+            parallel do
+              networks.each   { |network| task(ProvisionNetwork, network.id) }
+              public_ips.each { |public_ip| task(AllocatePublicIp, public_ip.id) }
+              instances.each  { |instance| task(CleanPuppetCertificate, instance.id) }
+            end
 
-          network_sink = sink_tasks(network_tasks)
+            parallel do
+              instances.each  { |instance| task(DeployInstance, instance.id) }
+            end
 
-          deploy_tasks = instances.map { |instance|
-            Task.create(type: Tasks::DeployInstance.name, arguments: [instance.id])
-          }
+            parallel do
+              public_ips.each { |public_ip| task(AssociatePublicIp, public_ip.id) }
+            end
 
-          network_sink.trigger(*deploy_tasks)
-
-          allocate_tasks = public_ips.map { |public_ip|
-            Task.create(type: Tasks::AllocatePublicIp.name, arguments: [public_ip.id])
-          }
-
-          deploy_sink = sink_tasks(deploy_tasks + allocate_tasks)
-
-          associate_tasks = public_ips.map { |public_ip|
-            Task.create(type: Tasks::AssociatePublicIp.name, arguments: [public_ip.id])
-          }
-          deploy_sink.trigger(*associate_tasks)
-          associate_sink = sink_tasks(associate_tasks)
-
-          # Unlock environment once all instances have been deployed
-          unlock_task = Task.create(type: Tasks::UnlockEnvironment, arguments: [environment.id.to_s])
-          associate_sink.trigger(unlock_task)
-
-          (network_tasks + allocate_tasks).each do |task|
-            TaskWorker.perform_async(task.id.to_s)
+            task(UnlockEnvironment, environment.id)
           end
         rescue => ex
           # Something went wrong, unlock the environment immediately
@@ -110,38 +97,21 @@ module Ancor
 
         begin
           instances = environment.roles.flat_map { |r| r.instances }
+          networks = instances.flat_map { |i| i.networks }.uniq
+          public_ips = environment.roles.flat_map { |r| r.public_ips }
+
           if instances.empty?
             environment.destroy
           else
-            instance_delete_tasks = instances.map { |instance|
-              Task.create(type: Tasks::DeleteInstance.name, arguments: [instance.id])
-            }
-
-            instance_delete_sink = sink_tasks(instance_delete_tasks)
-
-            networks = instances.flat_map { |i| i.networks }.uniq
-            network_delete_tasks = networks.map { |network|
-              Task.create(type: Tasks::DeleteNetwork.name, arguments: [network.id])
-            }
-
-            public_ips = environment.roles.flat_map { |r| r.public_ips }
-            if public_ips.empty?
-              instance_delete_sink.trigger(*network_delete_tasks)
-              delete_sink = sink_tasks(network_delete_tasks)
-            else
-              deallocate_tasks = public_ips.map { |public_ip|
-                Task.create(type: Tasks::DeallocatePublicIp.name, arguments: [public_ip.id])
-              }
-
-              instance_delete_sink.trigger(*(network_delete_tasks + deallocate_tasks))
-              delete_sink = sink_tasks(network_delete_tasks + deallocate_tasks)
-            end
-
-            delete_task = Task.create(type: Tasks::DeleteEnvironment, arguments: [environment.id])
-            delete_sink.trigger(delete_task)
-
-            instance_delete_tasks.each do |task|
-              TaskWorker.perform_async(task.id.to_s)
+            build_task_chain do
+              parallel do
+                instances.each  { |instance| task(DeleteInstance, instance.id) }
+              end
+              parallel do
+                networks.each   { |network| task(DeleteNetwork, network.id) }
+                public_ips.each { |public_ip| task(DeallocatePublicIp, public_ip.id) }
+              end
+              task(DeleteEnvironment, environment.id)
             end
           end
         rescue => ex
@@ -172,36 +142,21 @@ module Ancor
           network = Network.first
 
           instance = build_instance(rand(100..10000), network, role)
-          instance_task = Task.create(type: Tasks::DeployInstance.name, arguments: [instance.id])
-
           puts "Planning to deploy instance #{instance.name}"
 
-          push_tasks = role.dependent_instances.map { |ai|
-            puts "Planning push configuration for instance #{ai.name}"
-            Task.create(type: Tasks::PushConfiguration.name, arguments: [ai.id])
-          }
+          build_task_chain do
+            task(CleanPuppetCertificate, instance.id)
+            task(DeployInstance, instance.id)
 
-          instance_task.trigger(*push_tasks)
-
-          unlock_task = Task.create(type: Tasks::UnlockEnvironment, arguments: [environment.id])
-
-          if instance.public_ip
-            allocate_task = Task.create(type: Tasks::AllocatePublicIp.name, arguments: [instance.public_ip.id])
-            push_sink_task = sink_tasks(push_tasks + [allocate_task])
-
-            associate_task = Task.create(type: Tasks::AssociatePublicIp.name, arguments: [instance.public_ip.id])
-            push_sink_task.trigger(associate_task)
-            associate_task.trigger(unlock_task)
-
-            [instance_task, allocate_task].each do |task|
-              TaskWorker.perform_async(task.id.to_s)
+            parallel do
+              role.dependent_instances.each { |instance| task(PushConfiguration, instance.id) }
             end
-          else
-            push_sink_task = sink_tasks(push_tasks)
-            push_sink_task.trigger(unlock_task)
-            TaskWorker.perform_async(instance_task.id.to_s)
-          end
 
+            if instance.public_ip
+              task(AllocatePublicIp, instance.public_ip.id)
+              task(AssociatePublicIp, instance.public_ip.id)
+            end
+          end
         rescue => ex
           # Something went wrong, unlock the environment immediately
           environment.unlock
@@ -235,27 +190,13 @@ module Ancor
           instance.planned_stage = :undeploy
           instance.save
 
-          delete_task = Task.create(type: Tasks::DeleteInstance.name, arguments: [instance.id])
-
-          # Unlock environment once instance is deleted
-          unlock_task = Task.create(type: Tasks::UnlockEnvironment, arguments: [environment.id])
-          delete_task.trigger(unlock_task)
-
-          dependent_instances = role.dependent_instances
-          if dependent_instances.empty?
-            TaskWorker.perform_async(delete_task.id.to_s)
-          else
-            push_tasks = role.dependent_instances.map { |ai|
-              puts "Planning push configuration for instance #{ai.name}"
-              Task.create(type: Tasks::PushConfiguration.name, arguments: [ai.id])
-            }
-
-            push_sink_task = sink_tasks(push_tasks)
-            push_sink_task.trigger(delete_task)
-
-            push_tasks.each do |task|
-              TaskWorker.perform_async(task.id.to_s)
+          build_task_chain do
+            parallel do
+              role.dependent_instances.each { |instance| task(PushConfiguration, instance.id) }
             end
+
+            task(DeleteInstance, instance.id)
+            task(UnlockEnvironment, environment.id)
           end
         rescue => ex
           # Something went wrong, unlock the environment
@@ -266,18 +207,14 @@ module Ancor
 
       private
 
-      def sink_tasks(tasks_to_sink)
-        sink_task = Task.new(type: Tasks::Sink.name)
+      def build_task_chain(&block)
+        builder = ChainTaskBuilder.build(&block)
 
-        task_ids = tasks_to_sink.map { |task|
-          task.trigger(sink_task)
-          task.id.to_s
-        }
-
-        sink_task.arguments = [task_ids]
-        sink_task.save
-
-        sink_task
+        unless builder.empty?
+          builder.heads.each do |task|
+            TaskWorker.perform_async(task.id.to_s)
+          end
+        end
       end
 
       # Creates a new network model object
