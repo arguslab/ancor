@@ -38,4 +38,8 @@ class Instance
       interface.network
     }
   end
+
+  def public?
+    role.public?
+  end
 end
