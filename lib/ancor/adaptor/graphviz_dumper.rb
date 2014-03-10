@@ -45,7 +45,7 @@ module Ancor
       # @return [undefined]
       def recursive_dump(graphviz, visited, *tasks)
         tasks.each do |task|
-          graphviz.add_node(task.id.to_s, label: task.type)
+          graphviz.add_node(task.id.to_s, label: "#{task.type}\n#{task.id}")
 
           correlated_tasks(task) do |wh, target|
             graphviz.add_edge(task.id.to_s, target.id.to_s)
