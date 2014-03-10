@@ -269,6 +269,11 @@ module Ancor
         select_channels(instance, role.exports)
         assign_public_ip(instance, network)
 
+        # Security groups are mapped one-to-one with instances
+        secgroup = SecurityGroup.new
+        update_secgroup(instance, secgroup)
+        instance.security_groups.push(secgroup)
+
         @instance_builder.call(instance)
 
         instance.save!
@@ -294,7 +299,7 @@ module Ancor
           end
 
           instance.public_ip = public_ip
-          public_ip.save
+          public_ip.save!
         end
       end
 
@@ -326,7 +331,7 @@ module Ancor
         }
 
         secgroup.rules = rules
-        secgroup.save
+        secgroup.save!
 
         secgroup
       end
