@@ -155,7 +155,7 @@ module Ancor
           build_task_chain do
             parallel do
               task(CleanPuppetCertificate, instance.id)
-              instance.secgroups.each { |secgroup| task(SyncSecurityGroup, secgroup.id) }
+              instance.security_groups.each { |secgroup| task(SyncSecurityGroup, secgroup.id) }
             end
 
             task(DeployInstance, instance.id)
@@ -213,7 +213,7 @@ module Ancor
             task(DeleteInstance, instance.id)
 
             parallel do
-              instance.secgroups.each { |secgroup| task(DeleteSecurityGroup, secgroup.id) }
+              instance.security_groups.each { |secgroup| task(DeleteSecurityGroup, secgroup.id) }
             end
 
             task(UnlockEnvironment, environment.id)
