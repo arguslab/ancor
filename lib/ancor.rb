@@ -62,6 +62,7 @@ require 'ancor/provider/openstack'
 require 'ancor/tasks/base_executor'
 require 'ancor/tasks/sink'
 
+require 'ancor/tasks/clean_puppet_certificate'
 require 'ancor/tasks/deploy_instance'
 require 'ancor/tasks/delete_instance'
 require 'ancor/tasks/provision_instance'
