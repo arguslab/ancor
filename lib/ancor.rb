@@ -46,6 +46,7 @@ require 'ancor/adaptor/adaptation_engine'
 require 'ancor/adaptor/import_selector'
 require 'ancor/adaptor/task_builder'
 require 'ancor/adaptor/yaml_builder'
+require 'ancor/adaptor/graphviz_dumper'
 
 require 'ancor/conductor/client_lock'
 require 'ancor/conductor/client_util'

@@ -14,6 +14,8 @@ module Ancor
           task ExampleTask, 3
         end
 
+        # GraphvizDumper.dump_and_open(*subject.heads)
+
       end
 
       it 'structures tasks in a chain with parallel tasks' do
@@ -32,6 +34,8 @@ module Ancor
 
           task ExampleTask, 4
         end
+
+        # GraphvizDumper.dump_and_open(*subject.heads)
 
       end
     end
