@@ -6,6 +6,8 @@ module Ancor
       include Loggable
       include Tasks
 
+      PUBLIC_CIDR = '0.0.0.0/0'
+
       # Function that populates details for new network model objects
       # @return [Proc]
       attr_accessor :network_builder
@@ -60,6 +62,7 @@ module Ancor
 
         begin
           instances = environment.roles.flat_map { |r| r.instances }
+          secgroups = instances.flat_map { |i| i.security_groups }.uniq
           networks = instances.flat_map { |i| i.networks }.uniq
           public_ips = instances.map { |i| i.public_ip }.compact
 
@@ -70,6 +73,7 @@ module Ancor
               networks.each   { |network| task(ProvisionNetwork, network.id) }
               public_ips.each { |public_ip| task(AllocatePublicIp, public_ip.id) }
               instances.each  { |instance| task(CleanPuppetCertificate, instance.id) }
+              secgroups.each  { |secgroup| task(SyncSecurityGroup, secgroup.id) }
             end
 
             parallel do
@@ -97,6 +101,7 @@ module Ancor
 
         begin
           instances = environment.roles.flat_map { |r| r.instances }
+          secgroups = instances.flat_map { |i| i.security_groups }.uniq
           networks = instances.flat_map { |i| i.networks }.uniq
           public_ips = environment.roles.flat_map { |r| r.public_ips }
 
@@ -107,10 +112,13 @@ module Ancor
               parallel do
                 instances.each  { |instance| task(DeleteInstance, instance.id) }
               end
+
               parallel do
+                secgroups.each  { |secgroup| task(DeleteSecurityGroup, secgroup.id) }
                 networks.each   { |network| task(DeleteNetwork, network.id) }
                 public_ips.each { |public_ip| task(DeallocatePublicIp, public_ip.id) }
               end
+
               task(DeleteEnvironment, environment.id)
             end
           end
@@ -145,10 +153,15 @@ module Ancor
           puts "Planning to deploy instance #{instance.name}"
 
           build_task_chain do
-            task(CleanPuppetCertificate, instance.id)
+            parallel do
+              task(CleanPuppetCertificate, instance.id)
+              instance.secgroups.each { |secgroup| task(SyncSecurityGroup, secgroup.id) }
+            end
+
             task(DeployInstance, instance.id)
 
             parallel do
+              # TODO Update security groups for dependent instances
               role.dependent_instances.each { |instance| task(PushConfiguration, instance.id) }
             end
 
@@ -190,12 +203,19 @@ module Ancor
           instance.planned_stage = :undeploy
           instance.save
 
+
           build_task_chain do
             parallel do
+              # TODO Update security groups for dependent instances
               role.dependent_instances.each { |instance| task(PushConfiguration, instance.id) }
             end
 
             task(DeleteInstance, instance.id)
+
+            parallel do
+              instance.secgroups.each { |secgroup| task(DeleteSecurityGroup, secgroup.id) }
+            end
+
             task(UnlockEnvironment, environment.id)
           end
         rescue => ex
@@ -261,8 +281,9 @@ module Ancor
         role = instance.role
 
         if role.public?
+          # Attempt to reuse public IPs that are already allocated
           public_ip = role.public_ips.find { |public_ip|
-            !!public_ip.instance
+            public_ip.instance.nil?
           }
 
           unless public_ip
@@ -274,6 +295,39 @@ module Ancor
           instance.public_ip = public_ip
           public_ip.save
         end
+      end
+
+      # Updates the rules in the given security group for the given instance
+      #
+      # @param [Instance] instance
+      # @param [SecurityGroup] secgroup
+      # @return [SecurtyGroup]
+      def update_secgroup(instance, secgroup)
+        blocks = if instance.public?
+          [PUBLIC_CIDR]
+        else
+          instance.networks.map { |network| network.cidr }
+        end
+
+        targets = blocks.product(instance.channel_selections)
+
+        rules = targets.map { |cidr, selection|
+          case selection
+          when SinglePortChannelSelection
+            SecurityGroupRule.new(
+              cidr: cidr, protocol: selection.protocol, from: selection.port, to: selection.port)
+          when PortRangeChannelSelection
+            SecurityGroupRule.new(
+              cidr: cidr, protocol: selection.protocol, from: selection.from_port, to: selection.to_port)
+          else
+            raise ArgumentError
+          end
+        }
+
+        secgroup.rules = rules
+        secgroup.save
+
+        secgroup
       end
 
       # Attaches the given instance to the given network
