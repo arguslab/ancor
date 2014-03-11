@@ -75,7 +75,6 @@ module Ancor
           build_task_chain do
             parallel do
               networks.each   { |network| task(ProvisionNetwork, network.id) }
-              public_ips.each { |public_ip| task(AllocatePublicIp, public_ip.id) }
               instances.each  { |instance| task(CleanPuppetCertificate, instance.id) }
               secgroups.each  { |secgroup| task(SyncSecurityGroup, secgroup.id) }
             end
@@ -85,6 +84,7 @@ module Ancor
             end
 
             parallel do
+              public_ips.each { |public_ip| task(AllocatePublicIp, public_ip.id) }
               public_ips.each { |public_ip| task(AssociatePublicIp, public_ip.id) }
             end
 
@@ -173,6 +173,8 @@ module Ancor
               task(AllocatePublicIp, instance.public_ip.id)
               task(AssociatePublicIp, instance.public_ip.id)
             end
+
+            task(UnlockEnvironment, environment.id)
           end
         rescue => ex
           # Something went wrong, unlock the environment immediately
@@ -334,11 +336,7 @@ module Ancor
             raise ArgumentError
           end
         }
-        out_tcp = SecurityGroupRule.new(
-              cidr: "0.0.0.0/0", protocol: :tcp, from: 1, to: 65535, direction: :egress)
-        out_udp = SecurityGroupRule.new(
-              cidr: "0.0.0.0/0", protocol: :udp, from: 1, to: 65535, direction: :egress)
-        secgroup.rules = rules << out_tcp << out_udp
+        secgroup.rules.concat(rules)
         secgroup.save!
 
         secgroup
