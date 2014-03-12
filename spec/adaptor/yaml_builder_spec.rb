@@ -4,9 +4,11 @@ module Ancor
   module Adaptor
 
     describe YamlBuilder do
+      subject { YamlBuilder.new(environment) }
+      let(:environment) { Environment.new }
 
       it 'builds a requirement model from a file containing ARML' do
-        path = Rails.root.join(*%w(spec fixtures arml fullstack.yaml))
+        path = Rails.root.join('spec/fixtures/arml/fullstack.yaml')
 
         subject.build_from path
 
