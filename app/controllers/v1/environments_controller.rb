@@ -62,15 +62,14 @@ module V1
       begin
         # TODO Should validate before commit to prevent confusion
         # between client error (invalid spec) and server error (commit failure)
-
         builder.build(spec)
         builder.commit
 
         engine.plan(@environment)
 
         render nothing: true, status: 202
-      rescue
-        render nothing: true, status: 400
+      #rescue
+      #  render nothing: true, status: 400
       end
     end
 

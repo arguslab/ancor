@@ -24,6 +24,17 @@ class Role
 
   validates :slug, presence: true
 
+  validates :min, numericality: { only_integer: true, greater_than: 0 }
+
+  validates :max, numericality: { only_integer: true, greater_than_or_equal: 1 },
+    if: Proc.new { |a| a.max? }
+
+  validate :min_max, if: Proc.new { |a| a.max? }
+
+  def min_max
+    errors.add(:max, "max cannot be less than min") if min > max 
+  end
+
   def dependencies
     imports.map { |channel|
       channel.exporter
