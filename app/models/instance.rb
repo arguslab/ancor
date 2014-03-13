@@ -2,6 +2,7 @@ class Instance
   include Mongoid::Document
   include Lockable
   include Providable
+  include Ancor::Extensions::IndifferentAccess
 
   STAGES = [
     :setup,
@@ -31,7 +32,13 @@ class Instance
 
   embeds_many :channel_selections
 
+  field :cmt_details, type: Hash, default: -> { {} }, pre_processed: true
+
   validates :name, presence: true
+
+  def environment
+    role.environment
+  end
 
   def networks
     interfaces.map { |interface|
