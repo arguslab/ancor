@@ -85,6 +85,24 @@ module Ancor
       def execute_task(task_id)
         TaskWorker.perform_async(task_id)
       end
+
+      def ensure_task_chain(tasks_definitions)
+        task_definitions.each do |task|
+          key, task_type, *args = *task
+
+          unless context["#{key}_finished"]
+            unless task_started? key
+              perform_task key, task_type, *args
+              return false
+            end
+
+            return false unless task_completed? key
+            context["#{key}_finished"] = true
+          end
+        end
+
+        true
+      end
     end # BaseExecutor
   end # Tasks
 end
