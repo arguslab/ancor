@@ -18,7 +18,6 @@ module EngineHelper
         instance.provider_details = {
           flavor_id: openstack_config[:flavor_id],
           image_id: openstack_config[:image_id],
-          user_data: generate_user_data
         }
       end
 
@@ -47,7 +46,7 @@ module EngineHelper
           SecurityGroupRule.new(cidr: "0.0.0.0/0", protocol: :icmp, from: -1, to: -1),
           SecurityGroupRule.new(cidr: "0.0.0.0/0", protocol: :tcp, from: 22, to: 22),
         ]
-        
+
       end
     end
 
@@ -61,25 +60,6 @@ module EngineHelper
       openstack_auth_url: openstack_config[:auth_url],
       openstack_tenant: openstack_config[:tenant]
     }
-  end
-
-  # Generates user data using the Ubuntu Quantal template and some default
-  # values
-  #
-  # @return [String]
-  def generate_user_data
-    config = Ancor.config
-
-    template = ERB.new(
-      File.read(File.expand_path('spec/config/ubuntu-precise.sh.erb', Rails.root))
-    )
-    mco_template = ERB.new(
-      File.read(File.expand_path('spec/config/mcollective/server.cfg.erb', Rails.root))
-    )
-
-    mcollective_server_config = mco_template.result(binding)
-
-    template.result(binding)
   end
 
   def openstack_config
