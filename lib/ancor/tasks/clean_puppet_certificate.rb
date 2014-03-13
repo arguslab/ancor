@@ -8,9 +8,8 @@ module Ancor
 
         ca_client = rpc_client :puppetca
         client_sync {
-          # TODO How do we handle FQDN here?
           # TODO Check output; should be "cert does not exist" or "success"
-          ca_client.clean certname: "#{instance.name}.openstacklocal"
+          ca_client.clean certname: "#{instance.name}.#{instance.environment.slug}"
         }
 
         true
