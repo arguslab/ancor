@@ -11,6 +11,8 @@ export DEBIAN_FRONTEND=noninteractive
 export http_proxy="http://<%= config[:proxy][:host] %>:<%= config[:proxy][:port] %>/"
 <% end %>
 
+PUPPET_SSL=/var/lib/puppet/ssl
+
 ##
 # Use the official Puppetlabs repository
 ##
@@ -35,6 +37,38 @@ service mcollective restart
 cat <<EOF >> /etc/hosts
 127.0.1.1 `hostname`
 <%= config[:puppet][:host] %> puppet
+EOF
+
+##
+# Copy generated Puppet certificates
+##
+mkdir -p $PUPPET_SSL/certs
+mkdir -p $PUPPET_SSL/private_keys
+
+cat <<EOF > $PUPPET_SSL/certs/<%= certname %>.pem
+<%= instance.cmt_details[:client_cert] %>
+EOF
+
+cat <<EOF > $PUPPET_SSL/certs/ca.pem
+<%= instance.cmt_details[:ca_cert] %>
+EOF
+
+cat <<EOF > $PUPPET_SSL/private_keys/<%= certname %>.pem
+<%= instance.cmt_details[:client_key] %>
+EOF
+
+##
+# Set permissions on copied files
+##
+chown -R puppet $PUPPET_SSL
+chmod 640 $PUPPET_SSL/private_keys/<%= certname %>.pem
+
+##
+# Set predictable certname for Puppet agent
+##
+cat <<EOF >> /etc/puppet/puppet.conf
+[agent]
+certname = <%= certname %>
 EOF
 
 ##
