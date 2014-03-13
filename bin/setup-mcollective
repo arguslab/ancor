@@ -30,7 +30,7 @@ puts "Cloning required repositories"
 
 `git clone -q git://github.com/puppetlabs/marionette-collective.git -b 2.4.x #{vendordir}/marionette-collective`
 `git clone -q git://github.com/puppetlabs/mcollective-puppet-agent.git #{vendordir}/mcollective-puppet-agent`
-`git clone -q git://github.com/puppetlabs/mcollective-puppetca-agent.git #{vendordir}/mcollective-puppetca-agent`
+`git clone -q git://github.com/ianunruh/mcollective-puppetca-agent.git #{vendordir}/mcollective-puppetca-agent`
 
 puts "Installing plugins"
 
