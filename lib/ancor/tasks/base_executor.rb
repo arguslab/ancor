@@ -86,7 +86,7 @@ module Ancor
         TaskWorker.perform_async(task_id)
       end
 
-      def ensure_task_chain(tasks_definitions)
+      def ensure_task_chain(task_definitions)
         task_definitions.each do |task|
           key, task_type, *args = *task
 
