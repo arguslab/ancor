@@ -42,8 +42,6 @@ module EngineHelper
         secgroup.rules = [
           SecurityGroupRule.new(cidr: "0.0.0.0/0", protocol: :tcp, from: 1, to: 65535, direction: :egress),
           SecurityGroupRule.new(cidr: "0.0.0.0/0", protocol: :udp, from: 1, to: 65535, direction: :egress),
-          SecurityGroupRule.new(cidr: "0.0.0.0/0", protocol: :icmp, from: -1, to: -1, direction: :egress),
-          SecurityGroupRule.new(cidr: "0.0.0.0/0", protocol: :icmp, from: -1, to: -1),
           SecurityGroupRule.new(cidr: "0.0.0.0/0", protocol: :tcp, from: 22, to: 22),
         ]
 

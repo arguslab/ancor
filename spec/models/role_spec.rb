@@ -1,23 +1,25 @@
 require 'spec_helper'
 
 describe Role do
-  let(:dependent_a) { Role.create }
-  let(:dependent_b) { Role.create }
 
-  before do
-    channel_a = Channel.create(exporter: subject, importers: [dependent_a])
-    channel_b = Channel.create(exporter: subject, importers: [dependent_a, dependent_b])
+  it 'validates min' do
+    subject.slug = :what
+    subject.min = -1
+    subject.should_not be_valid
   end
 
-  it 'collects dependent roles' do
-    subject.dependent_roles.should == [dependent_a, dependent_b]
+  it 'validates max > min' do
+    subject.slug = :what
+    subject.min = 5
+    subject.max = 15
+    subject.should be_valid
   end
 
-  it 'collects dependent instances' do
-    instance_a = Instance.create(role: dependent_a)
-    instance_b = Instance.create(role: dependent_b)
-    instance_c = Instance.create(role: dependent_b)
-
-    subject.dependent_instances.should == [instance_a, instance_b, instance_c]
+  it 'validates max < min' do
+    subject.slug = :what
+    subject.min = 10
+    subject.max = 5
+    subject.should_not be_valid
   end
+
 end
