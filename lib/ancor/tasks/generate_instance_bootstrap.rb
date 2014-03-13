@@ -16,7 +16,8 @@ module Ancor
 
         mcollective_server_config = mco_template.result(binding)
 
-        instance.provider_details[:userdata] = template.result(binding)
+        instance.provider_details[:user_data] = template.result(binding)
+
         instance.save!
 
         return true
