@@ -23,6 +23,7 @@ openstack:
   # Project-specific parameters
   router_id: 1e2df6fc-6b03-4c02-8a21-ba93eddc68e6
   image_id: 2fb3fc44-677c-42a1-8f69-374dc0e875cc
+  ext_network_id: xxxxxxxxxxxxx
   flavor_id: 2
   dns_nameservers:
     - 172.17.0.10
