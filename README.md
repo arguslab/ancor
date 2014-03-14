@@ -4,7 +4,7 @@ ANCOR is a cloud automation framework that models dependencies between different
 application stack. When instances in one layer changes, the instances in a dependent layer
 are notified and reconfigured.
 
-## Developing ANCOR
+## Configuring ANCOR
 
 ### Operating System
 
