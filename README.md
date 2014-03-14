@@ -16,12 +16,7 @@ This framework is developed on Ubuntu 12.04 x64.
 
 - Please follow the [automated installer](https://github.com/arguslab/ancor-environment) 
 
-- Install ANCOR CLI (preferably on the same VM)
+- Install [ANCOR CLI](https://github.com/arguslab/ancor-cli) (preferably on the same VM)
 
-```
-git clone git@github.com:arguslab/ancor-cli.git
-cd ancor-cli
-bundle install
-```
 
 IMPORTANT! More information and setup options will be made available in the near future.
