@@ -4,7 +4,7 @@
   <head>
     <meta charset='utf-8' />
     <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Ancor : Next gen framework for cloud automation" />
+    <meta name="description" content="Ancor : next generation framework for cloud automation" />
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
@@ -19,7 +19,7 @@
           <a id="forkme_banner" href="https://github.com/arguslab/ancor">View on GitHub</a>
 
           <h1 id="project_title">Ancor</h1>
-          <h2 id="project_tagline">Next gen framework for cloud automation</h2>
+          <h2 id="project_tagline">next generation framework for cloud automation</h2>
 
             <section id="downloads">
               <a class="zip_download_link" href="https://github.com/arguslab/ancor/zipball/master">Download this project as a .zip file</a>
@@ -34,32 +34,29 @@
         <h3>
 <a name="overview" class="anchor" href="#overview"><span class="octicon octicon-link"></span></a>Overview</h3>
 
+<p>Separating user requirements from the implementation details has the potential of changing the way IT systems are deployed and managed in the cloud. To capture user requirements, we developed a high-level abstraction called the requirement model for defining cloud-based IT systems. Once users define their desired system in the specification, it is automatically compiled into a concrete cloud-based system that meets the specified user requirements. We demonstrate the practicality of this approach in the <strong>ANCOR</strong> framework.</p>
+
 <p>ANCOR is a cloud automation framework that models dependencies between different layers in an application stack. When instances in one layer changes, the instances in a dependent layer are notified and reconfigured.</p>
 
-<pre><code>sudo apt-get dist-upgrade
-sudo apt-get install curl git mongodb-server redis-server
-sudo reboot
-</code></pre>
+<p>More details: <a href="http://people.cis.ksu.edu/%7Exou/publications/ancor-tr.pdf">Compiling Abstract Specifications into Concrete Systems – Bringing Order to the Cloud</a></p>
 
 <h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+<a name="overall-picture" class="anchor" href="#overall-picture"><span class="octicon octicon-link"></span></a>Overall Picture</h3>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
-
-<h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
-
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<p>Currently, there are important limitations in the abstractions that support creating and managing services in a cloud-based IT system. As a result, cloud users must choose between managing the low-level details of their cloud services directly (as in IaaS), which is time- consuming and error-prone, and turning over significant parts of this management to their cloud provider (in SaaS or PaaS), which is less flexible and more difficult to tailor to user needs. To alleviate this situation we propose a high-level abstraction called the requirement model for defining cloud-based IT systems. It cap- tures important aspects of a system’s structure, such as service dependencies, without introducing low-level details such as operating systems or application configurations. The requirement model separates the cloud customer’s concern of what the system does, from the system engineer’s concern of how to implement it. In addition, we present a “compilation” process that automatically translates a requirement model into a concrete system based on pre-defined and reusable knowledge units. When combined, the requirement model and the compilation process enable repeatable deployment of cloud- based systems, more reliable system management, and the ability to implement the same requirement in different ways and on multiple cloud platforms. We demonstrate the practicality of this approach in the ANCOR (Automated eNterprise network COmpileR) framework, which generates concrete, cloud-based systems based on a specific requirement model. Our current implementation targets OpenStack and uses Puppet to configure the cloud instances, although the framework will also support other cloud platforms and configuration management solutions.</p>
 
 <h3>
 <a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<p>Ian Unruh (<a href="https://github.com/ianunruh" class="user-mention">@ianunruh</a>), Alex Bardas (<a href="https://github.com/bardasag" class="user-mention">@bardasag</a>)
+Rui Zhuang (<a href="https://github.com/zrui" class="user-mention">@zrui</a>)
+Xinming Ou (<a href="https://github.com/xinmingou" class="user-mention">@xinmingou</a>)
+Scott A. DeLoach</p>
 
 <h3>
 <a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+<p>Please contact ArgusLab group memebers for more information <a href="http://arguslab.org">http://arguslab.org</a> or contact <a href="mailto:iunruh@ksu.edu">iunruh@ksu.edu</a>, <a href="mailto:bardasag@ksu.edu">bardasag@ksu.edu</a> and we will be happy to help you out.</p>
       </section>
     </div>
 
