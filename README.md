@@ -17,8 +17,11 @@ are notified and reconfigured.
 
 ## Using a preconfigured ANCOR VM
 
-1. **Download the ANCOR VM** (VMware Fusion and VirtualBox versions available for now). 
-In case you choose to use a different virtualization infrastructure you might need to convert the available versions.
+1. **Download the ANCOR VM** (VMware Fusion and VirtualBox versions available for now):
+  - [VMware Fusion](https://dl.dropboxusercontent.com/u/88202830/ANCOR-Xubuntu-x64.vmwarevm.zip) 
+  - VirtualBox
+
+  In case you choose to use a different virtualization infrastructure you might need to convert the available versions.
 
 2. Fill-in the information specific to your OpenStack infrastructure in "ancor.yml" (`/home/ancor/workspace/ancor/config/ancor.yml`). You can also use the link on the Desktop.
 
