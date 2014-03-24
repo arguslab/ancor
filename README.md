@@ -17,34 +17,34 @@ are notified and reconfigured.
 
 ## Using a preconfigured ANCOR VM
 
-1. Download the ANCOR VM (VMware Fusion and VirtualBox versions available for now). 
+- Download the ANCOR VM (VMware Fusion and VirtualBox versions available for now). 
 In case you choose to use a different virtualization infrastructure you might need to convert the available versions.
 
-2. Fill-in the information specific to your OpenStack infrastructure in "ancor.yml" (`/home/ancor/workspace/ancor/config/ancor.yml`). You can also use the link on the Desktop.
+- Fill-in the information specific to your OpenStack infrastructure in "ancor.yml" (`/home/ancor/workspace/ancor/config/ancor.yml`). You can also use the link on the Desktop.
 
 Run in a terminal:
 `vim /home/ancor/Desktop/ancor.yml`
 
 Hint: Run ifconfig to find out the ANCOR VM's IP address. Use this address in the "mcollective" and "puppet" section of "ancor.yml"
 
-3. Update the orchestrator component of ANCOR with the new information from "ancor.yml"
+- Update the orchestrator component of ANCOR with the new information from "ancor.yml"
 
 Run in a terminal:
 `/home/ancor/workspace/ancor/bin/setup-mcollective`
 
 
-4. Start ANCOR services
+- Start ANCOR services
 
 Run in terminal
 `/home/ancor/workspace/ancor/bin/start-services`
 
 
-5. ANCOR is ready for use, ANCOR CLI is preinstalled.
+- ANCOR is ready for use, ANCOR CLI is preinstalled.
 
 Run in terminal:
 `ancor`
 
-6. OPTIONAL: Test the deployment with the default "eCommerce website" example.
+- OPTIONAL: Test the deployment with the default "eCommerce website" example.
 
 Run in terminal:
 `ancor environment plan /home/ancor/workspace/ancor/spec/fixtures/arml/fullstack.yaml`
