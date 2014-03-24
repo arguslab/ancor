@@ -10,7 +10,9 @@ end
 
 
 puts "Starting Sidekiq on the default port in development"
-`bundle exec sidekiq -e development -d -c 1 -L #{basedir}/log/sidekiq.log -P #{basedir}/tmp/pids/sidekiq.pid`
+Dir.chdir(basedir) do
+  `bundle exec sidekiq -e development -d -c 1 -L #{basedir}/log/sidekiq.log -P #{basedir}/tmp/pids/sidekiq.pid`
+end
 
 puts "Starting Rails on the default port in development"
 Dir.chdir(basedir) do
