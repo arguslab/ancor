@@ -4,7 +4,7 @@ ANCOR is a cloud automation framework that models dependencies between different
 application stack. When instances in one layer changes, the instances in a dependent layer
 are notified and reconfigured.
 
-## Requirements
+## General Requirements
 
 - In order to use ANCOR, the user needs an Openstack cloud infrastructure that the ANCOR VM can reach.
 
@@ -13,9 +13,9 @@ are notified and reconfigured.
 - The necessary Puppet manifests that are needed for the system that will be deployed with ANCOR.
 
 
-## Configuring ANCOR
+## Using and Configuring ANCOR
 
-## Using a preconfigured ANCOR VM
+### Using a preconfigured ANCOR VM
 
 1. **Download the ANCOR VM**:
   - [VMware Fusion version](http://people.cis.ksu.edu/~bardasag/ANCOR-Xubuntu-x64.vmwarevm.zip) 
