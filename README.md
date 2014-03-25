@@ -43,7 +43,8 @@ are notified and reconfigured.
 
   Run in terminal:
   ```
-  /home/ancor/workspace/ancor/bin/start-services
+  cd ~/workspace/ancor
+  bin/start-services
   ```
 
 5. ANCOR is ready for use, ANCOR CLI is preinstalled.
