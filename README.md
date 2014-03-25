@@ -21,7 +21,7 @@ are notified and reconfigured.
   - [VMware Fusion](http://people.cis.ksu.edu/~bardasag/ANCOR-Xubuntu-x64.vmwarevm.zip) 
   - [VirtualBox](https://dl.dropboxusercontent.com/u/88202830/ANCOR-Xubuntu-x64.ova.zip)
 
-  In case you choose to use a different virtualization infrastructure you might need to convert the available versions.
+  In case you choose to use a different virtualization infrastructure you might need to convert the available versions. The VM is bridged to the network and therefore the user might be asked if a different NIC is used than the one that it was configured on.
 
 2. Fill-in the information specific to your OpenStack infrastructure in "ancor.yml" (`/home/ancor/workspace/ancor/config/ancor.yml`). You can also use the link on the Desktop.
 
