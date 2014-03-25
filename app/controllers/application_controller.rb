@@ -16,4 +16,11 @@
 # You should have received a copy of the GNU General Public License
 # along with ANCOR.  If not, see <http://www.gnu.org/licenses/>.
 class ApplicationController < ActionController::Base
+  before_filter :allow_cors
+
+  private
+
+  def allow_cors
+    headers['Access-Control-Allow-Origin'] = '*'
+  end
 end
