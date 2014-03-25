@@ -18,7 +18,7 @@ are notified and reconfigured.
 ### Using a preconfigured ANCOR VM
 
 1. **Download** and unzip the **ANCOR VM** for:
-  - [VMware Fusion](http://people.cis.ksu.edu/~bardasag/ANCOR-Xubuntu-x64.vmwarevm.zip) 
+  - [VMware Fusion](http://people.cis.ksu.edu/~bardasag/ANCOR-Xubuntu-x64.vmwarevm.zip)
   - [VirtualBox](https://dl.dropboxusercontent.com/u/88202830/ANCOR-Xubuntu-x64.ova.zip)
 
   In case you choose to use a different virtualization infrastructure you might need to convert the available versions. The VM is bridged to the network and therefore the user might be asked if a different NIC is used than the one that it was configured on.
@@ -62,13 +62,30 @@ are notified and reconfigured.
   ancor environment commit
   ```
 
+### Using Vagrant
+
+If you already have [Vagrant](http://www.vagrantup.com/) installed, simply use `vagrant up` to create
+a local development VM for ANCOR.
+
+All necessary ports are forwarded to your host, so you can use your development machine's IP address when
+configuring ANCOR. Once the VM is up and running, use `vagrant ssh` to get a shell. From there, change into
+the `/vagrant` directory. This directory is shared between the VM and your development machine using the
+Shared Folders feature in VirtualBox. Changes in this directory will be shared instantly between the VM
+and your development machine.
+
+Once you have a shell in the `/vagrant` directory, run the following to configure and start ANCOR:
+
+1. `cp config/ancor.yml.example config/ancor.yml` to start from the configuration template
+2. `vim config/ancor.yml` to configure specifics about your VM and OpenStack infrastructure
+3. `bin/setup-mcollective` to install MCollective for ANCOR
+4. `bin/start-services` to start the Rails app and Sidekiq worker for ANCOR
 
 ### General Setup Instructions
-This framework is developed on Ubuntu 12.04 x64. 
+This framework is developed on Ubuntu 12.04 x64.
 
 - Ensure your terminal of choice is using bash/zsh as a [login shell](https://rvm.io/support/faq)
 
-- Please follow the [automated installer](https://github.com/arguslab/ancor-environment) 
+- Please follow the [automated installer](https://github.com/arguslab/ancor-environment)
 
 - Install [ANCOR CLI](https://github.com/arguslab/ancor-cli) (preferably on the same VM)
 
