@@ -17,9 +17,9 @@ are notified and reconfigured.
 
 ### Using a preconfigured ANCOR VM
 
-1. **Download the ANCOR VM**:
-  - [VMware Fusion version](http://people.cis.ksu.edu/~bardasag/ANCOR-Xubuntu-x64.vmwarevm.zip) 
-  - VirtualBox
+1. **Download** and unzip the **ANCOR VM** for:
+  - [VMware Fusion](http://people.cis.ksu.edu/~bardasag/ANCOR-Xubuntu-x64.vmwarevm.zip) 
+  - [VirtualBox](https://dl.dropboxusercontent.com/u/88202830/ANCOR-Xubuntu-x64.ova.zip)
 
   In case you choose to use a different virtualization infrastructure you might need to convert the available versions.
 
