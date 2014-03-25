@@ -57,7 +57,7 @@ are notified and reconfigured.
 
   Run in terminal:
   ```
-  ancor environment plan /home/ancor/workspace/ancor/spec/fixtures/arml/fullstack.yaml`
+  ancor environment plan /home/ancor/workspace/ancor/spec/fixtures/arml/fullstack.yaml
   ancor environment commit
   ```
 
