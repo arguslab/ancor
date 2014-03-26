@@ -30,7 +30,7 @@ are notified and reconfigured.
   vim /home/ancor/Desktop/ancor.yml
   ```
 
-  *Hint*: Run ifconfig to find out the ANCOR VM's IP address. **Use this address in the "mcollective" AND "puppet" section of "ancor.yml"**
+  *Hint*: Run `ifconfig` to find out the ANCOR VM's IP address. **Use this address in the "mcollective" AND "puppet" section of "ancor.yml"**
 
 3. Update the orchestrator component of ANCOR with the new information from "ancor.yml"
 
