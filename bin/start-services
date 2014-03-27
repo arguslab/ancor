@@ -8,15 +8,14 @@ else
   puts "Redis is managed by the OS, not starting"
 end
 
+puts "Starting Rails on the default port in development"
+Dir.chdir(basedir) do
+  `script/rails server -e development -d`
+end
 
 puts "Starting Sidekiq on the default port in development"
 Dir.chdir(basedir) do
   `bundle exec sidekiq -e development -d -c 1 -L #{basedir}/log/sidekiq.log -P #{basedir}/tmp/pids/sidekiq.pid`
-end
-
-puts "Starting Rails on the default port in development"
-Dir.chdir(basedir) do
-  `script/rails server -e development -d`
 end
 
 puts "Run `stop-services` when you are finished"
