@@ -51,6 +51,8 @@ class Instance
 
   field :cmt_details, type: Hash, default: -> { {} }, pre_processed: true
 
+  has_many :puppet_reports, dependent: :destroy
+
   validates :name, presence: true
 
   def environment
