@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.14'
+gem 'rails', '3.2.15'
 
 gem 'abstract_type'
 gem 'active_model_serializers'
@@ -8,7 +8,7 @@ gem 'fog'
 gem 'ruby-graphviz'
 gem 'hashie'
 gem 'mongoid'
-gem 'sidekiq'
+gem 'sidekiq', '~> 2.0'
 gem 'sinatra'
 gem 'thread_safe'
 
@@ -21,6 +21,7 @@ gem 'unf'
 
 group :development, :testing do
   # Development dependencies
+  gem 'colorize'
   gem 'guard'
   gem 'guard-rspec'
   gem 'rake'
