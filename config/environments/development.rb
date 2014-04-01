@@ -22,5 +22,9 @@ Ancor::Application.configure do
   # Only use best-standards-support built into browsers
   config.action_dispatch.best_standards_support = :builtin
 
-
+  config.action_dispatch.default_headers = {
+    'X-Content-Type-Options' => 'nosniff',
+    'Access-Control-Allow-Origin' => '*',
+    'Access-Control-Allow-Methods' => 'GET, POST, PUT, PATCH, DELETE, OPTIONS'
+  }
 end
