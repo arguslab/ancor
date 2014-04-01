@@ -20,5 +20,12 @@ module V1
     def index
       render json: { version: '0.0.1' }
     end
+
+    def options
+      headers['Access-Control-Allow-Origin'] = '*'
+      headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, PATCH, DELETE, OPTIONS'
+
+      head :ok
+    end
   end
 end
