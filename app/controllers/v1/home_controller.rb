@@ -22,9 +22,6 @@ module V1
     end
 
     def options
-      headers['Access-Control-Allow-Origin'] = '*'
-      headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, PATCH, DELETE, OPTIONS'
-
       head :ok
     end
   end

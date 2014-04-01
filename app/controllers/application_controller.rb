@@ -16,4 +16,12 @@
 # You should have received a copy of the GNU General Public License
 # along with ANCOR.  If not, see <http://www.gnu.org/licenses/>.
 class ApplicationController < ActionController::Base
+  before_filter :setup_access_control_headers
+
+  private
+
+  def setup_access_control_headers
+    headers['Access-Control-Allow-Origin'] = '*'
+    headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, PATCH, DELETE, OPTIONS'
+  end
 end
