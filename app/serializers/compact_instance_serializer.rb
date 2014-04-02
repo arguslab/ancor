@@ -20,4 +20,14 @@ class CompactInstanceSerializer < ActiveModel::Serializer
 
   has_one :public_ip, serializer: PublicIpSerializer
   has_many :interfaces, serializer: InstanceInterfaceSerializer
+
+  attributes :depends_on
+
+  def depends_on
+    object.role.dependencies.flat_map { |role|
+      role.instances.map { |instance|
+        instance.id
+      }
+    }
+  end
 end
