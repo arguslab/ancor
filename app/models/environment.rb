@@ -23,5 +23,5 @@ class Environment
   field :description, type: String
   field :slug, type: Symbol
 
-  has_many :roles
+  has_many :roles, dependent: :destroy
 end
