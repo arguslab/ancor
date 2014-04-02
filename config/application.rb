@@ -40,5 +40,8 @@ module Ancor
 
     # Enable escaping HTML in JSON.
     config.active_support.escape_html_entities_in_json = true
+
+    # Avoid deprecation notice
+    config.i18n.enforce_available_locales = true
   end
 end

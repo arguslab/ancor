@@ -23,5 +23,6 @@ class ApplicationController < ActionController::Base
   def setup_access_control_headers
     headers['Access-Control-Allow-Origin'] = '*'
     headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, PATCH, DELETE, OPTIONS'
+    headers['Access-Control-Allow-Headers'] = 'Content-Type'
   end
 end

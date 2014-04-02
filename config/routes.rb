@@ -17,7 +17,6 @@ Ancor::Application.routes.draw do
     # Webhooks and special resources
     # TODO Fold hiera into instance resource
     get "hiera/:certname" => "hiera#show"
-    post "webhook/mcollective"
     post "webhook/puppet"
 
     root to: "home#index"
