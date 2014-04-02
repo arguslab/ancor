@@ -1,6 +1,6 @@
 Ancor::Application.routes.draw do
 
-  namespace(:v1, format: :json) do
+  namespace(:v1, format: false) do
     # CORS preflight requests
     match "(*any)", to: "home#options", via: :options
 
