@@ -29,31 +29,13 @@ API
   - Expanding/contracting instances in roles
   - Replacing an instance
 
-## Command-line interface
-
-    ancor <subject> <verb> <targets> <--options>
-    ancor version
-    ancor plan <path to arml file> - imports an ARML specification and deploys it
-    ancor commit
-    ancor environment list
-    ancor instance list
-    ancor instance replace <old instance id>
-    ancor instance add <role slug>
-    ancor instance remove <role slug>
-    ancor goal list
-    ancor role list
-    ancor task list
-
 ## HTTP REST interface
 
 ### System info
 
-`GET /v1/version`
+`GET /v1`
 
-    "1.2.3"
-
-### Engine control
-
+    { "version": "0.0.1" }
 
 ### Instances
 
@@ -105,15 +87,15 @@ Remove an instance
 
 Import an ARML file into an environment for planning
 
-`POST /v1/environments/123/plan`
+Note that you **must** set the `Content-Type` request header to `application/yaml`
 
-    Content-Type: application/yaml
+`POST /v1/environments/production/plan`
 
     CONTENT OF ARML FILE
 
 Commit pending changes
 
-`POST /v1/environments/123`
+`PUT /v1/environments/production`
 
     { "commit": true }
 
@@ -123,7 +105,7 @@ List environments
 
 Get detailed view of an environment
 
-`GET /v1/environments/123`
+`GET /v1/environments/production`
 
     {
       "id": "123",
@@ -135,6 +117,10 @@ Get detailed view of an environment
         { "id": "456", "slug": "webapp" }
       ]
     }
+
+Delete an environment and everything contained in it
+
+`DELETE /v1/environments/production`
 
 ### Goals
 
