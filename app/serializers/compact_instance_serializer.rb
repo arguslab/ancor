@@ -26,7 +26,7 @@ class CompactInstanceSerializer < ActiveModel::Serializer
   def depends_on
     object.role.dependencies.flat_map { |role|
       role.instances.map { |instance|
-        instance.id
+        { id: instance.id, name: instance.name }
       }
     }
   end
