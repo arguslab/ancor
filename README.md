@@ -23,18 +23,12 @@ are notified and reconfigured.
 
   In case you choose to use a different virtualization infrastructure you might need to convert the available versions. The VM is bridged to the network and therefore the user might be asked if a different NIC is used than the one that it was configured on.
 
-2. In the preconfigured virtual machine, fill-in the follwoing specific information in `ancor.yml` (`/home/ancor/workspace/ancor/config/ancor.yml`):
-- Find the Ancor VM's IP address (*e.g.,* run in a terminal: `ifconfig`) 
-- Open `vim /home/ancor/Desktop/ancor.yml`
-- Use the ANCOR VM's IP in the *mcollective* AND *puppet* section of `ancor.yml` 
-- Fill in OpenStack infrastructure specific information `ancor.yml`
-
-  Run in a terminal:
-  ```
-  vim /home/ancor/Desktop/ancor.yml
-  ```
-
-  *Hint*: Run `ifconfig` to find out the ANCOR VM's IP address. **Use this address in the "mcollective" AND "puppet" section of "ancor.yml"**
+2. In the preconfigured ANCOR virtual machine:
+  - Find the Ancor VM's IP address (*e.g.,* run in a terminal: `ifconfig`) 
+  - Fill-in the following specific information in `ancor.yml` (`/home/ancor/workspace/ancor/config/ancor.yml`):
+    - Open `ancor.yml` file using the shortcut on the Desktop or run in a terminal `vim /home/ancor/Desktop/ancor.yml`
+      - Use the ANCOR VM's IP in the *mcollective* AND *puppet* section of `ancor.yml` 
+      - Fill in OpenStack infrastructure specific information in the *openstack* section of `ancor.yml`
 
 3. Update the orchestrator component of ANCOR with the new information from "ancor.yml"
 
