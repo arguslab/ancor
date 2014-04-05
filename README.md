@@ -27,8 +27,8 @@ are notified and reconfigured.
   - Find the Ancor VM's IP address (*e.g.,* run in a terminal: `ifconfig`) 
   - Fill-in the following specific information in `ancor.yml` (`/home/ancor/workspace/ancor/config/ancor.yml`):
     - Open `ancor.yml` file using the shortcut on the Desktop or run in a terminal `vim /home/ancor/Desktop/ancor.yml`
-      - Use the ANCOR VM's IP in the *mcollective* AND *puppet* section of `ancor.yml` 
-      - Fill in OpenStack infrastructure specific information in the *openstack* section of `ancor.yml`
+      - Use the ANCOR VM's IP in the **mcollective** AND **puppet** sections of `ancor.yml` 
+      - Fill-in OpenStack infrastructure specific information in the **openstack** section of `ancor.yml`
 
 3. Update the orchestrator component of ANCOR with the new information from "ancor.yml"
 
