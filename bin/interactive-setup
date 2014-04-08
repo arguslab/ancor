@@ -1,0 +1,157 @@
+#!/usr/bin/env ruby
+require 'active_support/core_ext/hash/keys'
+
+require 'colorize'
+require 'io/console'
+
+require 'fog/openstack'
+require 'fog/xml'
+
+config = {}
+
+trap('INT') do
+  puts "\n\nAborted".red
+  exit
+end
+
+def prompt(message, default = nil)
+  if default
+    message << " [#{default}]"
+  end
+
+  message << ": "
+
+  print message.bold.cyan
+  result = gets.chomp
+
+  if result.empty?
+    default
+  else
+    result
+  end
+end
+
+def prompt_quiet(message)
+  message << ": "
+
+  print message.bold.cyan
+  out = $stdin.noecho { $stdin.gets.chomp }
+  puts
+  out
+end
+
+def menu(elements, message)
+  elements.each_with_index do |element, i|
+    puts "  [#{i}] #{element.name}"
+  end
+
+  index = prompt(message, "0")
+  if index.empty?
+    index == "0"
+  end
+
+  elements[index.to_i].id
+end
+
+def section(name)
+puts <<-EOM.bold
+
+===============================================
+#{name}
+===============================================
+EOM
+end
+
+puts "Resolving local IP address".blue
+ip_address = Socket.ip_address_list.find { |info|
+  info.ipv4? && !info.ipv4_loopback? && !info.ipv4_multicast?
+}.ip_address
+
+section "OpenStack configuration"
+
+os_host = prompt("OpenStack API host")
+
+config[:openstack] = {
+  username: prompt("OpenStack user"),
+  api_key: prompt_quiet("OpenStack API key (password)"),
+  tenant: prompt("OpenStack tenant"),
+  auth_url: "http://#{os_host}:5000/v2.0/tokens"
+}
+
+puts 'Connecting to OpenStack'.blue
+
+compute = Fog::Compute.new(
+  provider: 'openstack',
+  openstack_api_key: config[:openstack][:api_key],
+  openstack_username: config[:openstack][:username],
+  openstack_tenant: config[:openstack][:tenant],
+  openstack_auth_url: config[:openstack][:auth_url]
+)
+
+network = Fog::Network.new(
+  provider: 'openstack',
+  openstack_api_key: config[:openstack][:api_key],
+  openstack_username: config[:openstack][:username],
+  openstack_tenant: config[:openstack][:tenant],
+  openstack_auth_url: config[:openstack][:auth_url]
+)
+
+puts "Authentication successful".blue
+
+puts "Retrieving flavors".blue
+config[:openstack][:flavor_id] = menu(compute.flavors.to_a, "Default instance flavor")
+
+puts "Retrieving images".blue
+config[:openstack][:image_id] = menu(compute.images.to_a, "Default instance image")
+
+puts "Retrieving external networks".blue
+ext_networks = network.networks.find_all do |n|
+  n.router_external == true
+end
+config[:openstack][:ext_network_id] = menu(ext_networks.to_a, "External network for floating IP addresses")
+
+puts "Retrieving routers".blue
+config[:openstack][:router_id] = menu(network.routers.to_a, "Router for new networks")
+
+config[:openstack][:dns_nameservers] = prompt("DNS nameservers (comma separated)", "8.8.8.8, 8.8.4.4").split(",").map { |s| s.strip }
+
+section "Puppet configuration"
+
+config[:puppet] = {
+  host: prompt("Puppet Master host", ip_address)
+}
+
+section "MCollective configuration"
+
+config[:mcollective] = {
+  psk: prompt("Pre-shared key", "unset"),
+  heartbeat_interval: prompt("Heartbeat interval (seconds)", 30),
+  vhost: prompt("RabbitMQ virtual host", "/mcollective"),
+  host: prompt("RabbitMQ host", ip_address),
+  port: prompt("RabbitMQ port", 61613),
+  user: prompt("RabbitMQ username", "mcollective"),
+  password: prompt_quiet("RabbitMQ password"),
+}
+
+section "HTTP proxy configuration"
+
+if prompt("Local HTTP proxy present? (Y/N)", "Y").upcase == 'Y'
+  config[:proxy] = {
+    host: prompt("Proxy host"),
+    port: prompt("Proxy port", 3128)
+  }
+end
+
+section "Finished"
+
+target = prompt("Path to ancor.yml", File.expand_path("../../config/ancor.yml", __FILE__))
+
+out = YAML.dump(config.deep_stringify_keys)
+
+puts out
+
+puts "Writing to file".cyan
+File.open(target, "w+") do |f|
+  f.write(out)
+end
+puts "Finished!".blue
