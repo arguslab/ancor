@@ -41,6 +41,8 @@ class Role
 
   validates :slug, presence: true
 
+  validates :slug, uniqueness: { scope: :environment_id }
+
   validates :min, numericality: { only_integer: true, greater_than: 0 }
 
   validates :max, numericality: { only_integer: true, greater_than_or_equal_to: 1 },
@@ -48,7 +50,7 @@ class Role
 
   def validate_max
     unless max? and min <= max
-      errors.add(:max, "should be an integer >=1 and cannot be less than min (in this case: min: #{min} and max: #{max})") 
+      errors.add(:max, "should be an integer >=1 and cannot be less than min (in this case: min: #{min} and max: #{max})")
     end
   end
 
