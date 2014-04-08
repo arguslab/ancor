@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
+require 'bundler/setup'
 require 'active_support/core_ext/hash/keys'
 
 require 'colorize'
-require 'io/console'
 
 require 'fog/openstack'
 require 'fog/xml'
@@ -31,15 +31,6 @@ def prompt(message, default = nil)
   end
 end
 
-def prompt_quiet(message)
-  message << ": "
-
-  print message.bold.cyan
-  out = $stdin.noecho { $stdin.gets.chomp }
-  puts
-  out
-end
-
 def menu(elements, message)
   elements.each_with_index do |element, i|
     puts "  [#{i}] #{element.name}"
@@ -62,6 +53,10 @@ puts <<-EOM.bold
 EOM
 end
 
+section "Interactive ANCOR setup"
+
+puts "If prompt contains [default], use enter to accept [default]"
+
 puts "Resolving local IP address".blue
 ip_address = Socket.ip_address_list.find { |info|
   info.ipv4? && !info.ipv4_loopback? && !info.ipv4_multicast?
@@ -73,7 +68,7 @@ os_host = prompt("OpenStack API host")
 
 config[:openstack] = {
   username: prompt("OpenStack user"),
-  api_key: prompt_quiet("OpenStack API key (password)"),
+  api_key: prompt("OpenStack API key (password)"),
   tenant: prompt("OpenStack tenant"),
   auth_url: "http://#{os_host}:5000/v2.0/tokens"
 }
@@ -130,7 +125,7 @@ config[:mcollective] = {
   host: prompt("RabbitMQ host", ip_address),
   port: prompt("RabbitMQ port", 61613),
   user: prompt("RabbitMQ username", "mcollective"),
-  password: prompt_quiet("RabbitMQ password"),
+  password: prompt("RabbitMQ password", "marionette"),
 }
 
 section "HTTP proxy configuration"
@@ -146,7 +141,12 @@ section "Finished"
 
 target = prompt("Path to ancor.yml", File.expand_path("../../config/ancor.yml", __FILE__))
 
-out = YAML.dump(config.deep_stringify_keys)
+config.stringify_keys!
+config.each do |k, section|
+  section.stringify_keys! if section
+end
+
+out = YAML.dump(config)
 
 puts out
 
