@@ -18,7 +18,7 @@ are notified and reconfigured.
 ### Using a preconfigured ANCOR VM
 
 1. **Download** and unzip the **ANCOR VM** for:
-  - [VMware Fusion](http://people.cis.ksu.edu/~bardasag/ANCOR-Xubuntu-x64.vmwarevm.zip)
+  - [VMware Fusion](https://dl.dropboxusercontent.com/u/88202830/ANCOR-Xubuntu-x64.vmwarevm.zip)
   - [VirtualBox](https://dl.dropboxusercontent.com/u/88202830/ANCOR-Xubuntu-x64.ova.zip)
 
   In case you choose to use a different virtualization infrastructure you might need to convert the available versions. The VM is bridged to the network and therefore the user might be asked if a different NIC is used than the one that it was configured on.
@@ -37,11 +37,13 @@ are notified and reconfigured.
   /home/ancor/workspace/ancor/bin/setup-mcollective
   ```
 
-4. Start ANCOR services
+4. Pull the latest version of the ANCOR code and install dependent "libraries". Next, start ANCOR services.
 
   Run in terminal:
   ```
   cd ~/workspace/ancor
+  git pull
+  bundle install
   bin/start-services
   ```
 
