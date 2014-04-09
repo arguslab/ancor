@@ -67,9 +67,9 @@ section "OpenStack configuration"
 os_host = prompt("OpenStack API IP address")
 
 config[:openstack] = {
-  username: prompt("OpenStack user"),
-  api_key: prompt("OpenStack password"),
-  tenant: prompt("OpenStack tenant"),
+  username: prompt("OpenStack User Name"),
+  api_key: prompt("OpenStack Password"),
+  tenant: prompt("OpenStack Tenant"),
   auth_url: "http://#{os_host}:5000/v2.0/tokens"
 }
 
@@ -96,7 +96,7 @@ puts "Authentication successful".blue
 puts "Retrieving flavors".blue
 config[:openstack][:flavor_id] = menu(compute.flavors.to_a, "Default instance flavor")
 
-puts "Retrieving images".blue
+puts "Retrieving images (Highly recommended to use the default image, Ubuntu 12.04LTS)".blue
 config[:openstack][:image_id] = menu(compute.images.to_a, "Default instance image")
 
 puts "Retrieving external networks".blue
