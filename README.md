@@ -30,31 +30,37 @@ are notified and reconfigured.
       - Use the ANCOR VM's IP in the **mcollective** AND **puppet** sections of `ancor.yml` 
       - Fill-in OpenStack infrastructure specific information in the **openstack** section of `ancor.yml`
 
-3. Update the orchestrator component of ANCOR with the new information from "ancor.yml"
-
-  Run in a terminal:
-  ```
-  /home/ancor/workspace/ancor/bin/setup-mcollective
-  ```
-
-4. Pull the latest version of the ANCOR code and install dependent "libraries". Next, start ANCOR services.
+3. Pull the latest version of the ANCOR code and install dependent "libraries".
 
   Run in terminal:
   ```
   cd ~/workspace/ancor
   git pull
   bundle install
+  ```
+
+4. Update the orchestrator component of ANCOR with the new information from "ancor.yml"
+
+  Run in a terminal:
+  ```
+  bin/setup-mcollective
+  ```
+
+5. Start ANCOR services.
+
+  Run in terminal:
+  ```
   bin/start-services
   ```
 
-5. ANCOR is ready for use, ANCOR CLI is preinstalled.
+6. ANCOR is ready for use, ANCOR CLI is preinstalled.
 
   Run in terminal:
   ```
   ancor
   ```
 
-6. OPTIONAL: Test the deployment with the default "eCommerce website" example.
+7. OPTIONAL: Test the deployment with the default "eCommerce website" example.
 
   Run in terminal:
   ```
