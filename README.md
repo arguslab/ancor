@@ -37,11 +37,13 @@ are notified and reconfigured.
   /home/ancor/workspace/ancor/bin/setup-mcollective
   ```
 
-4. Start ANCOR services
+4. Pull the latest version of the ANCOR code and install dependent "libraries". Next, start ANCOR services.
 
   Run in terminal:
   ```
   cd ~/workspace/ancor
+  git pull
+  bundle install
   bin/start-services
   ```
 
