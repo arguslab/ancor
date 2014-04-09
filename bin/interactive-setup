@@ -64,11 +64,11 @@ ip_address = Socket.ip_address_list.find { |info|
 
 section "OpenStack configuration"
 
-os_host = prompt("OpenStack API host")
+os_host = prompt("OpenStack API IP address")
 
 config[:openstack] = {
   username: prompt("OpenStack user"),
-  api_key: prompt("OpenStack API key (password)"),
+  api_key: prompt("OpenStack password"),
   tenant: prompt("OpenStack tenant"),
   auth_url: "http://#{os_host}:5000/v2.0/tokens"
 }
@@ -113,7 +113,7 @@ config[:openstack][:dns_nameservers] = prompt("DNS nameservers (comma separated)
 section "Puppet configuration"
 
 config[:puppet] = {
-  host: prompt("Puppet Master host", ip_address)
+  host: prompt("Puppet Master IP address", ip_address)
 }
 
 section "MCollective configuration"
@@ -122,7 +122,7 @@ config[:mcollective] = {
   psk: prompt("Pre-shared key", "unset"),
   heartbeat_interval: prompt("Heartbeat interval (seconds)", 30),
   vhost: prompt("RabbitMQ virtual host", "/mcollective"),
-  host: prompt("RabbitMQ host", ip_address),
+  host: prompt("RabbitMQ IP address", ip_address),
   port: prompt("RabbitMQ port", 61613),
   user: prompt("RabbitMQ username", "mcollective"),
   password: prompt("RabbitMQ password", "marionette"),
