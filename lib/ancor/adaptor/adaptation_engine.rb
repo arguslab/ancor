@@ -58,8 +58,8 @@ module Ancor
           instances = []
 
           Role.all.each do |role|
-            role.min.times do |index|
-              instances.push(build_instance(index, network, role))
+            role.min.times do
+              instances.push(build_instance(network, role))
             end
           end
 
@@ -170,7 +170,7 @@ module Ancor
         begin
           network = Network.first
 
-          instance = build_instance(rand(100..10000), network, role)
+          instance = build_instance(network, role)
           puts "Planning to deploy instance #{instance.name}"
 
           build_task_chain do
@@ -275,15 +275,17 @@ module Ancor
 
       # Creates a new instance model object
       #
-      # @param [Integer] index
       # @param [Network] network
       # @param [Role] role
       # @return [Instance]
-      def build_instance(index, network, role)
+      def build_instance(network, role)
         instance = Instance.new
 
+        # TODO This may not be long enough to prevent collisions
+        id = SecureRandom.hex(4)
+
         # Instance host names are not allowed to have underscores
-        instance.name = "#{role.slug}#{index}".dasherize
+        instance.name = "#{role.slug}-#{id}".dasherize
         instance.role = role
         instance.scenario = role.scenarios.first
         instance.planned_stage = :deploy
