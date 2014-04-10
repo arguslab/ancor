@@ -19,15 +19,18 @@ module Ancor
   module Tasks
     class Sink < BaseExecutor
       def perform(task_ids)
-        remaining = task_ids.reject { |id| Task.find(id).state == :completed }
-        if remaining.empty?
+        context[:remaining] ||= task_ids
+
+        context[:remaining] = context[:remaining].reject { |id| Task.find(id).state == :completed }
+        if context[:remaining].empty?
           puts "Task sink complete"
           true
         else
-          puts "Task sink incomplete, waiting on #{remaining.join(', ')}"
+          list = context[:remaining] * ', '
+          puts "Task sink incomplete, waiting on #{list}"
           false
         end
       end
-    end
-  end
+    end # Sink
+  end # Tasks
 end
