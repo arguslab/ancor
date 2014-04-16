@@ -31,7 +31,7 @@ module Ancor
       KEY_DESCRIPTION = 'description'
 
       # Role keys
-      KEY_SCENARIOS = 'scenarios'
+      KEY_SCENARIOS = 'implementations'
       KEY_MAX = 'max'
       KEY_MIN = 'min'
       KEY_IS_PUBLIC = 'is_public'
