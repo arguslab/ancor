@@ -4,13 +4,22 @@ goals:
     roles:
       - db
       - webapp
+      - weblb
 
 roles:
-  webapp:
-    name: Web application
+  weblb:
+    name: Web application load balance
     is_public: true
     exports:
       http: { type: single_port, protocol: tcp, number: 80 }
+    imports:
+      webapp: http
+
+  webapp:
+    name: Web application
+    min: 2
+    exports:
+      http: { type: single_port, protocol: tcp }
     imports:
       db: querying
 
