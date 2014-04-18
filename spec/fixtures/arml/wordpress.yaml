@@ -10,7 +10,7 @@ roles:
     name: Web application
     is_public: true
     exports:
-      http: { type: single_port, protocol: tcp, port: 80 }
+      http: { type: single_port, protocol: tcp, number: 80 }
     imports:
       db: querying
 
