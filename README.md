@@ -6,7 +6,7 @@ are notified and reconfigured.
 
 [Detailed Ancor Framework Desciption ](https://dl.dropboxusercontent.com/u/88202830/ANCORAll-in-one.pdf)
 
-[ANCOR Example Scenarios](https://github.com/arguslab/ancor-puppet)
+[ANCOR Example Scenarios Repository](https://github.com/arguslab/ancor-puppet)
 
 **Currently ANCOR is a prototype under heavy development. Please don't hesitate to contact the owners if you have any questions or concerns.**
 
