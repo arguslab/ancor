@@ -23,7 +23,8 @@ are notified and reconfigured.
 
 ### Using a preconfigured ANCOR VM
 
-**Important! Aprl 28th** - Links will be available shortly
+**Important! Aprl 28th** - Updating ANCOR VMs, links will be available shortly again
+
 1. **Download** and unzip the **ANCOR VM** for:
   - VMware Fusion
   - VirtualBox
