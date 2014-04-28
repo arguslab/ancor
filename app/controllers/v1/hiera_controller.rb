@@ -27,6 +27,7 @@ module V1
         data = {
           exports: Hash[instance.channel_selections.map { |s| [s.slug, s.to_hash] }],
           imports: import_selector.select(instance),
+          proxy_url: import_proxy,
           classes: [
             instance.scenario.profile
           ],
@@ -42,6 +43,15 @@ module V1
 
     def import_selector
       @import_selector ||= Ancor::Adaptor::ImportSelector.instance
+    end
+
+    def import_proxy
+      config = Ancor.config
+      if config[:proxy][:host] and config[:proxy][:port]
+        proxy = "http://#{config[:proxy][:host]}:#{config[:proxy][:port]}/"
+      else
+        proxy = ""
+      end
     end
   end
 end
