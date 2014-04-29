@@ -75,6 +75,7 @@ are notified and reconfigured.
    sudo -i
    cd /etc/puppet
    git pull
+   exit
    ```
 
 8. Test the deployment with the default "eCommerce website" example.
