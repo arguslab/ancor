@@ -66,7 +66,18 @@ are notified and reconfigured.
   ancor
   ```
 
-7. OPTIONAL: Test the deployment with the default "eCommerce website" example.
+**In case you would like to try out the available scenarios:**
+
+7. Get the latest CMT (Puppet) manifests:
+
+  Run in terminal:
+   ```
+   sudo -i
+   cd /etc/puppet
+   git pull
+   ```
+
+8. Test the deployment with the default "eCommerce website" example.
 
   Run in terminal:
   ```
