@@ -47,7 +47,7 @@ module V1
 
     def import_proxy
       config = Ancor.config
-      if config[:proxy][:host] and config[:proxy][:port]
+      if config[:proxy] and config[:proxy][:host] and config[:proxy][:port]
         proxy = "http://#{config[:proxy][:host]}:#{config[:proxy][:port]}/"
       else
         proxy = ""
