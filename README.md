@@ -75,13 +75,14 @@ are notified and reconfigured.
 
 **In case you would like to try out the available scenarios:**
 
-8. Get the latest CMT (Puppet) manifests:
+8. Get the latest CMT (Puppet) manifests and install new CMT modules:
 
   Run in terminal:
    ```
    sudo -i
    cd /etc/puppet
    git pull
+   ./install-modules
    exit
    ```
 
