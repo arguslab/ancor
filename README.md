@@ -51,15 +51,22 @@ are notified and reconfigured.
   ```
   bin/setup-mcollective
   ```
+  
+5. Update the pre-installed ANCOR CLI to the latest version.
 
-5. Start ANCOR services.
+  Run in terminal:
+  ```
+  gem update ancor-cli
+  ```
+
+6. Start ANCOR services.
 
   Run in terminal:
   ```
   bin/start-services
   ```
 
-6. ANCOR is ready for use, ANCOR CLI is preinstalled.
+7. ANCOR is ready for use, ANCOR CLI is preinstalled.
 
   Run in terminal:
   ```
@@ -68,7 +75,7 @@ are notified and reconfigured.
 
 **In case you would like to try out the available scenarios:**
 
-7. Get the latest CMT (Puppet) manifests:
+8. Get the latest CMT (Puppet) manifests:
 
   Run in terminal:
    ```
@@ -78,7 +85,7 @@ are notified and reconfigured.
    exit
    ```
 
-8. Test the deployment with the default "eCommerce website" example.
+9. Test the deployment with the default "eCommerce website" example.
 
   Run in terminal:
   ```
