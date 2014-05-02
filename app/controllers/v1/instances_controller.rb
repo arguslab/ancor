@@ -35,8 +35,18 @@ module V1
       render json: @instance
     end
 
+    def update
+      engine.replace_instance params[:id]
+      render nothing: true, status: 200
+    end
+
     def destroy
       engine.remove_instance params[:id]
+      render nothing: true, status: 200
+    end
+
+    def replace_all
+      engine.replace_all_instances params[:role]
       render nothing: true, status: 200
     end
 

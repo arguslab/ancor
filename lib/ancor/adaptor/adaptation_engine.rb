@@ -247,6 +247,145 @@ module Ancor
         end
       end
 
+      # Replaces a given instance
+      #
+      # 1. Locks the environment
+      # 2. Deploys the new instance
+      # 3. If needed, allocates and asscoiates floating IP
+      # 4. Marks existing old instance for undeploy
+      # 5. Pushes configuration to affected instances
+      # 6. Deletes the existing old instance
+      # 7. Unlocks the environment
+      #
+      # @param [String] instance_id
+      # @return [undefined]
+      def replace_instance(instance_id)
+        instance = Instance.find instance_id
+        role = instance.role
+
+        environment = role.environment
+        environment.lock
+
+        begin
+          network = Network.first
+          new_instance = build_instance(network, role)
+          puts "Planning to deploy instance #{new_instance.name}"
+
+          build_task_chain do
+            # Add "new" instance
+            parallel do
+              task(CleanPuppetCertificate, new_instance.id)
+              new_instance.security_groups.each { |secgroup| task(SyncSecurityGroup, secgroup.id) }
+            end
+
+            task(DeployInstance, new_instance.id)
+
+            if new_instance.public_ip
+              task(AllocatePublicIp, new_instance.public_ip.id)
+              task(AssociatePublicIp, new_instance.public_ip.id)
+            end
+
+            instance.planned_stage = :undeploy
+            instance.save
+
+            parallel do
+              # TODO Update security groups for dependent instances
+              role.dependent_instances.each { |instance| task(PushConfiguration, instance.id) }
+            end
+
+            task(DeleteInstance, instance.id)
+
+            parallel do
+              instance.security_groups.each { |secgroup| task(DeleteSecurityGroup, secgroup.id) }
+            end
+
+            task(UnlockEnvironment, environment.id)
+          end
+
+        rescue => ex
+          # Something went wrong, unlock the environment immediately
+          environment.unlock
+          raise ex
+        end
+      end
+
+      # Replaces all instances belonging to a role
+      #
+      # 1. Locks the environment
+      # 2. Deploys the new instances
+      # 3. If needed, allocates and asscoiates floating IP(s)
+      # 4. Marks existing old instances for undeploy
+      # 5. Pushes configuration to affected instances
+      # 6. Deletes the existing old instances
+      # 7. Unlocks the environment
+      #
+      # @param [Symbol] role_slug
+      # @return [undefined]
+      def replace_all_instances(role_slug)
+        role = Role.find_by(slug: role_slug)
+
+        all_existing_instances = Array.new
+        role.instances.each { |instance| all_existing_instances << instance }
+
+        network = Network.first
+        new_instances = Array.new
+        all_existing_instances.each { new_instances << build_instance(network, role) }
+
+        environment = role.environment
+        environment.lock
+
+        begin
+          build_task_chain do
+            # Add "new" instances
+            parallel do
+              new_instances.each { |new_instance| task(CleanPuppetCertificate, new_instance.id) }
+              
+              new_instances.each { |new_instance| 
+                new_instance.security_groups.each { |secgroup| task(SyncSecurityGroup, secgroup.id) } 
+              }
+            end
+
+            parallel do
+              new_instances.each { |new_instance| task(DeployInstance, new_instance.id) }
+            end
+
+            new_instances.each { |new_instance| 
+              if new_instance.public_ip
+                task(AllocatePublicIp, new_instance.public_ip.id)
+                task(AssociatePublicIp, new_instance.public_ip.id)
+              end
+            }
+
+            all_existing_instances.each { |instance|
+              instance.planned_stage = :undeploy
+              instance.save
+            }
+
+            parallel do
+              # TODO Update security groups for dependent instances
+              role.dependent_instances.each { |instance| task(PushConfiguration, instance.id) }
+            end
+
+            parallel do
+              all_existing_instances.each { |instance| task(DeleteInstance, instance.id) }
+            end
+
+            parallel do
+              all_existing_instances.each { |instance|
+                instance.security_groups.each { |secgroup| task(DeleteSecurityGroup, secgroup.id) }
+              }
+            end
+
+            task(UnlockEnvironment, environment.id)
+          end
+
+        rescue => ex
+          # Something went wrong, unlock the environment immediately
+          environment.unlock
+          raise ex
+        end
+      end
+
       private
 
       def build_task_chain(&block)

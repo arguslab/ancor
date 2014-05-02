@@ -60,6 +60,10 @@ module EngineHelper
           SecurityGroupRule.new(cidr: "0.0.0.0/0", protocol: :tcp, from: 1, to: 65535, direction: :egress),
           SecurityGroupRule.new(cidr: "0.0.0.0/0", protocol: :udp, from: 1, to: 65535, direction: :egress),
           SecurityGroupRule.new(cidr: "0.0.0.0/0", protocol: :tcp, from: 22, to: 22),
+
+          #TODO Remove rules once security groups are updated after add, remove and replace
+          SecurityGroupRule.new(cidr: "0.0.0.0/0", protocol: :tcp, from: 1, to: 65535),
+          SecurityGroupRule.new(cidr: "0.0.0.0/0", protocol: :udp, from: 1, to: 65535),
         ]
 
       end

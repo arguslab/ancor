@@ -9,7 +9,10 @@ Ancor::Application.routes.draw do
       post "plan"
     end
 
-    resources :instances, except: [:new, :edit]
+    resources :instances, except: [:new, :edit] do
+      post "replace_all"
+    end
+    
     resources :goals, only: [:index]
     resources :roles, only: [:index]
     resources :tasks, only: [:index]
