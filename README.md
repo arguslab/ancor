@@ -117,9 +117,9 @@ This framework is developed on Ubuntu 12.04 x64.
 
 - Ensure your terminal of choice is using bash/zsh as a [login shell](https://rvm.io/support/faq)
 
-- Please follow the [automated installer](https://github.com/arguslab/ancor-environment)
+- Please follow the [automated installer](https://github.com/arguslab/ancor-environment) (includes the [ANCOR CLI](https://github.com/arguslab/ancor-cli) tool)
 
-- Install [ANCOR CLI](https://github.com/arguslab/ancor-cli) (preferably on the same VM)
+- If needed, install [ANCOR CLI](https://github.com/arguslab/ancor-cli) on a different host
 
 
 IMPORTANT! More information and setup options will be made available in the near future.
