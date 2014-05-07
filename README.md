@@ -24,7 +24,7 @@ are notified and reconfigured.
 ### Using a preconfigured ANCOR VM
 
 1. **Download** and unzip the **ANCOR VM** for:
-  - [VMware Fusion](https://dl.dropboxusercontent.com/u/88202830/ancor%20vm.zip)
+  - [VMware Fusion](https://dl.dropboxusercontent.com/u/88202830/ancor_vm.zip)
   - [VirtualBox](https://dl.dropboxusercontent.com/u/88202830/ANCOR-Xubuntu-x64.ova.zip)
 
   In case you choose to use a different virtualization infrastructure you might need to convert the available versions. The VM is bridged to the network and therefore the user might be asked if a different NIC is used than the one that it was configured on.
