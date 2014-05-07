@@ -70,7 +70,7 @@ are notified and reconfigured.
 
   Run in terminal:
   ```
-  ancor
+  ancor version
   ```
 
 **In case you would like to try out the available scenarios:**
