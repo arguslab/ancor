@@ -94,7 +94,12 @@ are notified and reconfigured.
   ancor environment commit
   ```
 
-### Using Vagrant
+### Using [Vagrant](http://www.vagrantup.com/) 
+
+Clone the ancor repository. Run in terminal:
+```
+git clone https://github.com/arguslab/ancor/ && cd ancor
+```
 
 If you already have [Vagrant](http://www.vagrantup.com/) installed, simply use `vagrant up` to create
 a local development VM for ANCOR.
