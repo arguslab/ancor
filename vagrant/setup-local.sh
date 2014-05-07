@@ -1,5 +1,5 @@
 #!/bin/bash
-RUBY_VERSION=ruby-1.9.3-p448
+RUBY_VERSION=ruby-1.9.3
 
 curl -s -L https://get.rvm.io | bash -s stable
 source ~/.rvm/scripts/rvm
