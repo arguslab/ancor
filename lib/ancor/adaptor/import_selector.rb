@@ -54,8 +54,8 @@ module Ancor
 
           instances[instance.name] = {
             ip_address: ip_address,
-            stage: instance.stage,
-            planned_stage: instance.planned_stage,
+            ancor_stage: instance.stage,
+            ancor_planned_stage: instance.planned_stage,
           }.merge(channel_selections)
         }
 
