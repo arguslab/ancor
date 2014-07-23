@@ -28,6 +28,7 @@ module V1
           exports: Hash[instance.channel_selections.map { |s| [s.slug, s.to_hash] }],
           imports: import_selector.select(instance),
           proxy_url: import_proxy,
+          instances: instances,
           classes: [
             instance.scenario.profile
           ],
@@ -40,6 +41,15 @@ module V1
     end
 
     private
+
+    def instances
+      Instance.all.map do |instance|
+        {
+          name: instance.name,
+          ip_address: instance.interfaces.first.ip_address
+        }
+      end
+    end
 
     def import_selector
       @import_selector ||= Ancor::Adaptor::ImportSelector.instance
