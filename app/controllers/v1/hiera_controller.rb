@@ -43,12 +43,15 @@ module V1
     private
 
     def instances
-      Instance.all.map do |instance|
-        {
-          name: instance.name,
+      result = {}
+
+      Instance.all.each do |instance|
+        result[instance.name] = {
           ip_address: instance.interfaces.first.ip_address
         }
       end
+
+      result
     end
 
     def import_selector
