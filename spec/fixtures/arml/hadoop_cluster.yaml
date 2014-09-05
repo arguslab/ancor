@@ -1,0 +1,85 @@
+goals:
+   hadoop:
+      name: Hadoop Cluster
+      roles:
+         - cloudera_manager
+         - cloudera_node_master
+         - cloudera_node_slave
+         - dns_server
+
+roles:
+   cloudera_manager:
+      name: Cloudera Manager Server
+      min: 1
+      is_public: true
+      implementations:
+         default: { profile: "role::hadoop::cloudera_manager::default" }
+      exports:
+         node: {type: single_port, protocol: tcp}
+         cloudera_server: { type: single_port, protocol: tcp, number: 7182 }
+      imports:
+         dns_server: dns
+
+   cloudera_node_master:
+      name: Hadoop NameNode SecondaryNameNode ResourceManager JobHistory
+      min: 1
+      is_public: true
+      implementations:
+         default: { profile: "role::hadoop::cloudera_node::default" }
+      exports:
+         node: {type: single_port, protocol: tcp}
+         #Namenode
+         namenode_port: {type: single_port, protocol: tcp, number: 8020}
+         dfs_namenode_servicerpc_address: {type: single_port, protocol: tcp, number: 8022}
+         dfs_http_port: {type: single_port, protocol: tcp, number: 50070}
+         dfs_https_port: {type: single_port, protocol: tcp, number: 50470}
+         #Secondary Namenode
+         dfs_secondary_http_port: {type: single_port, protocol: tcp, number: 50090}
+         dfs_secondary_https_port: {type: single_port, protocol: tcp, number: 50495}
+         #ResourceManager
+         yarn_resourcemanager_address: {type: single_port, protocol: tcp, number: 8032}
+         yarn_resourcemanager_scheduler_address: {type: single_port, protocol: tcp, number: 8030}
+         yarn_resourcemanager_resource_tracker_address: {type: single_port, protocol: tcp, number: 8031}
+         yarn_resourcemanager_admin_address: {type: single_port, protocol: tcp, number: 8033}
+         resourcemanager_webserver_port: {type: single_port, protocol: tcp, number: 8088}
+         resourcemanager_webserver_https_port: {type: single_port, protocol: tcp, number: 8090}
+         #JobHistory
+         mapreduce_jobhistory_address: {type: single_port, protocol: tcp, number: 10020}
+         mapreduce_jobhistory_webapp_address: {type: single_port, protocol: tcp, number: 19888}
+         mapreduce_jobhistory_webapp_https_address: {type: single_port, protocol: tcp, number: 19890}
+      imports:
+         cloudera_manager: cloudera_server
+         dns_server: dns
+
+   cloudera_node_slave:
+      name: Hadoop DataNode NodeManager
+      min: 20
+      implementations:
+         default: { profile: "role::hadoop::cloudera_node::default" }
+      exports:
+         node: {type: single_port, protocol: tcp}
+         #Datanode
+         dfs_datanode_ipc_port: {type: single_port, protocol: tcp, number: 50020}
+         dfs_datanode_port: {type: single_port, protocol: tcp, number: 50010}
+         dfs_datanode_http_port: {type: single_port, protocol: tcp, number: 50075}
+         dfs_datanode_https_port: {type: single_port, protocol: tcp, number: 50475}
+         #NodeManager
+         nodemanager_webserver_port: {type: single_port, protocol: tcp, number: 8042}
+         nodemanager_webserver_https_port: {type: single_port, protocol: tcp, number: 8044}
+         yarn_nodemanager_address: {type: single_port, protocol: tcp, number: 8041}
+         yarn_nodemanager_localizer_address: {type: single_port, protocol: tcp, number: 8040}
+      imports:
+         cloudera_manager: cloudera_server
+         dns_server: dns
+
+   dns_server:
+      name: Domain Name Server
+      min: 1
+      implementations:
+         default: { profile: "role::hadoop::dns_server::default" }
+      exports:
+         dns: {type: single_port, protocol: tcp }
+      imports:
+         cloudera_manager: node
+         cloudera_node_master: node
+         cloudera_node_slave: node
