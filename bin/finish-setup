@@ -1,0 +1,19 @@
+#!/bin/bash
+set -e
+
+#Pull the latest version of the ANCOR code and install dependent "libraries"
+cd ~/workspace/ancor
+git pull
+bundle install
+
+#Update the orchestrator component of ANCOR with the new information from ancor.yml
+bin/setup-mcollective
+
+#Update the pre-installed ANCOR CLI to the latest version
+gem update ancor-cli
+
+#Update sample scenarios
+cd /etc/puppet
+sudo git pull 
+sudo ./install-modules
+cd ~/workspace/ancor
