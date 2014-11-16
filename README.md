@@ -38,7 +38,7 @@ ANCOR is a framework that captures the high-level user requirements and translat
   start-services 
   ```  
 
-**Testing ANCOR with the default ["eCommerce website"] example(https://github.com/arguslab/ancor-puppet):**
+**Testing ANCOR with the default ["eCommerce website"](https://github.com/arguslab/ancor-puppet) example:**
 
   Run in terminal:
   ```
