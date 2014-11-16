@@ -4,9 +4,9 @@ ANCOR is a framework that captures the high-level user requirements and translat
 
 [Compiling Abstract Specifications into Concrete Systems—Bringing Order to the Cloud](https://www.usenix.org/conference/lisa14/conference-program/presentation/unruh)
 
-[Puppet Manifests' Repository for ANCOR Example Scenarios](https://github.com/arguslab/ancor-puppet)
-
 [Current Ancor Prototype Desciption ](https://dl.dropboxusercontent.com/u/88202830/ANCORAll-in-one.pdf)
+
+[Puppet Manifests' Repository for ANCOR Example Scenarios](https://github.com/arguslab/ancor-puppet)
 
 **Please don't hesitate to contact the owners if you have any questions or concerns.**
 
@@ -19,9 +19,9 @@ ANCOR is a framework that captures the high-level user requirements and translat
 - The necessary Puppet manifests that are needed for the system that will be deployed with ANCOR.
 
 
-## Using and Configuring ANCOR
+## Setting Up and Using ANCOR
 
-### Using a preconfigured ANCOR VM
+### Preconfigured ANCOR VM Option
 
 1. **Download** and unzip the **ANCOR VM** for:
   - VMware Fusion - *coming soon (new version under construction)* 
@@ -37,17 +37,8 @@ ANCOR is a framework that captures the high-level user requirements and translat
   finish-setup 
   start-services 
   ```  
-  
-3. ANCOR is ready for use, ANCOR CLI is preinstalled.
 
-  Run in terminal:
-  ```
-  ancor version
-  ```
-
-**In case you would like to try out the available scenarios:**
-
-1. Test the deployment with the default "eCommerce website" example.
+**Testing ANCOR with the default ["eCommerce website"] example(https://github.com/arguslab/ancor-puppet):**
 
   Run in terminal:
   ```
@@ -55,7 +46,7 @@ ANCOR is a framework that captures the high-level user requirements and translat
   ancor environment commit
   ```
 
-### Using [Vagrant](http://www.vagrantup.com/) - *under revision*
+### [Vagrant](http://www.vagrantup.com/) Option - *under revision*
 
 Clone the ancor repository. Run in terminal:
 ```
