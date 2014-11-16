@@ -21,7 +21,7 @@ ANCOR is a framework that captures the high-level user requirements and translat
 
 ## Setting Up and Using ANCOR
 
-### Preconfigured ANCOR VM Option
+### Option 1 - Preconfigured ANCOR VM 
 
 1. **Download** and unzip the **ANCOR VM** for:
   - VMware Fusion - *coming soon (new version under construction)* 
@@ -46,7 +46,7 @@ ANCOR is a framework that captures the high-level user requirements and translat
   ancor environment commit
   ```
 
-### [Vagrant](http://www.vagrantup.com/) Option - *under revision*
+### Option 2 - Using [Vagrant](http://www.vagrantup.com/) - *under revision*
 
 1. Install [Vagrant](http://www.vagrantup.com/)
 2. Clone the ANCOR repository. Run in terminal: `git clone https://github.com/arguslab/ancor/ && cd ancor`
@@ -67,7 +67,7 @@ configuring ANCOR.
 
   `bin/start-services` to start the Rails app and Sidekiq worker for ANCOR
 
-  `ancor environment plan /vagrant/spec/fixtures/arml/fullstack.yaml; ancor environment commit` to test ANCOR with the default ["eCommerce website"](https://github.com/arguslab/ancor-puppet/tree/master/modules/role/manifests/ecommerce) example**
+  `ancor environment plan /vagrant/spec/fixtures/arml/fullstack.yaml; ancor environment commit` to test ANCOR with the default ["eCommerce website"](https://github.com/arguslab/ancor-puppet/tree/master/modules/role/manifests/ecommerce) example
 
 ### General Setup Instructions
 This framework is developed on Ubuntu 12.04 x64.
