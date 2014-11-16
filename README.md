@@ -74,7 +74,7 @@ This framework is developed on Ubuntu 12.04 x64.
 
 - Please follow the [automated installer](https://github.com/arguslab/ancor-environment) (includes the [ANCOR CLI](https://github.com/arguslab/ancor-cli) tool)
 
-- Change to the ANCOR directory to configure and start ANCOR: 
+- Change directory into the ANCOR folder to configure and start ANCOR: 
 
   ```bin/interactive-setup; bin/setup-mcollective; bin/start-services```
 - If needed, install [ANCOR CLI](https://github.com/arguslab/ancor-cli) on a different host
