@@ -1,14 +1,14 @@
 ## What is ANCOR?
 
-ANCOR is a cloud automation framework that models dependencies between different layers in an
-application stack. When instances in one layer changes, the instances in a dependent layer
-are notified and reconfigured.
+ANCOR is a framework that captures the high-level user requirements and translates them into a working IT system on a cloud infrastructure.
 
-[Detailed Ancor Framework Desciption ](https://dl.dropboxusercontent.com/u/88202830/ANCORAll-in-one.pdf)
+[Compiling Abstract Specifications into Concrete Systems—Bringing Order to the Cloud](https://www.usenix.org/conference/lisa14/conference-program/presentation/unruh)
 
 [Puppet Manifests' Repository for ANCOR Example Scenarios](https://github.com/arguslab/ancor-puppet)
 
-**Currently ANCOR is a prototype under heavy development. Please don't hesitate to contact the owners if you have any questions or concerns.**
+[Current Ancor Prototype Desciption ](https://dl.dropboxusercontent.com/u/88202830/ANCORAll-in-one.pdf)
+
+**Please don't hesitate to contact the owners if you have any questions or concerns.**
 
 ## General Requirements
 
@@ -24,49 +24,21 @@ are notified and reconfigured.
 ### Using a preconfigured ANCOR VM
 
 1. **Download** and unzip the **ANCOR VM** for:
-  - [VMware Fusion](https://dl.dropboxusercontent.com/u/88202830/ancor_vm.zip)
-  - [VirtualBox](https://dl.dropboxusercontent.com/u/88202830/ANCOR-Xubuntu-x64.ova.zip)
+  - VMware Fusion - *coming soon (new version under construction)* 
+  - VirtualBox - *coming soon (new version under construction)*
 
   In case you choose to use a different virtualization infrastructure you might need to convert the available versions. The VM is bridged to the network and therefore the user might be asked if a different NIC is used than the one that it was configured on.
 
-2. In the preconfigured ANCOR virtual machine:
-  - Find the Ancor VM's IP address (*e.g.,* run in a terminal: `ifconfig`) 
-  - Fill-in the following specific information in `ancor.yml` (`/home/ancor/workspace/ancor/config/ancor.yml`):
-    - Open `ancor.yml` file using the shortcut on the Desktop or run in a terminal `vim /home/ancor/Desktop/ancor.yml`
-      - Use the ANCOR VM's IP in the **mcollective** AND **puppet** sections of `ancor.yml` 
-      - Fill-in OpenStack infrastructure specific information in the **openstack** section of `ancor.yml`
-
-3. Pull the latest version of the ANCOR code and install dependent "libraries".
+2. Setup the communication between ANCOR and the OpenStack deployment. Start ANCOR. 
 
   Run in terminal:
   ```
-  cd ~/workspace/ancor
-  git pull
-  bundle install
-  ```
-
-4. Update the orchestrator component of ANCOR with the new information from "ancor.yml"
-
-  Run in a terminal:
-  ```
-  bin/setup-mcollective
-  ```
+  interactive-setup 
+  finish-setup 
+  start-services 
+  ```  
   
-5. Update the pre-installed ANCOR CLI to the latest version.
-
-  Run in terminal:
-  ```
-  gem update ancor-cli
-  ```
-
-6. Start ANCOR services.
-
-  Run in terminal:
-  ```
-  bin/start-services
-  ```
-
-7. ANCOR is ready for use, ANCOR CLI is preinstalled.
+3. ANCOR is ready for use, ANCOR CLI is preinstalled.
 
   Run in terminal:
   ```
@@ -75,18 +47,7 @@ are notified and reconfigured.
 
 **In case you would like to try out the available scenarios:**
 
-8. Get the latest CMT (Puppet) manifests and install new CMT modules:
-
-  Run in terminal:
-   ```
-   sudo -i
-   cd /etc/puppet
-   git pull
-   ./install-modules
-   exit
-   ```
-
-9. Test the deployment with the default "eCommerce website" example.
+1. Test the deployment with the default "eCommerce website" example.
 
   Run in terminal:
   ```
@@ -94,7 +55,7 @@ are notified and reconfigured.
   ancor environment commit
   ```
 
-### Using [Vagrant](http://www.vagrantup.com/) 
+### Using [Vagrant](http://www.vagrantup.com/) - *under revision*
 
 Clone the ancor repository. Run in terminal:
 ```
@@ -125,6 +86,3 @@ This framework is developed on Ubuntu 12.04 x64.
 - Please follow the [automated installer](https://github.com/arguslab/ancor-environment) (includes the [ANCOR CLI](https://github.com/arguslab/ancor-cli) tool)
 
 - If needed, install [ANCOR CLI](https://github.com/arguslab/ancor-cli) on a different host
-
-
-IMPORTANT! More information and setup options will be made available in the near future.
