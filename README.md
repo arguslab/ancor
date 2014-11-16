@@ -48,26 +48,37 @@ ANCOR is a framework that captures the high-level user requirements and translat
 
 ### [Vagrant](http://www.vagrantup.com/) Option - *under revision*
 
-Clone the ancor repository. Run in terminal:
+1. Install [Vagrant](http://www.vagrantup.com/)
+
+2. Clone the ANCOR repository. Run in terminal:
 ```
 git clone https://github.com/arguslab/ancor/ && cd ancor
 ```
-
-If you already have [Vagrant](http://www.vagrantup.com/) installed, simply use `vagrant up` to create
-a local development VM for ANCOR.
-
+3. Create a local development VM for ANCOR. Run in terminal:
+```
+vagrant up 
+```
 All necessary ports are forwarded to your host, so you can use your development machine's IP address when
-configuring ANCOR. Once the VM is up and running, use `vagrant ssh` to get a shell. From there, change into
-the `/vagrant` directory. This directory is shared between the VM and your development machine using the
+configuring ANCOR. 
+
+4. Once the VM is up and running, run in terminal:
+```
+vagrant ssh
+```
+
+5. Run the following commands inside the VM to configure and start ANCOR:
+`cd /vagrant` to change into the ANCOR directory 
+This directory is shared between the VM and your development machine using the
 Shared Folders feature in VirtualBox. Changes in this directory will be shared instantly between the VM
 and your development machine.
 
-Once you have a shell in the `/vagrant` directory, run the following to configure and start ANCOR:
+`bin/interactive-setup` to start from the configuration template
 
-1. `cp config/ancor.yml.example config/ancor.yml` to start from the configuration template
-2. `vim config/ancor.yml` to configure specifics about your VM and OpenStack infrastructure
-3. `bin/setup-mcollective` to install MCollective for ANCOR
-4. `bin/start-services` to start the Rails app and Sidekiq worker for ANCOR
+`bin/setup-mcollective` to install MCollective for ANCOR
+
+`bin/start-services` to start the Rails app and Sidekiq worker for ANCOR
+
+`ancor environment plan /vagrant/spec/fixtures/arml/fullstack.yaml; ancor environment commit` to test ANCOR with the default ["eCommerce website"](https://github.com/arguslab/ancor-puppet/tree/master/modules/role/manifests/ecommerce) example**
 
 ### General Setup Instructions
 This framework is developed on Ubuntu 12.04 x64.
