@@ -25,7 +25,6 @@ ANCOR is a framework that captures the high-level user requirements and translat
 
 1. **Download** and unzip the **ANCOR VM** for:
   - [VMware Fusion](https://dl.dropboxusercontent.com/u/88202830/ancor-vm.zip)
-  - VirtualBox - *coming soon (new version under construction)*
 
   In case you choose to use a different virtualization infrastructure you might need to convert the available versions. The VM is bridged to the network and therefore the user might be asked if a different NIC is used than the one that it was configured on.
 
