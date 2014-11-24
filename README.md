@@ -25,6 +25,7 @@ ANCOR is a framework that captures the high-level user requirements and translat
 
 1. **Download** and unzip the **ANCOR VM** for:
   - [VMware Fusion](https://dl.dropboxusercontent.com/u/88202830/ancor-vm.zip)
+  - [Virtual Box (OVA format)](https://dl.dropboxusercontent.com/u/88202830/ancor-vm.ova)
 
   In case you choose to use a different virtualization infrastructure you might need to convert the available versions. The VM is bridged to the network and therefore the user might be asked if a different NIC is used than the one that it was configured on.
 
@@ -44,8 +45,9 @@ ANCOR is a framework that captures the high-level user requirements and translat
   ancor environment plan /home/ancor/workspace/ancor/spec/fixtures/arml/fullstack.yaml
   ancor environment commit
   ```
+For more information about the available sample scenarios please check [Puppet Manifests' Repository for ANCOR Example Scenarios](https://github.com/arguslab/ancor-puppet)
 
-### Option 2 - Using [Vagrant](http://www.vagrantup.com/) - *under revision*
+### Option 2 - Using [Vagrant](http://www.vagrantup.com/)
 
 1. Install [Vagrant](http://www.vagrantup.com/)
 2. Clone the ANCOR repository. Run in terminal: `git clone https://github.com/arguslab/ancor/ && cd ancor`
@@ -64,9 +66,9 @@ ANCOR is a framework that captures the high-level user requirements and translat
 
   `bin/start-services` to start the Rails app and Sidekiq worker for ANCOR
 
-  `ancor environment plan /vagrant/spec/fixtures/arml/fullstack.yaml; ancor environment commit` to test ANCOR with the default ["eCommerce website"](https://github.com/arguslab/ancor-puppet/tree/master/modules/role/manifests/ecommerce) example
+  `ancor environment plan /vagrant/spec/fixtures/arml/fullstack.yaml; ancor environment commit` to test ANCOR with the default ["eCommerce website"](https://github.com/arguslab/ancor-puppet/tree/master/modules/role/manifests/ecommerce) example. For more information about the available sample scenarios please check [Puppet Manifests' Repository for ANCOR Example Scenarios](https://github.com/arguslab/ancor-puppet)
 
-### Option 3 - General Setup Instructions - *under revision*
+### Option 3 - General Setup Instructions (for advanced users)
 This framework is developed on Ubuntu 12.04 x64.
 
 - Ensure your terminal of choice is using bash/zsh as a [login shell](https://rvm.io/support/faq)
