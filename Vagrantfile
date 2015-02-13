@@ -2,7 +2,7 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure VAGRANTFILE_API_VERSION do |config|
   config.vm.box = "ancor-precise64"
-  config.vm.box_url = "https://ianunruh.s3.amazonaws.com/vagrant/ancor-precise64.box"
+  config.vm.box_url = "https://dl.dropboxusercontent.com/u/88202830/ancor-precise64.box"
 
   config.vm.network :forwarded_port, guest: 61613, host: 61613
   config.vm.network :forwarded_port, guest: 8140, host: 8140
