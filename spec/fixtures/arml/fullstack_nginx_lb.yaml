@@ -1,0 +1,69 @@
+goals:
+  ecommerce:
+    name: eCommerce frontend
+    roles:
+      - weblb
+      - webapp
+      - worker
+      - work_queue
+      - db_master
+      - db_slave
+
+roles:
+  weblb:
+    name: Web application load balancer
+    min: 2
+    is_public: true
+    implementations:
+      default: { profile: "role::ecommerce::weblb::nginx" }
+    exports:
+      http: { type: single_port, protocol: tcp, number: 80 }
+    imports:
+      webapp: http
+
+  webapp:
+    name: Web application
+    min: 3
+    implementations:
+      default: { profile: "role::ecommerce::webapp::default" }
+    exports:
+      http: { type: single_port, protocol: tcp }
+    imports:
+      db_master: querying
+      db_slave: querying
+      work_queue: redis
+
+  worker:
+    name: Sidekiq worker application
+    min: 2
+    implementations:
+      default: { profile: "role::ecommerce::worker::default" }
+    imports:
+      db_master: querying
+      db_slave: querying
+      work_queue: redis
+
+  work_queue:
+    name: Redis work queue
+    implementations:
+      default: { profile: "role::ecommerce::work_queue::default" }
+    exports:
+      redis: { type: single_port, protocol: tcp }
+
+  db_master:
+    name: MySQL master
+    implementations:
+      default: { profile: "role::ecommerce::db_master::default" }
+    exports:
+      querying: { type: single_port, protocol: tcp }
+
+  db_slave:
+    name: MySQL slave
+    min: 2
+    implementations:
+      default: { profile: "role::ecommerce::db_slave::default" }
+    exports:
+      querying: { type: single_port, protocol: tcp }
+    imports:
+      # Used for replication
+      db_master: querying
