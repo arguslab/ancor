@@ -53,7 +53,7 @@ roles:
 
    cloudera_node_slave:
       name: Hadoop DataNode NodeManager
-      min: 20
+      min: 3
       implementations:
          default: { profile: "role::hadoop::cloudera_node::default" }
       exports:
