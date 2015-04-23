@@ -33,9 +33,10 @@ ANCOR is a framework that captures the high-level user requirements and translat
 
   Run in terminal:
   ```
-  interactive-setup 
-  finish-setup 
-  start-services 
+  cd ~/workspace/ancor
+  bin/interactive-setup
+  bin/setup-mcollective
+  bin/start-services
   ```  
 
 **Testing ANCOR with the default ["eCommerce website"](https://github.com/arguslab/ancor-puppet/tree/master/modules/role/manifests/ecommerce) example:**
