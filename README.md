@@ -33,9 +33,8 @@ ANCOR is a framework that captures the high-level user requirements and translat
 
   Run in terminal:
   ```
-  cd ~/workspace/ancor
   bin/interactive-setup
-  bin/setup-mcollective
+  bin/finish-setup
   bin/start-services
   ```  
 
