@@ -1,0 +1,35 @@
+goals:
+  drupal:
+    name: Drupal cms
+    roles:
+      - db
+      - webapp
+      - weblb
+
+roles:
+  weblb:
+    name: Web application load balance
+    is_public: true
+    implementations:
+      default: { profile: "role::drupal::weblb::nginx" }
+    exports:
+      http: { type: single_port, protocol: tcp, number: 80 }
+    imports:
+      webapp: http
+
+  webapp:
+    name: Web application
+    min: 2
+    implementations:
+      default: { profile: "role::drupal::webapp::webapp_post" }
+    exports:
+      http: { type: single_port, protocol: tcp }
+    imports:
+      db: querying
+
+  db:
+    name: MySQL database
+    implementations:
+      default: { profile: "role::drupal::db::postgres" }
+    exports:
+      querying: { type: single_port, protocol: tcp }

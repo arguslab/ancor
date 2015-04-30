@@ -1,0 +1,35 @@
+goals:
+  wordpress:
+    name: Web Blog
+    roles:
+      - db
+      - webapp
+      - weblb
+
+roles:
+  weblb:
+    name: Web application load balance
+    is_public: true
+    implementations:
+      default: { profile: "role::blog::weblb::default" }
+    exports:
+      http: { type: single_port, protocol: tcp, number: 80 }
+    imports:
+      webapp: http
+
+  webapp:
+    name: Web application
+    min: 2
+    implementations:
+      default: { profile: "role::blog::webapp::default" }
+    exports:
+      http: { type: single_port, protocol: tcp }
+    imports:
+      db: querying
+
+  db:
+    name: MySQL database
+    implementations:
+      default: { profile: "role::blog::db::default" }
+    exports:
+      querying: { type: single_port, protocol: tcp }
