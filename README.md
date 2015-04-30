@@ -21,11 +21,11 @@ ANCOR is a framework that captures the high-level user requirements and translat
 
 ## Setting Up and Using ANCOR
 
-### Option 1 - Preconfigured ANCOR VM 
+### Option 1 - Preconfigured ANCOR VM (under revision) 
 
-1. **Download** and unzip the **ANCOR VM** for:
-  - [VMware Fusion](https://dl.dropboxusercontent.com/u/88202830/ancor-vm.zip)
-  - [Virtual Box (OVA format)](https://dl.dropboxusercontent.com/u/88202830/ancor-vm.ova)
+1. **Download** and unzip the **ANCOR VM** for (Please contact the authors):
+  - VMware Fusion
+  - Virtual Box (OVA format)
 
   In case you choose to use a different virtualization infrastructure you might need to convert the available versions. The VM is bridged to the network and therefore the user might be asked if a different NIC is used than the one that it was configured on.
 
@@ -33,16 +33,17 @@ ANCOR is a framework that captures the high-level user requirements and translat
 
   Run in terminal:
   ```
-  interactive-setup 
-  finish-setup 
-  start-services 
+  cd ~/workspace/ancor
+  bin/interactive-setup
+  bin/finish-setup
+  bin/start-services
   ```  
 
-**Testing ANCOR with the default ["eCommerce website"](https://github.com/arguslab/ancor-puppet/tree/master/modules/role/manifests/ecommerce) example:**
+**Testing ANCOR with a basic ["Wordpress deployment"](https://github.com/arguslab/ancor-puppet/tree/master/modules/role/manifests/wordpress) example:**
 
   Run in terminal:
   ```
-  ancor environment plan /home/ancor/workspace/ancor/spec/fixtures/arml/fullstack.yaml
+  ancor environment plan /home/ancor/workspace/ancor/spec/fixtures/arml/wordpress.yaml
   ancor environment commit
   ```
 For more information about the available sample scenarios please check [Puppet Manifests' Repository for ANCOR Example Scenarios](https://github.com/arguslab/ancor-puppet)
@@ -66,7 +67,7 @@ For more information about the available sample scenarios please check [Puppet M
 
   `bin/start-services` to start the Rails app and Sidekiq worker for ANCOR
 
-  `ancor environment plan /vagrant/spec/fixtures/arml/fullstack.yaml; ancor environment commit` to test ANCOR with the default ["eCommerce website"](https://github.com/arguslab/ancor-puppet/tree/master/modules/role/manifests/ecommerce) example. For more information about the available sample scenarios please check [Puppet Manifests' Repository for ANCOR Example Scenarios](https://github.com/arguslab/ancor-puppet)
+  `ancor environment plan /vagrant/spec/fixtures/arml/wordpress.yaml; ancor environment commit` to test ANCOR with a basic ["Wordpress deployment"](https://github.com/arguslab/ancor-puppet/tree/master/modules/role/manifests/wordpress) example. For more information about the available sample scenarios please check [Puppet Manifests' Repository for ANCOR Example Scenarios](https://github.com/arguslab/ancor-puppet)
 
 ### Option 3 - General Setup Instructions (for advanced users)
 This framework is developed on Ubuntu 12.04 x64.
