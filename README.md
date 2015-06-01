@@ -29,7 +29,7 @@ ANCOR is a framework that captures the high-level user requirements and translat
 
   In case you choose to use a different virtualization infrastructure you might need to convert the available versions. The VM is bridged to the network and therefore the user might be asked if a different NIC is used than the one that it was configured on.
 
-2. Setup the communication between ANCOR and the OpenStack deployment. Start ANCOR. 
+2. Setup the communication between ANCOR and the OpenStack deployment. Start ANCOR ... 
 
   Run in terminal:
   ```
