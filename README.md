@@ -23,7 +23,7 @@ ANCOR is a framework that captures the high-level user requirements and translat
 
 ### Option 1 - Preconfigured ANCOR VM (under revision) 
 
-1. **Download** and unzip the **ANCOR VM** for (Please contact the authors):
+1. **Download** and unzip the **ANCOR VM** for (Please contact the authors for links):
   - VMware Fusion
   - Virtual Box (OVA format)
 
