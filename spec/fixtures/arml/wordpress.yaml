@@ -19,7 +19,7 @@ roles:
 
   webapp:
     name: Web application
-    min: 2
+    min: 1
     implementations:
       default: { profile: "role::wordpress::webapp::default" }
     exports:
