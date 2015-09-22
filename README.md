@@ -41,11 +41,11 @@ ANCOR can be used as a [Moving Target Defense](http://www.arguslab.org/mtd.html)
   bin/start-services
   ```  
 
-**Testing ANCOR with a basic ["Wordpress deployment"](https://github.com/arguslab/ancor-puppet/tree/master/modules/role/manifests/wordpress) example:**
+**Testing ANCOR with a basic ["Drupal deployment"](https://github.com/arguslab/ancor-puppet/tree/master/modules/role/manifests/drupal) example:**
 
   Run in terminal:
   ```
-  ancor environment plan /home/ancor/workspace/ancor/spec/fixtures/arml/wordpress.yaml
+  ancor environment plan /home/ancor/workspace/ancor/spec/fixtures/arml/drupal.yaml
   ancor environment commit
   ```
 For more information about the available sample scenarios please check [Puppet Manifests' Repository for ANCOR Example Scenarios](https://github.com/arguslab/ancor-puppet)
@@ -69,7 +69,7 @@ For more information about the available sample scenarios please check [Puppet M
 
   `bin/start-services` to start the Rails app and Sidekiq worker for ANCOR
 
-  `ancor environment plan /vagrant/spec/fixtures/arml/wordpress.yaml; ancor environment commit` to test ANCOR with a basic ["Wordpress deployment"](https://github.com/arguslab/ancor-puppet/tree/master/modules/role/manifests/wordpress) example. For more information about the available sample scenarios please check [Puppet Manifests' Repository for ANCOR Example Scenarios](https://github.com/arguslab/ancor-puppet)
+  `ancor environment plan /vagrant/spec/fixtures/arml/drupal.yaml; ancor environment commit` to test ANCOR with a basic ["Wordpress deployment"](https://github.com/arguslab/ancor-puppet/tree/master/modules/role/manifests/drupal) example. For more information about the available sample scenarios please check [Puppet Manifests' Repository for ANCOR Example Scenarios](https://github.com/arguslab/ancor-puppet)
 
 ### Option 3 - General Setup Instructions (for advanced users)
 This framework is developed on Ubuntu 12.04 x64.
