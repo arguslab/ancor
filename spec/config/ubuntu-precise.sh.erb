@@ -20,7 +20,12 @@ curl -O http://apt.puppetlabs.com/puppetlabs-release-precise.deb
 dpkg -i puppetlabs-release-precise.deb
 
 apt-get update
-apt-get install -y -qq puppet mcollective mcollective-facter-facts mcollective-puppet-agent ruby-stomp
+apt-get install -y -qq puppet mcollective mcollective-puppet-agent ruby-stomp git
+
+# Install facter through github after patch
+git clone https://github.com/puppetlabs/mcollective-facter-facts /root/facter
+mv /root/facter/facts /usr/share/mcollective/plugins/mcollective/
+
 
 ##
 # Configure and restart the MCollective server
