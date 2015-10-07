@@ -25,12 +25,11 @@ ANCOR can be used as a [Moving Target Defense](http://www.arguslab.org/mtd.html)
 
 ### Option 1 - Preconfigured ANCOR VM (under revision) 
 
-1. **Download** the **ANCOR VM**:
-  - Source 1 -- [OVA format (works with Virtual Box, VMware products, etc.)](https://dl.dropboxusercontent.com/u/88202830/ancor_vm.ova)
- - Source 2 -- [OVA format (works with Virtual Box, VMware products, etc.)](https://drive.google.com/open?id=0B0vt6z9-IhD9SHZQRkdaeDZIUmc)
+1. **Download** and unzip the **ANCOR VM** for (Please contact the authors for download links):
+  - VMware Fusion
+  - Virtual Box (OVA format)
 
-
-  The virtual machine is bridged to the network and therefore the user might be asked if a different NIC is used than the one that it was configured on.
+  In case you choose to use a different virtualization infrastructure you might need to convert the available versions. The VM is bridged to the network and therefore the user might be asked if a different NIC is used than the one that it was configured on.
 
 2. Setup the communication between ANCOR and the OpenStack deployment. Start ANCOR ... 
 
