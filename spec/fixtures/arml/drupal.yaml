@@ -19,7 +19,7 @@ roles:
 
   webapp:
     name: Web application
-    min: 3
+    min: 2
     implementations:
       default: { profile: "role::drupal::webapp::default" }
     exports:
