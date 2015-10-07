@@ -231,7 +231,7 @@ module Ancor
               # TODO Update security groups for dependent instances
               role.dependent_instances.each { |instance| task(PushConfiguration, instance.id) }
             end
-
+            sleep 30
             task(DeleteInstance, instance.id)
 
             parallel do
@@ -292,7 +292,7 @@ module Ancor
               # TODO Update security groups for dependent instances
               role.dependent_instances.each { |instance| task(PushConfiguration, instance.id) }
             end
-
+            sleep 30
             task(DeleteInstance, instance.id)
 
             parallel do
@@ -365,6 +365,8 @@ module Ancor
               # TODO Update security groups for dependent instances
               role.dependent_instances.each { |instance| task(PushConfiguration, instance.id) }
             end
+
+            sleep 30
 
             parallel do
               all_existing_instances.each { |instance| task(DeleteInstance, instance.id) }

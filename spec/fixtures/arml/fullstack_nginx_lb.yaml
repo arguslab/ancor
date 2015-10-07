@@ -12,7 +12,7 @@ goals:
 roles:
   weblb:
     name: Web application load balancer
-    min: 2
+    min: 1
     is_public: true
     implementations:
       default: { profile: "role::ecommerce::weblb::nginx" }
@@ -20,6 +20,18 @@ roles:
       http: { type: single_port, protocol: tcp, number: 80 }
     imports:
       webapp: http
+
+  weblb2:
+    name: Web application load balancer
+    min: 1
+    is_public: true
+    implementations:
+      default: { profile: "role::ecommerce::weblb::default" }
+    exports:
+      http: { type: single_port, protocol: tcp, number: 80 }
+    imports:
+      webapp: http
+
 
   webapp:
     name: Web application
