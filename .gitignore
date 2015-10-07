@@ -24,6 +24,3 @@ config/mcollective.cfg
 
 # Ignore Vagrant temp files
 .vagrant
-
-# Ignore ancor-puppet
-ancor-puppet
