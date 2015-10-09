@@ -23,7 +23,7 @@ ANCOR can be used as a [Moving Target Defense](http://www.arguslab.org/mtd.html)
 
 ## Setting Up and Using ANCOR
 
-### Option 1 - Preconfigured ANCOR VM (under revision) 
+### Option 1 - Preconfigured ANCOR VM
 
 1. **Download** the **ANCOR VM**:
  - Source 1 -- [OVA format (works with Virtual Box, VMware products, etc.)](https://dl.dropboxusercontent.com/u/88202830/ancor_vm.ova)
@@ -50,7 +50,12 @@ The virtual machine is bridged to the network and therefore the user might be as
   ```
 For more information about the available sample scenarios please check [Puppet Manifests' Repository for ANCOR Example Scenarios](https://github.com/arguslab/ancor-puppet)
 
-### Option 2 - Using [Vagrant](http://www.vagrantup.com/)
+For more features (e.g., adding, removing, replacing instances) run in terminal: 
+```
+ancor
+```
+
+### Option 2 - Using [Vagrant](http://www.vagrantup.com/) (under revision)
 
 1. Install [Vagrant](http://www.vagrantup.com/)
 2. Clone the ANCOR repository. Run in terminal: `git clone https://github.com/arguslab/ancor/ && cd ancor`
