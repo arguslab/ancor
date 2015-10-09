@@ -29,7 +29,9 @@ ANCOR can be used as a [Moving Target Defense](http://www.arguslab.org/mtd.html)
  - Source 1 -- [OVA format (works with Virtual Box, VMware products, etc.)](https://dl.dropboxusercontent.com/u/88202830/ancor_vm.ova)
  - Source 2 -- [OVA format (works with Virtual Box, VMware products, etc.)](https://drive.google.com/open?id=0B0vt6z9-IhD9SHZQRkdaeDZIUmc)
 
-The virtual machine is bridged to the network and therefore the user might be asked if a different NIC is used than the one that it was configured on.
+Default credentials - user: **ancor** password: **ancor**
+
+The virtual machine is bridged to the network and therefore the user might be warned that a different NIC is used than the one that it was configured on.
 
 2. Setup the communication between ANCOR and the OpenStack deployment. Start ANCOR ... 
 
