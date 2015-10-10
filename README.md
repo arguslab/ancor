@@ -57,26 +57,33 @@ For more features (e.g., adding, removing, replacing instances) run in terminal:
 ancor
 ```
 
-### Option 2 - Using [Vagrant](http://www.vagrantup.com/) (under revision)
+### Option 2 - Using [Vagrant](http://www.vagrantup.com/)
 
 1. Install [Vagrant](http://www.vagrantup.com/)
-2. Clone the ANCOR repository. Run in terminal: `git clone https://github.com/arguslab/ancor/ && cd ancor`
+2. Clone the ANCOR repository. Run in terminal: 
+ ```
+ git clone https://github.com/arguslab/ancor/ && cd ancor
+ ```
 3. Create a local development VM for ANCOR. All necessary ports are forwarded to your host, so you can use your development machine's IP address when configuring ANCOR. Run in terminal: `vagrant up`
 4. Once the VM is up and running, run in terminal:`vagrant ssh`
 5. Run the following commands inside the VM to configure and start ANCOR:
 
   `cd /vagrant` to change into the ANCOR directory 
-  This directory is shared between the VM and your development machine using the
+  This directory is shared between the VM and your host using the
   Shared Folders feature in VirtualBox. Changes in this directory will be shared instantly between the VM
-  and your development machine.
+  and your host.
 
   `bin/interactive-setup` to start from the configuration template
 
   `bin/setup-mcollective` to install MCollective for ANCOR
 
   `bin/start-services` to start the Rails app and Sidekiq worker for ANCOR
+6. Test ANCOR with a basic ["Drupal deployment"](https://github.com/arguslab/ancor-puppet/tree/master/modules/role/manifests/drupal) example:
 
-  `ancor environment plan /vagrant/spec/fixtures/arml/drupal.yaml; ancor environment commit` to test ANCOR with a basic ["Wordpress deployment"](https://github.com/arguslab/ancor-puppet/tree/master/modules/role/manifests/drupal) example. For more information about the available sample scenarios please check [Puppet Manifests' Repository for ANCOR Example Scenarios](https://github.com/arguslab/ancor-puppet)
+ ```
+ ancor environment plan /vagrant/spec/fixtures/arml/drupal.yaml; ancor environment commit
+ ```
+ For more information about the available sample scenarios please check [Puppet Manifests' Repository for ANCOR Example Scenarios](https://github.com/arguslab/ancor-puppet)
 
 ### Option 3 - General Setup Instructions (for advanced users)
 This framework is developed on Ubuntu 12.04 x64.
