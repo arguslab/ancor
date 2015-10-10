@@ -61,6 +61,7 @@ ancor
 
 1. Install [Vagrant](http://www.vagrantup.com/)
 2. Clone the ANCOR repository. Run in terminal: 
+
  ```
  git clone https://github.com/arguslab/ancor/ && cd ancor
  ```
