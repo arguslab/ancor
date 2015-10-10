@@ -66,6 +66,7 @@ ancor
  git clone https://github.com/arguslab/ancor/ && cd ancor
  ```
 3. Create a local development VM for ANCOR. All necessary ports are forwarded to your host, so you can use your development machine's IP address when configuring ANCOR. Run in terminal: `vagrant up`
+
 4. Once the VM is up and running, run in terminal:`vagrant ssh`
 5. Run the following commands inside the VM to configure and start ANCOR:
 
