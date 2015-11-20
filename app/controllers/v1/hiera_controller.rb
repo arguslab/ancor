@@ -30,8 +30,9 @@ module V1
           proxy_url: import_proxy,
           instances: instances,
           classes: [
-            instance.scenario.profile
+             instance.scenario.profile
           ],
+          dep_roles: import_selector.dr(instance),
         }
 
         render json: data, status: 200

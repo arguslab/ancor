@@ -37,6 +37,21 @@ module Ancor
         resolved
       end
 
+
+      # @param [Instance] target
+      # @return [Array]
+      def dr(target)
+        role = target.role
+        dependencies = role.dependencies
+
+        resolved = Array.new
+        dependencies.each { |dependency|
+          resolved = resolved << dependency.slug.to_s
+        }
+
+        resolved
+      end
+
       private
 
       # @param [Instance] target
