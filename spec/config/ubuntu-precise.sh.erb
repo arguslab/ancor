@@ -5,6 +5,8 @@
 set -e -x
 
 echo 'ubuntu:K$uci$!' | chpasswd
+sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+service ssh restart
 
 export DEBIAN_FRONTEND=noninteractive
 <% if config[:proxy] %>

@@ -1,6 +1,6 @@
 goals:
-  wordpress:
-    name: Wordpress blog
+  eCommerce:
+    name: Magento eCommerce platform
     roles:
       - db
       - webapp
@@ -11,7 +11,7 @@ roles:
     name: Web application load balance
     is_public: true
     implementations:
-      default: { profile: "role::wordpress::weblb::nginx" }
+      default: { profile: "role::magento::weblb::nginx" }
     exports:
       http: { type: single_port, protocol: tcp, number: 80 }
     imports:
@@ -21,7 +21,7 @@ roles:
     name: Web application
     min: 3
     implementations:
-      default: { profile: "role::wordpress::webapp::default" }
+      default: { profile: "role::magento::webapp::default" }
     exports:
       http: { type: single_port, protocol: tcp }
     imports:
@@ -30,6 +30,7 @@ roles:
   db:
     name: MySQL database
     implementations:
-      default: { profile: "role::wordpress::db::default" }
+      default: { profile: "role::magento::db::default" }
     exports:
       querying: { type: single_port, protocol: tcp }
+
