@@ -1,0 +1,37 @@
+goals:
+  drupal:
+    name: Mediawiki
+    roles:
+      - webapp
+      - weblb
+      - memcached
+
+roles:
+  weblb:
+    name: Web application load balance
+    is_public: true
+    implementations:
+      default: { profile: "role::mediawiki::weblb::default" }
+    exports:
+      http: { type: single_port, protocol: tcp, number: 80 }
+    imports:
+      webapp: http
+
+  webapp:
+    name: Web application
+    min: 2
+    implementations:
+      default: { profile: "role::mediawiki::webapp::default" }
+    exports:
+      http: { type: single_port, protocol: tcp }
+    imports:
+      memcached: http
+
+  memcached:
+    name: Memcached
+    min: 1 
+    implementations:
+      default: { profile: "role::mediawiki::memcached::default" }
+    exports:
+      http: { type: single_port, protocol: tcp }
+
