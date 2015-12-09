@@ -1,8 +1,9 @@
 #!/bin/bash
 set -e
 
+#Pre-configured VM
 #Pull the latest version of the ANCOR code and install dependent "libraries"
-cd /vagrant/
+cd ~/workspace/ancor
 git pull
 bundle install
 
@@ -16,4 +17,4 @@ gem update ancor-cli
 cd /etc/puppet
 sudo git pull 
 sudo ./install-modules
-cd /vagrant/
+cd ~/workspace/ancor
