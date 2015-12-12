@@ -19,7 +19,7 @@ roles:
 
   webapp:
     name: Web application
-    min: 2
+    min: 3
     implementations:
       default: { profile: "role::mediawiki::webapp::default" }
     exports:
