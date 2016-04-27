@@ -2,8 +2,6 @@
 
 ANCOR is a framework that captures the high-level user requirements and translates them into a working IT system on a cloud infrastructure.
 
-ANCOR can be used as a [Moving Target Defense](http://www.arguslab.org/mtd.html) platform for the systems it is deploying and managing.
-
 [Compiling Abstract Specifications into Concrete Systems—Bringing Order to the Cloud](https://www.usenix.org/conference/lisa14/conference-program/presentation/unruh)
 
 [Current Ancor Prototype Desciption ](https://dl.dropboxusercontent.com/u/88202830/ANCORAll-in-one.pdf)
