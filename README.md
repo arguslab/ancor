@@ -13,9 +13,7 @@ ANCOR is a framework that captures the high-level user requirements and translat
 ## General Requirements
 
 - In order to use ANCOR, the user needs an Openstack cloud infrastructure that the ANCOR VM can reach.
-
 - The ANCOR VM should be reachable by the instances running on the OpenStack infrastructure (ANCOR VM should run in bridged mode).
-
 - The necessary Puppet manifests that are needed for the system that will be deployed with ANCOR.
 
 
