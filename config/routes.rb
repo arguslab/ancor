@@ -3,7 +3,6 @@ Ancor::Application.routes.draw do
   namespace(:v1, format: :json) do
     # CORS preflight requests
     match "(*any)", to: "home#options", via: :options
-
     # General API resources
     resources :environments, except: [:new, :edit] do
       post "plan"
