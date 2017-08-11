@@ -1,3 +1,4 @@
+# Work in Progress ...
 ### Overview
 Separating user requirements from the implementation details has the potential of changing the way IT systems are deployed and managed in the cloud. To capture user requirements, we developed a high-level abstraction called the requirement model for defining cloud-based IT systems. Once users define their desired system in the specification, it is automatically compiled into a concrete cloud-based system that meets the specified user requirements. We demonstrate the practicality of this approach in the **ANCOR** framework.
 
@@ -14,15 +15,22 @@ In addition, we present a “compilation” process that automatically translate
 
 We demonstrate the practicality of this approach in the ANCOR (Automated eNterprise network COmpileR) framework, which generates concrete, cloud-based systems based on a specific requirement model. Our current implementation targets OpenStack and uses Puppet to configure the cloud instances, although the framework will also support other cloud platforms and configuration management solutions.
 
-### Authors and Contributors
-* Ian Unruh (@ianunruh)
+### Current Contributors
 * Alex Bardas (@bardasag)
-* Rui Zhuang (@zrui)
 * Xinming Ou (@xinmingou)
-* Scott A. DeLoach
+* Scott A. DeLoach (@sdeloach)
+
+### Past Contributors
+* Ian Unruh (@ianunruh)
+* Rui Zhuang (@zrui)
+* Ali Ali
+* Simon Novelly
+* Gilnei De Pellegrin
+* Brian Cain
+
 
 ### Support or Contact
-Please contact ArgusLab group members for more information http://arguslab.org or contact iunruh@ksu.edu, bardasag@ksu.edu and we will be happy to help you out.
+Please contact ArgusLab group members for more information http://arguslab.org or contact alexbardas@ku.edu and he will be happy to help you out.
 
 More setup information will be made available on the GitHub file repository page.
 
