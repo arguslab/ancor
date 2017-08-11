@@ -1,19 +1,12 @@
 # Work in Progress ...
 ### Overview
-Separating user requirements from the implementation details has the potential of changing the way IT systems are deployed and managed in the cloud. To capture user requirements, we developed a high-level abstraction called the requirement model for defining cloud-based IT systems. Once users define their desired system in the specification, it is automatically compiled into a concrete cloud-based system that meets the specified user requirements. We demonstrate the practicality of this approach in the **ANCOR** framework.
+Moving Target Defenses (MTD) have been proposed as a game changing approach to cyber security that eliminates the static nature of current computer systems -- an attacker’s biggest advantage. The core idea of MTD is to make a system change proactively as a means to eliminating the asymmetric advantage the attacker has on time. 
 
-ANCOR is a cloud automation framework that models dependencies between different layers in an application stack. When instances in one layer changes, the instances in a dependent layer are notified and reconfigured.
+**M**oving **T**arget **D**efense for **C**loud-**B**ased **IT S**ystems (**MTD CBITS**) is a platform that automatically adapts multiple aspects of the network’s logical and physical configuration. The platform is targeting a cloud infrastructure and is built on the **ANCOR** framework.
+ANCOR is a framework for creating and managing cloud-based IT systems using a high-level abstraction (an up-to-date IT system inventory). While ANCOR was focused on creating and managing IT systems in a reliable and automated way, the MTD CBITS work analyzes the feasibility and potential security benefits of an MTD approach based on live instance replacement. A live instance replacement mechanism can be the means to deploying various defenses in an automated way while constantly removing attackers’ persistent access
 
 More details: [Compiling Abstract Specifications into Concrete Systems – Bringing Order to the Cloud](http://people.cis.ksu.edu/~bardasag/paper.pdf)
-
-### Overall Picture
-Currently, there are important limitations in the abstractions that support creating and managing services in a cloud-based IT system. As a result, cloud users must choose between managing the low-level details of their cloud services directly (as in IaaS), which is time- consuming and error-prone, and turning over significant parts of this management to their cloud provider (in SaaS or PaaS), which is less flexible and more difficult to tailor to user needs. 
-
-To alleviate this situation we propose a high-level abstraction called the requirement model for defining cloud-based IT systems. It captures important aspects of a system’s structure, such as service dependencies, without introducing low-level details such as operating systems or application configurations. The requirement model separates the cloud customer’s concern of what the system does, from the system engineer’s concern of how to implement it. 
-
-In addition, we present a “compilation” process that automatically translates a requirement model into a concrete system based on pre-defined and reusable knowledge units. When combined, the requirement model and the compilation process enable repeatable deployment of cloud- based systems, more reliable system management, and the ability to implement the same requirement in different ways and on multiple cloud platforms. 
-
-We demonstrate the practicality of this approach in the ANCOR (Automated eNterprise network COmpileR) framework, which generates concrete, cloud-based systems based on a specific requirement model. Our current implementation targets OpenStack and uses Puppet to configure the cloud instances, although the framework will also support other cloud platforms and configuration management solutions.
+[MTD CBITS: Moving Target Defense for Cloud-Based IT Systems](http://people.cs.ksu.edu/~sdeloach/publications/Conference/esorics17_cbits.pdf)
 
 ### Current Contributors
 * Alex Bardas (@bardasag)
