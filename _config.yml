@@ -1,0 +1,8 @@
+title: Ancor
+description: next generation framework for cloud automation
+google_analytics: 
+show_downloads: true
+theme: jekyll-theme-cayman
+
+gems:
+  - jekyll-mentions
