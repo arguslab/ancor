@@ -7,7 +7,7 @@ ANCOR is a framework for creating and managing cloud-based IT systems using a hi
 
 More details: 
 - [MTD CBITS: Moving Target Defense for Cloud-Based IT Systems](http://people.cs.ksu.edu/~sdeloach/publications/Conference/esorics17_cbits.pdf)
-- [Compiling Abstract Specifications into Concrete Systems – Bringing Order to the Cloud](http://people.cis.ksu.edu/~bardasag/paper.pdf)
+- [Compiling Abstract Specifications into Concrete Systems – Bringing Order to the Cloud](https://www.usenix.org/conference/lisa14/conference-program/presentation/unruh)
 
 
 ### Current Contributors
