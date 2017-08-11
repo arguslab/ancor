@@ -26,7 +26,7 @@ More details:
 
 
 ### Support or Contact
-Please contact ArgusLab group members for more information http://arguslab.org or contact alexbardas _at_ ku _d0t_ edu
+Please contact Alex Bardas or the [ArgusLab group](http://www.arguslab.org/) for more information.
 
 More information is available on the GitHub file repository page.
 
