@@ -5,8 +5,10 @@ Moving Target Defenses (MTD) have been proposed as a game changing approach to c
 **M**oving **T**arget **D**efense for **C**loud-**B**ased **IT S**ystems (**MTD CBITS**) is a platform that automatically adapts multiple aspects of the network’s logical and physical configuration. The platform is targeting a cloud infrastructure and is built on the **ANCOR** framework.
 ANCOR is a framework for creating and managing cloud-based IT systems using a high-level abstraction (an up-to-date IT system inventory). While ANCOR was focused on creating and managing IT systems in a reliable and automated way, the MTD CBITS work analyzes the feasibility and potential security benefits of an MTD approach based on live instance replacement. A live instance replacement mechanism can be the means to deploying various defenses in an automated way while constantly removing attackers’ persistent access
 
-More details: [Compiling Abstract Specifications into Concrete Systems – Bringing Order to the Cloud](http://people.cis.ksu.edu/~bardasag/paper.pdf)
-[MTD CBITS: Moving Target Defense for Cloud-Based IT Systems](http://people.cs.ksu.edu/~sdeloach/publications/Conference/esorics17_cbits.pdf)
+More details: 
+- [MTD CBITS: Moving Target Defense for Cloud-Based IT Systems](http://people.cs.ksu.edu/~sdeloach/publications/Conference/esorics17_cbits.pdf)
+- [Compiling Abstract Specifications into Concrete Systems – Bringing Order to the Cloud](http://people.cis.ksu.edu/~bardasag/paper.pdf)
+
 
 ### Current Contributors
 * Alex Bardas (@bardasag)
