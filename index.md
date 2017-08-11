@@ -19,6 +19,7 @@ We demonstrate the practicality of this approach in the ANCOR (Automated eNterpr
 * Alex Bardas (@bardasag)
 * Xinming Ou (@xinmingou)
 * Scott A. DeLoach (@sdeloach)
+* Sathya Chandran Sundaramurthy (@sathyacs)
 
 ### Past Contributors
 * Ian Unruh (@ianunruh)
