@@ -14,7 +14,7 @@ Useful information:
 
 ## "MTD CBITS: Moving Target Defense for Cloud-Based IT Systems" Resources
 - Supporting proofs for Cases 3 and 4 from Section 4.2: . 
-- Python implementation for an "attack windows calculator": 
+- [Python implementation for an "attack windows calculator"](https://github.com/arguslab/ancor/tree/master/supplementary-material/attack-windows-calculator)
 - More comprehensive descriptions of the value added: 
 
 
