@@ -18,8 +18,7 @@ Useful information:
 
 
 ## General Requirements
-- In order to use MTD CBITS and/or ANCOR, the user needs an OpenStack cloud infrastructure (extensively tested on  
-Icehouse release) that the VM hosting MTD CBITS/ANCOR  can reach.
+- In order to use MTD CBITS and/or ANCOR, the user needs an OpenStack cloud infrastructure (extensively tested on Icehouse release) that the VM hosting MTD CBITS/ANCOR  can reach.
 
 - The MTD CBITS/ANCOR VM should be reachable by the instances running on the OpenStack infrastructure (i.e., VM should run in bridged mode).
 
