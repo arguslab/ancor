@@ -18,15 +18,30 @@ Useful information:
 
 
 ## General Requirements
-- In order to use MTD CBITS and/or ANCOR, the user needs an OpenStack cloud infrastructure that the VM hosting 
-MTD CBITS/ANCOR  can reach.
+- In order to use MTD CBITS and/or ANCOR, the user needs an OpenStack cloud infrastructure (extensively tested on  
+Icehouse release) that the VM hosting MTD CBITS/ANCOR  can reach.
 
 - The MTD CBITS/ANCOR VM should be reachable by the instances running on the OpenStack infrastructure (i.e., VM should run in bridged mode).
 
 - The necessary Puppet manifests that are needed for the system that will be deployed with MTD CBITS or ANCOR.
 
 
+
 ## Setting Up and Using MTD CBITS and ANCOR
+
+### General Setup Instructions 
+The underlying ANCOR framework was extensively tested on Ubuntu 12.04 x64.
+
+- Ensure your terminal of choice is using bash/zsh as a [login shell](https://rvm.io/support/faq)
+
+- Please follow the [automated installer](https://github.com/arguslab/ancor-environment) (includes the [ANCOR CLI](https://github.com/arguslab/ancor-cli) tool)
+
+- Run in terminal: Change directory into the ANCOR folder to configure and start ANCOR
+  ```bin/interactive-setup; bin/setup-mcollective; bin/start-services```
+  
+- If needed, install [ANCOR CLI](https://github.com/arguslab/ancor-cli) on a different host
+
+
 
 ### Preconfigured MTD CBITS/ANCOR VM
 
