@@ -18,10 +18,45 @@ Useful information:
 
 
 ## General Requirements
-- In order to use MTD CBITS and/or ANCOR, the user needs an OpenStack cloud infrastructure that the MTD CBITS/ANCOR VM can reach.
+- In order to use MTD CBITS and/or ANCOR, the user needs an OpenStack cloud infrastructure that the VM hosting 
+MTD CBITS/ANCOR  can reach.
 
-- The MTD CBITS/ANCOR VM should be reachable by the instances running on the OpenStack infrastructure (i.e., MTD CBITS/ANCOR VM should run in bridged mode).
+- The MTD CBITS/ANCOR VM should be reachable by the instances running on the OpenStack infrastructure (i.e., VM should run in bridged mode).
 
 - The necessary Puppet manifests that are needed for the system that will be deployed with MTD CBITS or ANCOR.
 
-# work in progress ...
+
+## Setting Up and Using MTD CBITS and ANCOR
+
+### Preconfigured MTD CBITS/ANCOR VM
+
+1. **Download** the **MTD CBITS/ANCOR VM**:
+ - Source -- [OVA format (works with Virtual Box, VMware products, etc.)](https://drive.google.com/open?id=0B0vt6z9-IhD9SHZQRkdaeDZIUmc)
+
+ Default credentials - user: **ancor** password: **ancor**
+
+ The virtual machine is bridged to the network and therefore the user might be warned that a different NIC is used than the one that it was configured on.
+
+2. Setup the communication between the preconfigured VM and the OpenStack deployment. Start MTD CBITS/ANCOR ... 
+
+  Run in terminal:
+  ```
+  cd ~/workspace/ancor
+  bin/interactive-setup
+  bin/finish-setup
+  bin/start-services
+  ```  
+
+**Testing MTD CBITS and ANCOR with a basic ["Drupal deployment"](https://github.com/arguslab/ancor-puppet/tree/master/modules/role/manifests/drupal) example:**
+
+  Run in terminal:
+  ```
+  ancor environment plan /home/ancor/workspace/ancor/spec/fixtures/arml/drupal.yaml
+  ancor environment commit
+  ```
+For more information about the available sample scenarios please check [Puppet Manifests' Repository for MTD CBITS and ANCOR Example Scenarios](https://github.com/arguslab/ancor-puppet)
+
+For more features (e.g., adding, removing, replacing instances) run in terminal: 
+```
+ancor
+```
