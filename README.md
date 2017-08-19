@@ -29,7 +29,7 @@ Icehouse release) that the VM hosting MTD CBITS/ANCOR  can reach.
 
 ## Setting Up and Using MTD CBITS and ANCOR
 
-### General Setup Instructions 
+### Option 1 - General Setup Instructions 
 The underlying ANCOR framework was extensively tested on Ubuntu 12.04 x64.
 
 - Ensure your terminal of choice is using bash/zsh as a [login shell](https://rvm.io/support/faq)
@@ -43,7 +43,7 @@ The underlying ANCOR framework was extensively tested on Ubuntu 12.04 x64.
 
 
 
-### Preconfigured MTD CBITS/ANCOR VM
+### Option 2 - Preconfigured MTD CBITS/ANCOR VM
 
 1. **Download** the **MTD CBITS/ANCOR VM**:
  - Source -- [OVA format (works with Virtual Box, VMware products, etc.)](https://drive.google.com/open?id=0B0vt6z9-IhD9SHZQRkdaeDZIUmc)
@@ -62,7 +62,7 @@ The underlying ANCOR framework was extensively tested on Ubuntu 12.04 x64.
   bin/start-services
   ```  
 
-**Testing MTD CBITS and ANCOR with a basic ["Drupal deployment"](https://github.com/arguslab/ancor-puppet/tree/master/modules/role/manifests/drupal) example:**
+** Testing MTD CBITS and ANCOR with a basic ["Drupal deployment"](https://github.com/arguslab/ancor-puppet/tree/master/modules/role/manifests/drupal) example:**
 
   Run in terminal:
   ```
@@ -75,3 +75,32 @@ For more features (e.g., adding, removing, replacing instances) run in terminal:
 ```
 ancor
 ```
+
+### Option 3 - Using [Vagrant](http://www.vagrantup.com/)
+
+1. Install [Vagrant](http://www.vagrantup.com/)
+2. Clone the MTD CBITS/ANCOR repository. Run in terminal: 
+
+ ```
+ git clone https://github.com/arguslab/ancor/ && cd ancor
+ ```
+3. Create a local development VM for MTD CBITS and ANCOR. All necessary ports are forwarded to your host, so you can use your development machine's IP address when configuring MTD CBITS and/or ANCOR. Run in terminal: `vagrant up`
+
+4. Once the VM is up and running, run in terminal:`vagrant ssh`
+5. Run the following commands inside the VM to configure and start ANCOR:
+
+  `cd /vagrant` to change into the ANCOR directory 
+  This directory is shared between the VM and your host using the
+  Shared Folders feature in VirtualBox. Changes in this directory will be shared instantly between the VM
+  and your host.
+
+  `bin/interactive-setup` to start from the configuration template
+
+  `bin/setup-mcollective` to install MCollective for ANCOR
+
+  `bin/start-services` to start the Rails app and Sidekiq worker for ANCOR
+6. Test MTD CBITS and ANCOR with a basic ["Drupal deployment"](https://github.com/arguslab/ancor-puppet/tree/master/modules/role/manifests/drupal) example:
+
+ ```
+ ancor environment plan /vagrant/spec/fixtures/arml/drupal.yaml; ancor environment commit
+ ```
