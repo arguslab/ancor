@@ -12,7 +12,7 @@ Useful information:
 
 **Please don't hesitate to contact the authors if you have any questions or concerns.**
 
-## _MTD CBITS: Moving Target Defense for Cloud-Based IT Systems_ Resources
+## Resources for _MTD CBITS: Moving Target Defense for Cloud-Based IT Systems_
 - [Blogging Website and Hadoop Scenario Experiments, Supporting Chinese Remainder Theorem Use Cases Proofs, and Openstack Filter Scheduler Configuration](https://github.com/arguslab/ancor/blob/master/supplementary-material/additional-resources.pdf)
 - [Python implementation for an "attack windows calculator"](https://github.com/arguslab/ancor/tree/master/supplementary-material/attack-windows-calculator)
 
