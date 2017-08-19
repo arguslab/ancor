@@ -30,7 +30,7 @@ Icehouse release) that the VM hosting MTD CBITS/ANCOR  can reach.
 ## Setting Up and Using MTD CBITS and ANCOR
 
 ### Option 1 - General Setup Instructions 
-The underlying ANCOR framework was extensively tested on Ubuntu 12.04 x64.
+(The underlying ANCOR framework was extensively tested on Ubuntu 12.04 x64.)
 
 - Ensure your terminal of choice is using bash/zsh as a [login shell](https://rvm.io/support/faq)
 
