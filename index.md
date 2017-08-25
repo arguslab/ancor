@@ -10,10 +10,13 @@ the MTD CBITS work analyzes the feasibility and potential security benefits of a
 instance replacement. Why live instance replacements? A live instance replacement mechanism can be the means to 
 deploying various defenses in an automated way while constantly removing attackers’ persistent access. 
 
-More details: 
+#### More details: 
 - [MTD CBITS: Moving Target Defense for Cloud-Based IT Systems](http://people.cs.ksu.edu/~sdeloach/publications/Conference/esorics17_cbits.pdf)
 - [Compiling Abstract Specifications into Concrete Systems – Bringing Order to the Cloud](https://www.usenix.org/conference/lisa14/conference-program/presentation/unruh)
 
+#### Resources mentioned in [MTD CBITS: Moving Target Defense for Cloud-Based IT Systems](http://people.cs.ksu.edu/~sdeloach/publications/Conference/esorics17_cbits.pdf)
+- [Blogging Website and Hadoop Scenario Experiments, Supporting Chinese Remainder Theorem Use Cases Proofs, and Openstack Filter Scheduler Configuration](https://github.com/arguslab/ancor/blob/master/supplementary-material/additional-resources.pdf)
+- [Python implementation for an "attack windows calculator"](https://github.com/arguslab/ancor/tree/master/supplementary-material/attack-windows-calculator)
 
 ### Current Contributors
 * Alex Bardas (@bardasag)
