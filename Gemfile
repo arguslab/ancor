@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.15'
+gem 'rails', '4.1.11'
 
 gem 'abstract_type'
 gem 'active_model_serializers'
@@ -16,7 +16,7 @@ gem 'ipaddress'
 gem 'json'
 gem 'systemu'
 gem 'stomp'
-gem 'puppet', '~> 3.4.2'
+gem 'puppet', '~> 3.6.2'
 gem 'unf'
 
 group :development, :testing do
