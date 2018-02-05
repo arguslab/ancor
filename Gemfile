@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.1.11'
+gem 'rails', '4.2.7.1'
 
 gem 'abstract_type'
 gem 'active_model_serializers'
