@@ -45,7 +45,7 @@ Useful information:
 ### Option 2 - Preconfigured MTD CBITS/ANCOR VM
 
 1. **Download** the **MTD CBITS/ANCOR VM**:
- - Source -- [OVA format (works with Virtual Box, VMware products, etc.)](https://drive.google.com/file/d/0B0vt6z9-IhD9X3ktbXZyOGJVajQ/view?usp=sharing)
+ - Source -- [OVA format (works with Virtual Box, VMware products, etc.)](https://drive.google.com/file/d/0B0vt6z9-IhD9X3ktbXZyOGJVajQ/view?usp=sharing&resourcekey=0-jYif6W7JaA88c9wZQbHJwQ)
 
  Default credentials - user: **ancor** password: **ancor**
 
